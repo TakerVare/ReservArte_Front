@@ -7,9 +7,9 @@
 
 **Versión:** 1.0  
 **Fecha:** Octubre 2025  
-**Cliente:** Centro de Diseño de Cejas  
+**Cliente:** More Than Brows  
 **Ubicación:** España  
-**Desarrollador:** [Tu nombre/empresa]
+**Desarrolladores:** Gabriel Sánchez-Vallejo Millán y Guillermo Algárate del Arco
 
 ---
 

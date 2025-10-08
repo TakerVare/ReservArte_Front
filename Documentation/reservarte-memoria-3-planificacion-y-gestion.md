@@ -7,9 +7,9 @@
 
 **Versión:** 1.0  
 **Fecha:** Octubre 2025  
-**Cliente:** Centro de Diseño de Cejas  
+**Cliente:** More Than Brows  
 **Ubicación:** España  
-**Desarrollador:** [Tu nombre/empresa]
+**Desarrollador:** Gabriel Sánchez-Vallejo Millán y Guillermo Algárate del Arco
 
 ---
 
@@ -1634,22 +1634,27 @@ Esta memoria técnica presenta un plan completo, detallado y viable para el desa
 
 ### Por parte del Cliente
 
-**Nombre:** ____________________________  
-**Cargo:** ____________________________  
-**Empresa:** ____________________________  
-**Fecha:** ____________________________  
+**Nombre:** Sofía Fatás Ounka___________  
+**Cargo:** CEO y propietaria___________  
+**Empresa:** More Than Brows__________  
+**Fecha:** 08/10/2025__________________  
 **Firma:** ____________________________
 
 ---
 
 ### Por parte del Proveedor
 
-**Nombre:** ____________________________  
-**Cargo:** ____________________________  
-**Empresa:** ____________________________  
-**Fecha:** ____________________________  
+**Nombre:** Gabriel Sánchez-Vallejo Millán
+**Cargo:** Co-director________________  
+**Empresa:** 2º DAW 2025-2026__________  
+**Fecha:** 08/10/2025__________________  
 **Firma:** ____________________________
 
+**Nombre:** Guillermo Algárate del Arco  
+**Cargo:** Co-director_________________  
+**Empresa:** 2º DAW 2025-2026__________  
+**Fecha:** 08/10/2025__________________  
+**Firma:** ____________________________
 ---
 
 **FIN DE LA MEMORIA TÉCNICA DE RESERVARTE**

@@ -7,9 +7,9 @@
 
 **Versión:** 1.0  
 **Fecha:** Octubre 2025  
-**Cliente:** Centro de Diseño de Cejas  
+**Cliente:** More Than Brows  
 **Ubicación:** España  
-**Desarrollador:** [Tu nombre/empresa]
+**Desarrolladores:** Gabriel Sánchez-Vallejo Millán y Guillermo Algárate del Arco
 
 ---
 
@@ -28,7 +28,7 @@
 
 ### 1.1 Descripción del Proyecto
 
-Se propone el desarrollo de **ReservArte**, una aplicación web y móvil multi-tenant para la gestión integral de centros de diseño de cejas. El sistema permitirá gestionar empleados, clientes, agendas, citas, pagos y recordatorios, con capacidad para operar inicialmente en un solo local y escalar a múltiples locales o reventa como solución SaaS a otros negocios del sector.
+Se propone el desarrollo de **ReservArte**, una aplicación web y móvil multi-tenant para la gestión integral de un centro de diseño de cejas. El sistema permitirá gestionar empleados, clientes, agendas, citas, pagos y recordatorios, con capacidad para operar inicialmente en un solo local y escalar a múltiples locales o reventa como solución SaaS a otros negocios del sector.
 
 ### 1.2 Características Principales
 
@@ -272,13 +272,7 @@ CustomerPaymentMethod
 **Funcionalidades:**
 - CRUD de servicios:
   - Diseño de cejas
-  - Microblading
   - Tinte de cejas
-  - Depilación con hilo/cera
-  - Laminado de cejas
-  - Lifting de pestañas
-  - Extensiones de pestañas
-  - Tinte de pestañas
 - Configuración por servicio:
   - Nombre y descripción
   - Duración estimada
@@ -395,7 +389,7 @@ ServicePackageItem
 
 **D. Políticas de Cancelación**
 - Configuración por organización:
-  - Tiempo mínimo de anticipación para cancelar sin penalización
+  - Tiempo mínimo de anticipación para cancelarmodificar sin penalización
   - Porcentaje de penalización (0-100%)
   - Número máximo de no-shows antes de bloqueo
 - Sistema de pre-autorización con Redsys:
@@ -486,6 +480,7 @@ WaitingList
   4. Pre-autorización válida por 7 días
 - Escenarios:
   - **Asiste a la cita:** Se confirma (tipo "2") el pago completo al finalizar servicio
+  - **Asiste a la cita y paga en efectivo en el local:** Se confirma (tipo "2") el pago completo al finalizar servicio
   - **Cancela con > 24h (o tiempo configurado):** Se cancela (tipo "9") la pre-autorización completa
   - **Cancela con < 24h:** Se confirma el % de penalización configurado
   - **No se presenta (no-show):** Se confirma el 100% del importe
@@ -2149,7 +2144,7 @@ interface ConsentCheckboxes {
 
 **Firma de conformidad del cliente:**
 
-Nombre: ____________________________  
-Cargo: ____________________________  
-Fecha: ____________________________  
+Nombre: Sofía Fatás Ounka___________  
+Cargo: CEO y propietaria_________  
+Fecha: 08/10/2025__________________  
 Firma: ____________________________
