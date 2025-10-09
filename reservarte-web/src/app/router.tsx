@@ -1,8 +1,6 @@
-﻿import { createBrowserRouter } from 'react-router-dom';
-
-// Placeholder pages
-const DashboardPage = () => <div>Dashboard</div>;
-const LoginPage = () => <div>Login</div>;
+import { createBrowserRouter } from 'react-router-dom';
+import { DashboardPage } from './pages/DashboardPage';
+import { LoginPage } from './pages/LoginPage';
 
 export const router = createBrowserRouter([
   {

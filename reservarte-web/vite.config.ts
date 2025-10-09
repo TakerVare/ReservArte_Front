@@ -1,20 +1,20 @@
-﻿import { defineConfig } from 'vite'
+import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import path from 'path'
 
 export default defineConfig({
   plugins: [react()],
   resolve: {
-    alias: {
-      '@': path.resolve(__dirname, './src'),
-      '@components': path.resolve(__dirname, './src/components'),
-      '@features': path.resolve(__dirname, './src/features'),
-      '@pages': path.resolve(__dirname, './src/pages'),
-      '@lib': path.resolve(__dirname, './src/lib'),
-      '@stores': path.resolve(__dirname, './src/stores'),
-      '@types': path.resolve(__dirname, './src/types'),
-      '@assets': path.resolve(__dirname, './src/assets'),
-    },
+    alias: [
+      { find: '@', replacement: path.resolve(__dirname, 'src') },
+      { find: '@components', replacement: path.resolve(__dirname, 'src/components') },
+      { find: '@features', replacement: path.resolve(__dirname, 'src/features') },
+      { find: '@pages', replacement: path.resolve(__dirname, 'src/pages') },
+      { find: '@lib', replacement: path.resolve(__dirname, 'src/lib') },
+      { find: '@stores', replacement: path.resolve(__dirname, 'src/stores') },
+      { find: '@types', replacement: path.resolve(__dirname, 'src/types') },
+      { find: '@assets', replacement: path.resolve(__dirname, 'src/assets') }
+    ],
   },
   server: {
     port: 3000,
