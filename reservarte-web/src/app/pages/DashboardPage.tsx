@@ -40,7 +40,7 @@ Failed to resolve import "little-date" from "src/components/calendar-31.tsx".
           <CardHeader>
             <CardTitle>Calendario-31 - With events slots</CardTitle>
           </CardHeader>
-          <CardContent>
+          <CardContent>git 
             <Calendar31 />
           </CardContent>
         </Card>
