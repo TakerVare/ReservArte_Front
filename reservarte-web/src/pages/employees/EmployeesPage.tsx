@@ -1,8 +1,0 @@
-// TODO: Implement EmployeesPage
-export const EmployeesPage = () => {
-  return (
-    <div>
-      <h1>EmployeesPage</h1>
-    </div>
-  );
-};
