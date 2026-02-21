@@ -1,9 +1,13 @@
 <script setup lang="ts">
+import BannerPrincipal from './components/BannerPrincipal.vue';
 import CTexlabel from './components/c_textlabel.vue'
+import NavButtom from './components/NavButtom.vue';
 </script>
 
 <template>
   <div class="app">
+    <BannerPrincipal></BannerPrincipal>
+    
     <section class="app__demo" aria-labelledby="demo-titulo">
       <h2 id="demo-titulo" class="app__title">
         Demo Text-Label — Variantes
@@ -68,12 +72,15 @@ import CTexlabel from './components/c_textlabel.vue'
       </div>
     </section>
   </div>
+
+  <NavButtom>
+  </NavButtom>
 </template>
 
 <style scoped>
 .app {
-  padding: 2rem;
-  max-width: 640px;
+  /*padding: 2rem;*/
+  /*max-width: 640px;*/
   margin: 0 auto;
 }
 
