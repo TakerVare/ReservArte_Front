@@ -49,7 +49,13 @@ button {
 button:hover {
   border-color: #646cff;
 }
+/*
 button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+Quito button:focus, porque no quiero que se muestre en el modo normal, lo dejo simplemente por accesisbilidad.
+*/  
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }

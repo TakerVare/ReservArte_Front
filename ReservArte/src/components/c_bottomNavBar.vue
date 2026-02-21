@@ -133,9 +133,11 @@ const handleClick = (index: number) => {
   transition: color 0.3s ease;
 }
 
+
 .nav-item.active .nav-label {
   color: #625b71;
 }
+
 
 .nav-item:hover .icon-container {
   /*background-color: rgba(232, 222, 248, 0.5);*/

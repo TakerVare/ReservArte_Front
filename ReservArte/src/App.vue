@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import BannerPrincipal from './components/BannerPrincipal.vue';
 import CTexlabel from './components/c_textlabel.vue'
-import NavButtom from './components/NavButtom.vue';
+import NavButtom from './components/c_bottomNavBar.vue';
 </script>
 
 <template>
