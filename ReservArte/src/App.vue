@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import BannerPrincipal from './components/BannerPrincipal.vue';
+import BannerPrincipal from './components/c_bannerPrincipal.vue';
 import CTexlabel from './components/c_textlabel.vue'
 import NavButtom from './components/c_bottomNavBar.vue';
 </script>
