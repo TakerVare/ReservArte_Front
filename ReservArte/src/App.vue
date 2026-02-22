@@ -5,6 +5,7 @@ import NavButtom from './components/c_bottomNavBar.vue'
 import C_contentAreaPrimaryButton from './components/Buttons/c_contentAreaPrimaryButton.vue'
 import C_contentAreaSecondaryButton from './components/Buttons/c_contentAreaSecondaryButton.vue'
 import C_navAreaPrimaryButton from './components/Buttons/c_navAreaPrimaryButton.vue'
+import C_navAreaSecondaryButton from './components/Buttons/c_navAreaSecondaryButton.vue'
 
 function onPrimaryClick() {
   alert('Acción del botón primario ejecutada.')
@@ -327,6 +328,97 @@ function onPrimaryClick() {
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
             </template>
           </C_navAreaPrimaryButton>
+          <span class="app__button-label">XXL</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="app__demo" aria-labelledby="demo-boton-nav-sec-titulo">
+      <h2 id="demo-boton-nav-sec-titulo" class="app__title">
+        Demo Botón navegación secundario (Nav Area Secondary)
+      </h2>
+      <p class="app__demo-desc">
+        Misma estructura que el botón de navegación primario, con colores del secundario (fondo blanco, borde y texto rosa; icono por defecto <strong>después</strong> del texto).
+      </p>
+      <div class="app__button-demo">
+        <div class="app__button-item">
+          <C_navAreaSecondaryButton text="Volver" @click="onPrimaryClick" />
+          <span class="app__button-label">Sin icono</span>
+        </div>
+        <div class="app__button-item">
+          <C_navAreaSecondaryButton text="Volver" icon-position="after" @click="onPrimaryClick">
+            <template #icon>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </template>
+          </C_navAreaSecondaryButton>
+          <span class="app__button-label">Icono después (por defecto)</span>
+        </div>
+        <div class="app__button-item">
+          <C_navAreaSecondaryButton text="Volver" icon-position="before" @click="onPrimaryClick">
+            <template #icon>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            </template>
+          </C_navAreaSecondaryButton>
+          <span class="app__button-label">Icono antes</span>
+        </div>
+        <div class="app__button-item">
+          <C_navAreaSecondaryButton text="Volver" icon-position="after" :disabled="true">
+            <template #icon>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </template>
+          </C_navAreaSecondaryButton>
+          <span class="app__button-label">Disabled con icono</span>
+        </div>
+      </div>
+
+      <h3 class="app__subtitle">Tamaños (size) con icono</h3>
+      <div class="app__button-demo app__button-demo--sizes">
+        <div class="app__button-item">
+          <C_navAreaSecondaryButton text="Volver" size="XS" icon-position="after" @click="onPrimaryClick">
+            <template #icon>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </template>
+          </C_navAreaSecondaryButton>
+          <span class="app__button-label">XS</span>
+        </div>
+        <div class="app__button-item">
+          <C_navAreaSecondaryButton text="Volver" size="SM" icon-position="after" @click="onPrimaryClick">
+            <template #icon>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </template>
+          </C_navAreaSecondaryButton>
+          <span class="app__button-label">SM</span>
+        </div>
+        <div class="app__button-item">
+          <C_navAreaSecondaryButton text="Volver" size="MD" icon-position="after" @click="onPrimaryClick">
+            <template #icon>
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </template>
+          </C_navAreaSecondaryButton>
+          <span class="app__button-label">MD</span>
+        </div>
+        <div class="app__button-item">
+          <C_navAreaSecondaryButton text="Volver" size="LG" icon-position="after" @click="onPrimaryClick">
+            <template #icon>
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </template>
+          </C_navAreaSecondaryButton>
+          <span class="app__button-label">LG</span>
+        </div>
+        <div class="app__button-item">
+          <C_navAreaSecondaryButton text="Volver" size="XL" icon-position="before" @click="onPrimaryClick">
+            <template #icon>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            </template>
+          </C_navAreaSecondaryButton>
+          <span class="app__button-label">XL (icono antes)</span>
+        </div>
+        <div class="app__button-item">
+          <C_navAreaSecondaryButton text="Volver" size="XXL" icon-position="after" @click="onPrimaryClick">
+            <template #icon>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+            </template>
+          </C_navAreaSecondaryButton>
           <span class="app__button-label">XXL</span>
         </div>
       </div>
