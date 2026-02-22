@@ -1,7 +1,12 @@
 <script setup lang="ts">
-import BannerPrincipal from './components/c_bannerPrincipal.vue';
+import BannerPrincipal from './components/c_bannerPrincipal.vue'
 import CTexlabel from './components/c_textlabel.vue'
-import NavButtom from './components/c_bottomNavBar.vue';
+import NavButtom from './components/c_bottomNavBar.vue'
+import C_contentAreaPrimaryButton from './components/Buttons/c_contentAreaPrimaryButton.vue'
+
+function onPrimaryClick() {
+  alert('Acción del botón primario ejecutada.')
+}
 </script>
 
 <template>
@@ -71,6 +76,87 @@ import NavButtom from './components/c_bottomNavBar.vue';
         </div>
       </div>
     </section>
+
+    <section class="app__demo" aria-labelledby="demo-boton-titulo">
+      <h2 id="demo-boton-titulo" class="app__title">
+        Demo Botón primario (Content Area)
+      </h2>
+      <p class="app__demo-desc">
+        Un solo botón con tres estados: <strong>Enabled</strong> (por defecto), <strong>Hold</strong> (al pasar el ratón o mantener pulsado) y <strong>Disabled</strong> (cuando se pasa <code>disabled</code>).
+      </p>
+      <div class="app__button-demo">
+        <div class="app__button-item">
+          <C_contentAreaPrimaryButton
+            text="Reservar Cita"
+            @click="onPrimaryClick"
+          />
+          <span class="app__button-label">Habilitado (pasa el ratón para ver Hold)</span>
+        </div>
+        <div class="app__button-item">
+          <C_contentAreaPrimaryButton
+            text="Reservar Cita"
+            :disabled="true"
+          />
+          <span class="app__button-label">Disabled</span>
+        </div>
+      </div>
+
+      <h3 class="app__subtitle">Tamaños (size)</h3>
+      <div class="app__button-demo app__button-demo--sizes">
+        <div class="app__button-item">
+          <C_contentAreaPrimaryButton text="Reservar Cita" size="XS" @click="onPrimaryClick" />
+          <span class="app__button-label">XS</span>
+        </div>
+        <div class="app__button-item">
+          <C_contentAreaPrimaryButton text="Reservar Cita" size="SM" @click="onPrimaryClick" />
+          <span class="app__button-label">SM</span>
+        </div>
+        <div class="app__button-item">
+          <C_contentAreaPrimaryButton text="Reservar Cita" size="MD" @click="onPrimaryClick" />
+          <span class="app__button-label">MD</span>
+        </div>
+        <div class="app__button-item">
+          <C_contentAreaPrimaryButton text="Reservar Cita" size="LG" @click="onPrimaryClick" />
+          <span class="app__button-label">LG</span>
+        </div>
+        <div class="app__button-item">
+          <C_contentAreaPrimaryButton text="Reservar Cita" size="XL" @click="onPrimaryClick" />
+          <span class="app__button-label">XL</span>
+        </div>
+        <div class="app__button-item">
+          <C_contentAreaPrimaryButton text="Reservar Cita" size="XXL" @click="onPrimaryClick" />
+          <span class="app__button-label">XXL</span>
+        </div>
+      </div>
+
+      <h3 class="app__subtitle">Tamaños (size) — Disabled</h3>
+      <div class="app__button-demo app__button-demo--sizes">
+        <div class="app__button-item">
+          <C_contentAreaPrimaryButton text="Reservar Cita" size="XS" :disabled="true" />
+          <span class="app__button-label">XS</span>
+        </div>
+        <div class="app__button-item">
+          <C_contentAreaPrimaryButton text="Reservar Cita" size="SM" :disabled="true" />
+          <span class="app__button-label">SM</span>
+        </div>
+        <div class="app__button-item">
+          <C_contentAreaPrimaryButton text="Reservar Cita" size="MD" :disabled="true" />
+          <span class="app__button-label">MD</span>
+        </div>
+        <div class="app__button-item">
+          <C_contentAreaPrimaryButton text="Reservar Cita" size="LG" :disabled="true" />
+          <span class="app__button-label">LG</span>
+        </div>
+        <div class="app__button-item">
+          <C_contentAreaPrimaryButton text="Reservar Cita" size="XL" :disabled="true" />
+          <span class="app__button-label">XL</span>
+        </div>
+        <div class="app__button-item">
+          <C_contentAreaPrimaryButton text="Reservar Cita" size="XXL" :disabled="true" />
+          <span class="app__button-label">XXL</span>
+        </div>
+      </div>
+    </section>
   </div>
 
   <NavButtom>
@@ -97,6 +183,50 @@ import NavButtom from './components/c_bottomNavBar.vue';
   display: flex;
   flex-direction: column;
   gap: 2rem;
+}
+
+.app__demo-desc {
+  margin: 0 0 1rem;
+  font-size: 0.9rem;
+  color: #444;
+  line-height: 1.5;
+}
+
+.app__demo-desc code {
+  padding: 0.15em 0.4em;
+  background: #eee;
+  border-radius: 4px;
+  font-size: 0.9em;
+}
+
+.app__button-demo {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+.app__button-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.app__button-label {
+  font-size: 0.75rem;
+  color: #888;
+  font-family: system-ui, sans-serif;
+}
+
+.app__subtitle {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #555;
+  margin: 0 0 1rem;
+}
+
+.app__button-demo--sizes {
+  align-items: flex-end;
 }
 
 .app__variants {
