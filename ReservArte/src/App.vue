@@ -6,6 +6,7 @@ import C_contentAreaPrimaryButton from './components/Buttons/c_contentAreaPrimar
 import C_contentAreaSecondaryButton from './components/Buttons/c_contentAreaSecondaryButton.vue'
 import C_navAreaPrimaryButton from './components/Buttons/c_navAreaPrimaryButton.vue'
 import C_navAreaSecondaryButton from './components/Buttons/c_navAreaSecondaryButton.vue'
+import CPageTittle from './components/c_pageTittle.vue'
 
 function onPrimaryClick() {
   alert('Acción del botón primario ejecutada.')
@@ -76,6 +77,45 @@ function onPrimaryClick() {
             text="No hay citas asignadas"
             variant="empty-state"
           />
+        </div>
+      </div>
+    </section>
+
+    <section class="app__demo" aria-labelledby="demo-page-title-titulo">
+      <h2 id="demo-page-title-titulo" class="app__title">
+        Demo Page Title (Título pantalla)
+      </h2>
+      <p class="app__demo-desc">
+        Un único componente con 6 tamaños controlados por la prop <code>size</code>: XXL, XL, LG, MD, SM, XS.
+      </p>
+      <div class="app__variants">
+        <div class="app__variant">
+          <span class="app__variant-name">XXL</span>
+          <CPageTittle text="Título pantalla" size="XXL" />
+        </div>
+        <div class="app__variant">
+          <span class="app__variant-name">XL</span>
+          <CPageTittle text="Título pantalla" size="XL" />
+        </div>
+        <div class="app__variant">
+          <span class="app__variant-name">LG</span>
+          <CPageTittle text="Título pantalla" size="LG" />
+        </div>
+        <div class="app__variant">
+          <span class="app__variant-name">MD (por defecto)</span>
+          <CPageTittle text="Título pantalla" size="MD" />
+        </div>
+        <div class="app__variant">
+          <span class="app__variant-name">SM</span>
+          <CPageTittle text="Título pantalla" size="SM" />
+        </div>
+        <div class="app__variant">
+          <span class="app__variant-name">XS</span>
+          <CPageTittle text="Título pantalla" size="XS" />
+        </div>
+        <div class="app__variant">
+          <span class="app__variant-name">Sin size (usa MD)</span>
+          <CPageTittle text="Título pantalla" />
         </div>
       </div>
     </section>
