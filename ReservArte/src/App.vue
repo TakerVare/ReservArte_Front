@@ -8,6 +8,7 @@ import C_navAreaPrimaryButton from './components/Buttons/c_navAreaPrimaryButton.
 import C_navAreaSecondaryButton from './components/Buttons/c_navAreaSecondaryButton.vue'
 import CPageTittle from './components/c_pageTittle.vue'
 import CSectionTittle from './components/c_sectionTittle.vue'
+import CContactMap from './components/c_contactMap.vue'
 
 function onPrimaryClick() {
   alert('Acción del botón primario ejecutada.')
@@ -148,6 +149,45 @@ function onPrimaryClick() {
         <div class="app__variant">
           <span class="app__variant-name">Sin size (usa MD)</span>
           <CSectionTittle text="Título de sección" />
+        </div>
+      </div>
+    </section>
+
+    <section class="app__demo" aria-labelledby="demo-contact-map-titulo">
+      <h2 id="demo-contact-map-titulo" class="app__title">
+        Demo Contact Map (Mapa de contacto)
+      </h2>
+      <p class="app__demo-desc">
+        Mapa de Google Maps con 6 tamaños controlados por la prop <code>size</code>: XXL, XL, LG, MD, SM, XS.
+      </p>
+      <div class="app__variants">
+        <div class="app__variant">
+          <span class="app__variant-name">XXL (iframe 800×600)</span>
+          <CContactMap size="XXL" />
+        </div>
+        <div class="app__variant">
+          <span class="app__variant-name">XL (iframe 800×600)</span>
+          <CContactMap size="XL" />
+        </div>
+        <div class="app__variant">
+          <span class="app__variant-name">LG (iframe 600×450)</span>
+          <CContactMap size="LG" />
+        </div>
+        <div class="app__variant">
+          <span class="app__variant-name">MD (por defecto, iframe 600×450)</span>
+          <CContactMap size="MD" />
+        </div>
+        <div class="app__variant">
+          <span class="app__variant-name">SM (iframe 400×300)</span>
+          <CContactMap size="SM" />
+        </div>
+        <div class="app__variant">
+          <span class="app__variant-name">XS (iframe 400×300)</span>
+          <CContactMap size="XS" />
+        </div>
+        <div class="app__variant">
+          <span class="app__variant-name">Sin size (usa MD)</span>
+          <CContactMap />
         </div>
       </div>
     </section>
