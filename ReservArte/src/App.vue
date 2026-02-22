@@ -3,6 +3,7 @@ import BannerPrincipal from './components/c_bannerPrincipal.vue'
 import CTexlabel from './components/c_textlabel.vue'
 import NavButtom from './components/c_bottomNavBar.vue'
 import C_contentAreaPrimaryButton from './components/Buttons/c_contentAreaPrimaryButton.vue'
+import C_contentAreaSecondaryButton from './components/Buttons/c_contentAreaSecondaryButton.vue'
 
 function onPrimaryClick() {
   alert('Acción del botón primario ejecutada.')
@@ -153,6 +154,87 @@ function onPrimaryClick() {
         </div>
         <div class="app__button-item">
           <C_contentAreaPrimaryButton text="Reservar Cita" size="XXL" :disabled="true" />
+          <span class="app__button-label">XXL</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="app__demo" aria-labelledby="demo-boton-secundario-titulo">
+      <h2 id="demo-boton-secundario-titulo" class="app__title">
+        Demo Botón secundario (Content Area)
+      </h2>
+      <p class="app__demo-desc">
+        Misma estructura que el primario, con estilo outline: borde y texto en color, fondo transparente; al hover, fondo y texto blanco.
+      </p>
+      <div class="app__button-demo">
+        <div class="app__button-item">
+          <C_contentAreaSecondaryButton
+            text="Reservar Cita"
+            @click="onPrimaryClick"
+          />
+          <span class="app__button-label">Habilitado (pasa el ratón para ver Hold)</span>
+        </div>
+        <div class="app__button-item">
+          <C_contentAreaSecondaryButton
+            text="Reservar Cita"
+            :disabled="true"
+          />
+          <span class="app__button-label">Disabled</span>
+        </div>
+      </div>
+
+      <h3 class="app__subtitle">Tamaños (size)</h3>
+      <div class="app__button-demo app__button-demo--sizes">
+        <div class="app__button-item">
+          <C_contentAreaSecondaryButton text="Reservar Cita" size="XS" @click="onPrimaryClick" />
+          <span class="app__button-label">XS</span>
+        </div>
+        <div class="app__button-item">
+          <C_contentAreaSecondaryButton text="Reservar Cita" size="SM" @click="onPrimaryClick" />
+          <span class="app__button-label">SM</span>
+        </div>
+        <div class="app__button-item">
+          <C_contentAreaSecondaryButton text="Reservar Cita" size="MD" @click="onPrimaryClick" />
+          <span class="app__button-label">MD</span>
+        </div>
+        <div class="app__button-item">
+          <C_contentAreaSecondaryButton text="Reservar Cita" size="LG" @click="onPrimaryClick" />
+          <span class="app__button-label">LG</span>
+        </div>
+        <div class="app__button-item">
+          <C_contentAreaSecondaryButton text="Reservar Cita" size="XL" @click="onPrimaryClick" />
+          <span class="app__button-label">XL</span>
+        </div>
+        <div class="app__button-item">
+          <C_contentAreaSecondaryButton text="Reservar Cita" size="XXL" @click="onPrimaryClick" />
+          <span class="app__button-label">XXL</span>
+        </div>
+      </div>
+
+      <h3 class="app__subtitle">Tamaños (size) — Disabled</h3>
+      <div class="app__button-demo app__button-demo--sizes">
+        <div class="app__button-item">
+          <C_contentAreaSecondaryButton text="Reservar Cita" size="XS" :disabled="true" />
+          <span class="app__button-label">XS</span>
+        </div>
+        <div class="app__button-item">
+          <C_contentAreaSecondaryButton text="Reservar Cita" size="SM" :disabled="true" />
+          <span class="app__button-label">SM</span>
+        </div>
+        <div class="app__button-item">
+          <C_contentAreaSecondaryButton text="Reservar Cita" size="MD" :disabled="true" />
+          <span class="app__button-label">MD</span>
+        </div>
+        <div class="app__button-item">
+          <C_contentAreaSecondaryButton text="Reservar Cita" size="LG" :disabled="true" />
+          <span class="app__button-label">LG</span>
+        </div>
+        <div class="app__button-item">
+          <C_contentAreaSecondaryButton text="Reservar Cita" size="XL" :disabled="true" />
+          <span class="app__button-label">XL</span>
+        </div>
+        <div class="app__button-item">
+          <C_contentAreaSecondaryButton text="Reservar Cita" size="XXL" :disabled="true" />
           <span class="app__button-label">XXL</span>
         </div>
       </div>
