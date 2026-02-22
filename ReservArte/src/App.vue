@@ -7,6 +7,7 @@ import C_contentAreaSecondaryButton from './components/Buttons/c_contentAreaSeco
 import C_navAreaPrimaryButton from './components/Buttons/c_navAreaPrimaryButton.vue'
 import C_navAreaSecondaryButton from './components/Buttons/c_navAreaSecondaryButton.vue'
 import CPageTittle from './components/c_pageTittle.vue'
+import CSectionTittle from './components/c_sectionTittle.vue'
 
 function onPrimaryClick() {
   alert('Acción del botón primario ejecutada.')
@@ -116,6 +117,37 @@ function onPrimaryClick() {
         <div class="app__variant">
           <span class="app__variant-name">Sin size (usa MD)</span>
           <CPageTittle text="Título pantalla" />
+        </div>
+      </div>
+    </section>
+
+    <section class="app__demo" aria-labelledby="demo-section-title-titulo">
+      <h2 id="demo-section-title-titulo" class="app__title">
+        Demo Section Title (Título de sección)
+      </h2>
+      <p class="app__demo-desc">
+        Un único componente con 4 tamaños controlados por la prop <code>size</code>: LG, MD, SM, XS.
+      </p>
+      <div class="app__variants">
+        <div class="app__variant">
+          <span class="app__variant-name">LG</span>
+          <CSectionTittle text="Título de sección" size="LG" />
+        </div>
+        <div class="app__variant">
+          <span class="app__variant-name">MD (por defecto)</span>
+          <CSectionTittle text="Título de sección" size="MD" />
+        </div>
+        <div class="app__variant">
+          <span class="app__variant-name">SM</span>
+          <CSectionTittle text="Título de sección" size="SM" />
+        </div>
+        <div class="app__variant">
+          <span class="app__variant-name">XS</span>
+          <CSectionTittle text="Título de sección" size="XS" />
+        </div>
+        <div class="app__variant">
+          <span class="app__variant-name">Sin size (usa MD)</span>
+          <CSectionTittle text="Título de sección" />
         </div>
       </div>
     </section>
