@@ -9,9 +9,20 @@ import C_navAreaSecondaryButton from './components/Buttons/c_navAreaSecondaryBut
 import CPageTittle from './components/c_pageTittle.vue'
 import CSectionTittle from './components/c_sectionTittle.vue'
 import CContactMap from './components/c_contactMap.vue'
+import CListItem from './components/c_listItem.vue'
 
 function onPrimaryClick() {
   alert('Acción del botón primario ejecutada.')
+}
+
+function onListItemEdit() {
+  alert('Editar ítem')
+}
+function onListItemDelete() {
+  alert('Eliminar ítem')
+}
+function onListItemCheck() {
+  alert('Confirmar ítem')
 }
 </script>
 
@@ -188,6 +199,57 @@ function onPrimaryClick() {
         <div class="app__variant">
           <span class="app__variant-name">Sin size (usa MD)</span>
           <CContactMap />
+        </div>
+      </div>
+    </section>
+
+    <section class="app__demo" aria-labelledby="demo-list-item-titulo">
+      <h2 id="demo-list-item-titulo" class="app__title">
+        Demo List Item (Ítem de lista)
+      </h2>
+      <p class="app__demo-desc">
+        Ítem de lista con título y acciones (editar, eliminar, confirmar). 4 tamaños: LG, MD, SM, XS. Iconos por defecto desde <code>src/assets/</code> (edit.svg, delete.svg, check.svg).
+      </p>
+      <div class="app__variants">
+        <div class="app__variant">
+          <span class="app__variant-name">LG</span>
+          <CListItem
+            title="Marcos Aguilar Fernández"
+            size="LG"
+            @edit="onListItemEdit"
+            @delete="onListItemDelete"
+            @check="onListItemCheck"
+          />
+        </div>
+        <div class="app__variant">
+          <span class="app__variant-name">MD</span>
+          <CListItem
+            title="Marcos Aguilar Fernández"
+            size="MD"
+            @edit="onListItemEdit"
+            @delete="onListItemDelete"
+            @check="onListItemCheck"
+          />
+        </div>
+        <div class="app__variant">
+          <span class="app__variant-name">SM</span>
+          <CListItem
+            title="Marcos Aguilar Fernández"
+            size="SM"
+            @edit="onListItemEdit"
+            @delete="onListItemDelete"
+            @check="onListItemCheck"
+          />
+        </div>
+        <div class="app__variant">
+          <span class="app__variant-name">XS</span>
+          <CListItem
+            title="Marcos Aguilar Fernández"
+            size="XS"
+            @edit="onListItemEdit"
+            @delete="onListItemDelete"
+            @check="onListItemCheck"
+          />
         </div>
       </div>
     </section>
