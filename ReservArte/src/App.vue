@@ -10,6 +10,7 @@ import CPageTittle from './components/c_pageTittle.vue'
 import CSectionTittle from './components/c_sectionTittle.vue'
 import CContactMap from './components/c_contactMap.vue'
 import CListItem from './components/c_listItem.vue'
+import CLoginForm from './components/c_loginForm.vue'
 
 function onPrimaryClick() {
   alert('Acción del botón primario ejecutada.')
@@ -23,6 +24,10 @@ function onListItemDelete() {
 }
 function onListItemCheck() {
   alert('Confirmar ítem')
+}
+
+function onLoginSubmit(payload: { usuario: string; password: string; acceptTerms: boolean }) {
+  alert(`Login: ${payload.usuario} / *** / términos: ${payload.acceptTerms}`)
 }
 </script>
 
@@ -250,6 +255,45 @@ function onListItemCheck() {
             @delete="onListItemDelete"
             @check="onListItemCheck"
           />
+        </div>
+      </div>
+    </section>
+
+    <section class="app__demo" aria-labelledby="demo-login-form-titulo">
+      <h2 id="demo-login-form-titulo" class="app__title">
+        Demo Login Form (Formulario de login)
+      </h2>
+      <p class="app__demo-desc">
+        Formulario de login con 6 tamaños controlados por la prop <code>size</code>: XXL, XL, LG, MD, SM, XS.
+      </p>
+      <div class="app__variants">
+        <div class="app__variant">
+          <span class="app__variant-name">XXL</span>
+          <CLoginForm size="XXL" @submit="onLoginSubmit" />
+        </div>
+        <div class="app__variant">
+          <span class="app__variant-name">XL</span>
+          <CLoginForm size="XL" @submit="onLoginSubmit" />
+        </div>
+        <div class="app__variant">
+          <span class="app__variant-name">LG</span>
+          <CLoginForm size="LG" @submit="onLoginSubmit" />
+        </div>
+        <div class="app__variant">
+          <span class="app__variant-name">MD (por defecto)</span>
+          <CLoginForm size="MD" @submit="onLoginSubmit" />
+        </div>
+        <div class="app__variant">
+          <span class="app__variant-name">SM</span>
+          <CLoginForm size="SM" @submit="onLoginSubmit" />
+        </div>
+        <div class="app__variant">
+          <span class="app__variant-name">XS</span>
+          <CLoginForm size="XS" @submit="onLoginSubmit" />
+        </div>
+        <div class="app__variant">
+          <span class="app__variant-name">Sin size (usa MD)</span>
+          <CLoginForm @submit="onLoginSubmit" />
         </div>
       </div>
     </section>

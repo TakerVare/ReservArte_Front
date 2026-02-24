@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts">
-export type ButtonSize = 'XXL' | 'XL' | 'LG' | 'MD' | 'SM' | 'XS'
+export type ButtonSize = 'XXL' | 'XL' | 'LG' | 'MD' | 'SM' | 'XS' | 'Form-L' | 'Form-M' | 'Form-S'
 
 const props = withDefaults(
   defineProps<{
@@ -176,6 +176,49 @@ export default {
     padding: 32px 64px;
   }
   &--XXL &__text {
+    color: white;
+    font-size: 20px;
+    font-family: Georgia, serif;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: 0.55px;
+    word-wrap: break-word;
+  }
+
+  /* Form size variants – dimensiones fijas */
+  &--Form-L &__btn {
+    width: 584px;
+    height: 84px;
+  }
+  &--Form-L &__text {
+    color: white;
+    font-size: 20px;
+    font-family: Georgia, serif;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: 0.55px;
+    word-wrap: break-word;
+  }
+
+  &--Form-M &__btn {
+    width: 544px;
+    height: 84px;
+  }
+  &--Form-M &__text {
+    color: white;
+    font-size: 20px;
+    font-family: Georgia, serif;
+    font-weight: 700;
+    line-height: 20px;
+    letter-spacing: 0.55px;
+    word-wrap: break-word;
+  }
+
+  &--Form-S &__btn {
+    width: 343px;
+    height: 84px;
+  }
+  &--Form-S &__text {
     color: white;
     font-size: 20px;
     font-family: Georgia, serif;
