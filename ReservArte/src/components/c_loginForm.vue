@@ -53,7 +53,7 @@
       <div class="c_loginForm__submit-wrap">
         <C_contentAreaPrimaryButton
           text="Reservar Cita"
-          size="XXL"
+          :size="submitButtonSize"
           @click="handleSubmit"
         />
       </div>
@@ -62,8 +62,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import C_contentAreaPrimaryButton from './Buttons/c_contentAreaPrimaryButton.vue'
+import type { ButtonSize } from './Buttons/c_contentAreaPrimaryButton.vue'
 
 export type LoginFormSize = 'XXL' | 'XL' | 'LG' | 'MD' | 'SM' | 'XS'
 
@@ -78,6 +79,23 @@ const props = withDefaults(
     forgotPasswordUrl: '',
   }
 )
+
+/** Tamaño del botón de envío según la versión del formulario: Form-L (XXL/XL/LG/MD), Form-M (SM), Form-S (XS). */
+const submitButtonSize = computed<ButtonSize>(() => {
+  switch (props.size) {
+    case 'XXL':
+    case 'XL':
+    case 'LG':
+    case 'MD':
+      return 'Form-L'
+    case 'SM':
+      return 'Form-M'
+    case 'XS':
+      return 'Form-S'
+    default:
+      return 'Form-L'
+  }
+})
 
 const emit = defineEmits<{
   submit: [{ usuario: string; password: string; acceptTerms: boolean }]
