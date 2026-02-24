@@ -117,10 +117,11 @@ const handleClick = (index: number) => {
   overflow: hidden;
   transition: background-color 0.3s ease;
 }
-
+/*
 .nav-item.active .icon-container {
-  /*background-color: #F5F5F5;*/
+  background-color: #F5F5F5;
 }
+*/
 
 .nav-icon {
   width: 24px;
