@@ -10,7 +10,8 @@ const emit = defineEmits<{
   navigate: [index: number]
 }>()
 
-const maxWidth = computed(() => {
+
+  const minWidth = computed(() => {
   if (!props.size) return undefined
 
   const sizeMap = {
@@ -37,7 +38,7 @@ const handleClick = (index: number) => {
 </script>
 
 <template>
-  <div class="nav-bottom" :style="{ maxWidth: maxWidth }">
+  <div class="nav-bottom" :style="{ minWidth: minWidth }">
     <div class="nav-content">
       <div class="nav-bar">
         <button
@@ -59,10 +60,15 @@ const handleClick = (index: number) => {
 
 <style scoped>
 .nav-bottom {
+  position: sticky;
+  bottom: 0;
+  z-index: 100;
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: white;
+  margin-top: auto;
 }
 
 .nav-content {

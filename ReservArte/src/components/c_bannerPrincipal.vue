@@ -5,7 +5,7 @@ const props = defineProps<{
   size?: 'XXL' | 'XL' | 'LG' | 'MD' | 'SM' | 'XS'
 }>()
 
-const maxWidth = computed(() => {
+const minWidth = computed(() => {
   if (!props.size) return undefined
 
   const sizeMap = {
@@ -22,7 +22,7 @@ const maxWidth = computed(() => {
 </script>
 
 <template>
-  <div class="banner-principal" :style="{ maxWidth: maxWidth }">
+  <div class="banner-principal" :style="{ minWidth: minWidth }">
     <div class="banner-content">
       <img
         src="/resources/images/Logo_Recto_More_Than_Brows_SIN_fondo.png"
