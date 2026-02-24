@@ -8,10 +8,16 @@ import { useViewportSize } from '../composables/useViewportSize'
 const router = useRouter()
 const { size } = useViewportSize()
 
-function onLoginSubmit(payload: { usuario: string; password: string; acceptTerms: boolean }) {
-  // TODO: integrar con API de login
+function onLoginSubmit(payload: { email: string; password: string; acceptTerms: boolean }) {
   console.log('Login:', payload)
-  alert(`Login: ${payload.usuario} / *** / términos: ${payload.acceptTerms}`)
+}
+
+function onLoginSuccess() {
+  router.push('/')
+}
+
+function onLoginError() {
+  // El formulario ya muestra el mensaje de error
 }
 
 function onNavNavigate(index: number) {
@@ -27,6 +33,8 @@ function onNavNavigate(index: number) {
       <CLoginForm
         :size="size"
         @submit="onLoginSubmit"
+        @success="onLoginSuccess"
+        @error="onLoginError"
       />
     </main>
     <NavBottom

@@ -8,11 +8,11 @@
       @submit.prevent="handleSubmit"
     >
       <div class="c_loginForm__field">
-        <label class="c_loginForm__label" for="login-usuario">Usuario</label>
+        <label class="c_loginForm__label" for="login-email">Email</label>
         <input
-          id="login-usuario"
-          v-model="usuario"
-          type="text"
+          id="login-email"
+          v-model="email"
+          type="email"
           class="c_loginForm__input"
           autocomplete="username"
         />
@@ -50,10 +50,14 @@
           <span v-else class="c_loginForm__forgot-link">He olvidado mi contraseña</span>
         </div>
       </div>
+      <p v-if="errorMessage" class="c_loginForm__error">
+        {{ errorMessage }}
+      </p>
       <div class="c_loginForm__submit-wrap">
         <C_contentAreaPrimaryButton
-          text="Reservar Cita"
+          :text="isLoading ? 'Iniciando sesión...' : 'Reservar Cita'"
           :size="submitButtonSize"
+          :disabled="isLoading"
           @click="handleSubmit"
         />
       </div>
@@ -97,20 +101,76 @@ const submitButtonSize = computed<ButtonSize>(() => {
   }
 })
 
+const LOGIN_API_URL = 'http://localhost:5297/api/Auth/Login'
+
 const emit = defineEmits<{
-  submit: [{ usuario: string; password: string; acceptTerms: boolean }]
+  submit: [{ email: string; password: string; acceptTerms: boolean }]
+  success: [{ token: string }]
+  error: [error: unknown]
 }>()
 
-const usuario = ref('')
+const email = ref('')
 const password = ref('')
 const acceptTerms = ref(false)
+const isLoading = ref(false)
+const errorMessage = ref('')
 
-function handleSubmit() {
-  emit('submit', {
-    usuario: usuario.value,
-    password: password.value,
-    acceptTerms: acceptTerms.value,
-  })
+async function handleSubmit() {
+  errorMessage.value = ''
+
+  if (!email.value.trim()) {
+    errorMessage.value = 'Introduce tu email.'
+    return
+  }
+  if (!password.value) {
+    errorMessage.value = 'Introduce tu contraseña.'
+    return
+  }
+  if (!acceptTerms.value) {
+    errorMessage.value = 'Debes aceptar los términos y condiciones.'
+    return
+  }
+
+  isLoading.value = true
+  try {
+    const response = await fetch(LOGIN_API_URL, {
+      method: 'POST',
+      headers: {
+        accept: '*/*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: email.value.trim(),
+        password: password.value,
+      }),
+    })
+
+    if (!response.ok) {
+      const text = await response.text()
+      errorMessage.value = text || `Error ${response.status}. Vuelve a intentarlo.`
+      emit('error', new Error(errorMessage.value))
+      return
+    }
+
+    const token = await response.text()
+    if (token) {
+      localStorage.setItem('auth_token', token)
+      emit('success', { token })
+      emit('submit', {
+        email: email.value,
+        password: password.value,
+        acceptTerms: acceptTerms.value,
+      })
+    } else {
+      errorMessage.value = 'No se recibió token de sesión.'
+      emit('error', new Error(errorMessage.value))
+    }
+  } catch (err) {
+    errorMessage.value = 'No se pudo conectar con el servidor. Comprueba tu conexión.'
+    emit('error', err)
+  } finally {
+    isLoading.value = false
+  }
 }
 </script>
 
@@ -233,6 +293,15 @@ export default {
     &:hover {
       text-decoration: underline;
     }
+  }
+
+  &__error {
+    width: 100%;
+    margin: 0;
+    padding: 8px 0;
+    color: #b71c1c;
+    font-size: 14px;
+    font-family: Roboto, system-ui, sans-serif;
   }
 
   &__submit-wrap {
