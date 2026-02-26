@@ -16,18 +16,34 @@
       <span class="c_navAreaSecondaryButton__inner">
         <span
           v-if="hasIcon && iconPosition === 'before'"
-          class="c_navAreaSecondaryButton__icon"
+          class="c_navAreaSecondaryButton__icon-wrap"
           aria-hidden="true"
         >
-          <slot name="icon" />
+          <span class="c_navAreaSecondaryButton__icon c_navAreaSecondaryButton__icon--default">
+            <slot name="icon" />
+          </span>
+          <span
+            v-if="hasIconHover"
+            class="c_navAreaSecondaryButton__icon c_navAreaSecondaryButton__icon--hover"
+          >
+            <slot name="icon-hover" />
+          </span>
         </span>
         <span class="c_navAreaSecondaryButton__text">{{ text }}</span>
         <span
           v-if="hasIcon && iconPosition === 'after'"
-          class="c_navAreaSecondaryButton__icon"
+          class="c_navAreaSecondaryButton__icon-wrap"
           aria-hidden="true"
         >
-          <slot name="icon" />
+          <span class="c_navAreaSecondaryButton__icon c_navAreaSecondaryButton__icon--default">
+            <slot name="icon" />
+          </span>
+          <span
+            v-if="hasIconHover"
+            class="c_navAreaSecondaryButton__icon c_navAreaSecondaryButton__icon--hover"
+          >
+            <slot name="icon-hover" />
+          </span>
         </span>
       </span>
     </button>
@@ -56,6 +72,7 @@ const props = withDefaults(
 
 const slots = useSlots()
 const hasIcon = computed(() => !!(slots.icon?.()?.length))
+const hasIconHover = computed(() => !!(slots['icon-hover']?.()?.length))
 
 const emit = defineEmits<{
   click: []
@@ -97,17 +114,30 @@ export default {
     margin: 0;
     font: inherit;
 
-    /* Hold (hover / active) – secundario */
     &:hover:not(:disabled) {
       border-color: #FFC0CB;
       background-color: #FFC0CB;
       color: white;
+
+      .c_navAreaSecondaryButton__icon--default {
+        display: none;
+      }
+      .c_navAreaSecondaryButton__icon--hover {
+        display: inline-flex;
+      }
     }
 
     &:active:not(:disabled) {
       border-color: #FFC0CB;
       background-color: #FFC0CB;
       color: white;
+
+      .c_navAreaSecondaryButton__icon--default {
+        display: none;
+      }
+      .c_navAreaSecondaryButton__icon--hover {
+        display: inline-flex;
+      }
     }
 
     &:disabled {
@@ -129,11 +159,25 @@ export default {
     gap: 8px;
   }
 
-  &__icon {
+  &__icon-wrap {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+  }
+
+  &__icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    &--default {
+      display: inline-flex;
+    }
+
+    &--hover {
+      display: none;
+    }
 
     :deep(svg) {
       width: 1em;
@@ -161,7 +205,7 @@ export default {
     text-decoration: none;
   }
 
-  /* Size variants – mismas dimensiones que Nav Area Primary */
+  /* Size variants */
   &--XS {
     width: 163px;
     padding: 0 4px;
@@ -175,7 +219,7 @@ export default {
   &--XS &__inner {
     gap: 4px;
   }
-  &--XS &__icon {
+  &--XS &__icon-wrap {
     width: 16px;
     height: 16px;
   }
@@ -206,7 +250,7 @@ export default {
   &--SM &__inner {
     gap: 8px;
   }
-  &--SM &__icon {
+  &--SM &__icon-wrap {
     width: 16px;
     height: 16px;
   }
@@ -237,7 +281,7 @@ export default {
   &--MD &__inner {
     gap: 12px;
   }
-  &--MD &__icon {
+  &--MD &__icon-wrap {
     width: 16px;
     height: 16px;
   }
@@ -268,7 +312,7 @@ export default {
   &--LG &__inner {
     gap: 16px;
   }
-  &--LG &__icon {
+  &--LG &__icon-wrap {
     width: 16px;
     height: 16px;
   }
@@ -299,7 +343,7 @@ export default {
   &--XL &__inner {
     gap: 16px;
   }
-  &--XL &__icon {
+  &--XL &__icon-wrap {
     width: 16px;
     height: 16px;
   }

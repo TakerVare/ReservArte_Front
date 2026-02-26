@@ -96,5 +96,7 @@ export default {
   width: 20px;
   height: 20px;
   margin-right: 8px;
+  object-fit: none;
+  object-position: center;
 }
 </style>
