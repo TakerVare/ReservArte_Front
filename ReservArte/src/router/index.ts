@@ -1,23 +1,68 @@
-import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
-import LoginView from "../views/LoginView.vue";
-import ContactInfoView from "../views/ContactInfoView.vue";
-import BookingView from "../views/BookingView.vue";
-import UserView from "../views/UserView.vue";
-import UserManagementView from "../views/UserManagementView.vue";
-import NewUserView from "../views/NewUserView.vue";
+import { createRouter, createWebHistory } from 'vue-router'
+
+// Layouts
+import PublicLayout from '../layouts/PublicLayout.vue'
+import AuthLayout from '../layouts/AuthLayout.vue'
+import AdminLayout from '../layouts/AdminLayout.vue'
+
+// Vistas públicas
+import HomeView from '../views/HomeView.vue'
+import ContactInfoView from '../views/ContactInfoView.vue'
+import BookingView from '../views/BookingView.vue'
+import UserView from '../views/UserView.vue'
+
+// Vistas auth
+import LoginView from '../views/LoginView.vue'
+
+// Vistas admin
+import UserManagementView from '../views/UserManagementView.vue'
+import NewUserView from '../views/NewUserView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    { path: "/", name: "home", component: HomeView },
-    { path: "/login", name: "login", component: LoginView },
-    { path: "/contact", name: "contact", component: ContactInfoView },
-    { path: "/booking", name: "booking", component: BookingView },
-    { path: "/user", name: "user", component: UserView },
-    { path: "/user/management", name: "user-management", component: UserManagementView },
-    { path: "/user/new", name: "new-user", component: NewUserView },
-  ],
-});
+    /**
+     * RUTAS PÚBLICAS
+     * Heredan de PublicLayout → Banner + contenido + NavBottom
+     */
+    {
+      path: '/',
+      component: PublicLayout,
+      children: [
+        { path: '', name: 'home', component: HomeView },
+        { path: 'contact', name: 'contact', component: ContactInfoView },
+        { path: 'booking', name: 'booking', component: BookingView },
+        { path: 'user', name: 'user', component: UserView },
+      ],
+    },
 
-export default router;
+    /**
+     * RUTAS AUTH
+     * Heredan de AuthLayout → Sin header ni footer
+     */
+    {
+      path: '/auth',
+      component: AuthLayout,
+      children: [
+        { path: 'login', name: 'login', component: LoginView },
+        // { path: 'register', name: 'register', component: RegisterView },
+      ],
+    },
+
+    /**
+     * RUTAS ADMIN
+     * Heredan de AdminLayout → Header y footer distintos
+     */
+    {
+      path: '/admin',
+      component: AdminLayout,
+      children: [
+        { path: 'users', name: 'admin-users', component: UserManagementView },
+        { path: 'users/new', name: 'admin-new-user', component: NewUserView },
+        // { path: 'users/:id/edit', name: 'admin-edit-user', component: EditUserView },
+      ],
+    },
+  ],
+})
+
+export default router

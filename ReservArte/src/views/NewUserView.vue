@@ -1,9 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import BannerPrincipal from '../components/c_bannerPrincipal.vue'
 import CNewUser from '../components/c_newUser.vue'
-import NavBottom from '../components/c_bottomNavBar.vue'
 import { useViewportSize } from '../composables/useViewportSize'
 import type { UserFormData } from '../components/c_newUser.vue'
 
@@ -22,19 +20,22 @@ const formData = ref<UserFormData>({
 const avatarUrl = ref('')
 
 function onBack() {
-  router.push('/user/management')
+  router.push({ name: 'admin-users' })
 }
 
 function onDelete() {
-  alert('Eliminar usuario')
+  // TODO: llamar al store para eliminar
+  console.log('Eliminar usuario')
 }
 
 function onAvatarCamera() {
-  alert('Abrir cámara')
+  // TODO: abrir cámara
+  console.log('Abrir cámara')
 }
 
 function onAvatarUpload() {
-  alert('Subir imagen')
+  // TODO: abrir selector de archivos
+  console.log('Subir imagen')
 }
 
 function onAvatarDelete() {
@@ -42,17 +43,13 @@ function onAvatarDelete() {
 }
 
 function onSave() {
-  alert('Guardar: ' + JSON.stringify(formData.value))
+  // TODO: llamar al store para guardar
+  console.log('Guardar:', JSON.stringify(formData.value))
+  router.push({ name: 'admin-users' })
 }
 
 function onCancel() {
-  router.push('/user/management')
-}
-
-function onNavNavigate(index: number) {
-  if (index === 0) router.push('/booking')
-  if (index === 1) router.push('/contact')
-  if (index === 2) router.push('/user')
+  router.push({ name: 'admin-users' })
 }
 </script>
 
@@ -63,46 +60,18 @@ export default {
 </script>
 
 <template>
-  <div class="new-user-page">
-    <BannerPrincipal :size="size" />
-    <main class="new-user-page__main">
-      <CNewUser
-        :size="size"
-        title="Nuevo Usuario"
-        :avatar-url="avatarUrl"
-        :form-data="formData"
-        @back="onBack"
-        @delete="onDelete"
-        @avatar-camera="onAvatarCamera"
-        @avatar-upload="onAvatarUpload"
-        @avatar-delete="onAvatarDelete"
-        @update:form-data="formData = $event"
-        @save="onSave"
-        @cancel="onCancel"
-      />
-    </main>
-    <NavBottom
-      :size="size"
-      :active-index="2"
-      @navigate="onNavNavigate"
-    />
-  </div>
+  <CNewUser
+    :size="size"
+    title="Nuevo Usuario"
+    :avatar-url="avatarUrl"
+    :form-data="formData"
+    @back="onBack"
+    @delete="onDelete"
+    @avatar-camera="onAvatarCamera"
+    @avatar-upload="onAvatarUpload"
+    @avatar-delete="onAvatarDelete"
+    @update:form-data="formData = $event"
+    @save="onSave"
+    @cancel="onCancel"
+  />
 </template>
-
-<style scoped>
-.new-user-page {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-  background-color: #fff;
-}
-
-.new-user-page__main {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  width: 100%;
-}
-</style>
