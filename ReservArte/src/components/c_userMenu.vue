@@ -31,9 +31,10 @@ const props = withDefaults(
         title: 'Área de administración',
         items: [
           { id: 'citas', text: 'Citas' },
-          { id: 'usuarios', text: 'Usuarios' },
+          { id: 'clientes', text: 'Clientes' },
           { id: 'servicios', text: 'Servicios' },
           { id: 'empleados', text: 'Empleados' },
+          { id: 'usuarios', text: 'Todos los usuarios' },
           { id: 'configuracion-admin', text: 'Configuración' },
         ],
       },
