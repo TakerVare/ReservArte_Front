@@ -5,8 +5,9 @@
   >
     <form
       class="c_loginForm__form"
-      @submit.prevent="handleSubmit"
+      @submit.prevent="onSubmit"
     >
+      <!-- Email -->
       <div class="c_loginForm__field">
         <label class="c_loginForm__label" for="login-email">Email</label>
         <input
@@ -14,9 +15,16 @@
           v-model="email"
           type="email"
           class="c_loginForm__input"
+          :class="{ 'c_loginForm__input--error': emailError }"
           autocomplete="username"
+          @blur="emailBlur"
         />
+        <span v-if="emailError" class="c_loginForm__field-error">
+          {{ emailError }}
+        </span>
       </div>
+
+      <!-- Contraseña -->
       <div class="c_loginForm__field">
         <label class="c_loginForm__label" for="login-password">Contraseña</label>
         <input
@@ -24,9 +32,16 @@
           v-model="password"
           type="password"
           class="c_loginForm__input"
+          :class="{ 'c_loginForm__input--error': passwordError }"
           autocomplete="current-password"
+          @blur="passwordBlur"
         />
+        <span v-if="passwordError" class="c_loginForm__field-error">
+          {{ passwordError }}
+        </span>
       </div>
+
+      <!-- Checkboxes -->
       <div class="c_loginForm__checkbox-row">
         <div class="c_loginForm__checkbox-wrap">
           <input
@@ -39,6 +54,10 @@
             Acepto los términos y condiciones
           </label>
         </div>
+        <span v-if="acceptTermsError" class="c_loginForm__field-error">
+          {{ acceptTermsError }}
+        </span>
+
         <div class="c_loginForm__checkbox-wrap">
           <input
             id="login-register"
@@ -50,6 +69,7 @@
             No tengo cuenta, quiero registrarme
           </label>
         </div>
+
         <div class="c_loginForm__forgot-row">
           <a
             v-if="forgotPasswordUrl"
@@ -61,15 +81,24 @@
           <span v-else class="c_loginForm__forgot-link">He olvidado mi contraseña</span>
         </div>
       </div>
-      <p v-if="errorMessage" class="c_loginForm__error">
-        {{ errorMessage }}
+
+      <!-- Mensaje de éxito registro -->
+      <p v-if="successMessage" class="c_loginForm__success">
+        {{ successMessage }}
       </p>
+
+      <!-- Error del servidor -->
+      <p v-if="serverError" class="c_loginForm__error">
+        {{ serverError }}
+      </p>
+
+      <!-- Botón -->
       <div class="c_loginForm__submit-wrap">
         <C_contentAreaPrimaryButton
           :text="submitButtonText"
           :size="submitButtonSize"
           :disabled="isLoading"
-          @click="handleSubmit"
+          @click="onSubmit"
         />
       </div>
     </form>
@@ -78,6 +107,8 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useForm, useField } from 'vee-validate'
+import * as yup from 'yup'
 import C_contentAreaPrimaryButton from './Buttons/c_contentAreaPrimaryButton.vue'
 import type { ButtonSize } from './Buttons/c_contentAreaPrimaryButton.vue'
 
@@ -86,7 +117,6 @@ export type LoginFormSize = 'XXL' | 'XL' | 'LG' | 'MD' | 'SM' | 'XS'
 const props = withDefaults(
   defineProps<{
     size?: LoginFormSize
-    /** URL del enlace "He olvidado mi contraseña". Opcional. */
     forgotPasswordUrl?: string
   }>(),
   {
@@ -95,7 +125,58 @@ const props = withDefaults(
   }
 )
 
-/** Tamaño del botón de envío según la versión del formulario */
+const emit = defineEmits<{
+  submit: [{ email: string; password: string; acceptTerms: boolean }]
+  success: [{ token: string }]
+  error: [error: unknown]
+  'register-success': []
+}>()
+
+// ─── Esquema Yup ───
+const validationSchema = yup.object({
+  email: yup
+    .string()
+    .required('Introduce tu email')
+    .matches(
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      'El formato del email no es válido (ej: usuario@dominio.com)'
+    ),
+  password: yup
+    .string()
+    .required('Introduce tu contraseña')
+    .min(8, 'La contraseña debe tener al menos 8 caracteres')
+    .matches(/[a-z]/, 'Debe contener al menos una letra minúscula')
+    .matches(/[A-Z]/, 'Debe contener al menos una letra mayúscula')
+    .matches(/[0-9]/, 'Debe contener al menos un número')
+    .matches(/[^a-zA-Z0-9]/, 'Debe contener al menos un símbolo (!@#$%...)'),
+  acceptTerms: yup
+    .boolean()
+    .oneOf([true], 'Debes aceptar los términos y condiciones'),
+})
+
+// ─── VeeValidate: useForm + useField ───
+const { handleSubmit, resetForm } = useForm({
+  validationSchema,
+  initialValues: {
+    email: '',
+    password: '',
+    acceptTerms: false,
+  },
+})
+
+const { value: email, errorMessage: emailError, handleBlur: emailBlur } = useField<string>('email')
+const { value: password, errorMessage: passwordError, handleBlur: passwordBlur } = useField<string>('password')
+const { value: acceptTerms, errorMessage: acceptTermsError } = useField<boolean>('acceptTerms')
+
+// ─── Estado local (no gestionado por VeeValidate) ───
+const wantsRegister = ref(false)
+const isLoading = ref(false)
+const serverError = ref('')
+const successMessage = ref('')
+
+const LOGIN_API_URL = 'http://localhost:5297/api/Auth/Login'
+const REGISTER_API_URL = 'http://localhost:5297/api/Auth/Register'
+
 const submitButtonSize = computed<ButtonSize>(() => {
   switch (props.size) {
     case 'XXL':
@@ -112,24 +193,6 @@ const submitButtonSize = computed<ButtonSize>(() => {
   }
 })
 
-const LOGIN_API_URL = 'http://localhost:5297/api/Auth/Login'
-const REGISTER_API_URL = 'http://localhost:5297/api/Auth/Register'
-
-const emit = defineEmits<{
-  submit: [{ email: string; password: string; acceptTerms: boolean }]
-  success: [{ token: string }]
-  error: [error: unknown]
-  'register-success': []
-}>()
-
-const email = ref('')
-const password = ref('')
-const acceptTerms = ref(false)
-const wantsRegister = ref(false)
-const isLoading = ref(false)
-const errorMessage = ref('')
-
-/** Texto dinámico del botón según el modo */
 const submitButtonText = computed(() => {
   if (isLoading.value) {
     return wantsRegister.value ? 'Registrando...' : 'Iniciando sesión...'
@@ -137,30 +200,23 @@ const submitButtonText = computed(() => {
   return wantsRegister.value ? 'Registrarme' : 'Reservar Cita'
 })
 
-async function handleSubmit() {
-  errorMessage.value = ''
-
-  if (!email.value.trim()) {
-    errorMessage.value = 'Introduce tu email.'
-    return
-  }
-  if (!password.value) {
-    errorMessage.value = 'Introduce tu contraseña.'
-    return
-  }
-  if (!acceptTerms.value) {
-    errorMessage.value = 'Debes aceptar los términos y condiciones.'
-    return
-  }
+/**
+ * onSubmit: VeeValidate valida con Yup.
+ * Si pasa la validación, ejecuta handleLogin o handleRegister.
+ * Si no pasa, los errores aparecen automáticamente debajo de cada campo.
+ */
+const onSubmit = handleSubmit(async (values) => {
+  serverError.value = ''
+  successMessage.value = ''
 
   if (wantsRegister.value) {
-    await handleRegister()
+    await handleRegister(values.email, values.password)
   } else {
-    await handleLogin()
+    await handleLogin(values.email, values.password)
   }
-}
+})
 
-async function handleLogin() {
+async function handleLogin(emailVal: string, passwordVal: string) {
   isLoading.value = true
   try {
     const response = await fetch(LOGIN_API_URL, {
@@ -170,15 +226,15 @@ async function handleLogin() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        email: email.value.trim(),
-        password: password.value,
+        email: emailVal.trim(),
+        password: passwordVal,
       }),
     })
 
     if (!response.ok) {
       const text = await response.text()
-      errorMessage.value = text || `Error ${response.status}. Vuelve a intentarlo.`
-      emit('error', new Error(errorMessage.value))
+      serverError.value = text || `Error ${response.status}. Vuelve a intentarlo.`
+      emit('error', new Error(serverError.value))
       return
     }
 
@@ -187,23 +243,23 @@ async function handleLogin() {
       localStorage.setItem('auth_token', token)
       emit('success', { token })
       emit('submit', {
-        email: email.value,
-        password: password.value,
+        email: emailVal,
+        password: passwordVal,
         acceptTerms: acceptTerms.value,
       })
     } else {
-      errorMessage.value = 'No se recibió token de sesión.'
-      emit('error', new Error(errorMessage.value))
+      serverError.value = 'No se recibió token de sesión.'
+      emit('error', new Error(serverError.value))
     }
   } catch (err) {
-    errorMessage.value = 'No se pudo conectar con el servidor. Comprueba tu conexión.'
+    serverError.value = 'No se pudo conectar con el servidor. Comprueba tu conexión.'
     emit('error', err)
   } finally {
     isLoading.value = false
   }
 }
 
-async function handleRegister() {
+async function handleRegister(emailVal: string, passwordVal: string) {
   isLoading.value = true
   try {
     const response = await fetch(REGISTER_API_URL, {
@@ -213,24 +269,23 @@ async function handleRegister() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        email: email.value.trim(),
-        password: password.value,
+        email: emailVal.trim(),
+        password: passwordVal,
       }),
     })
 
     if (!response.ok) {
       const text = await response.text()
-      errorMessage.value = text || `Error ${response.status}. Vuelve a intentarlo.`
-      emit('error', new Error(errorMessage.value))
+      serverError.value = text || `Error ${response.status}. Vuelve a intentarlo.`
+      emit('error', new Error(serverError.value))
       return
     }
 
-    // Registro exitoso: desmarcar checkbox y avisar al usuario
     wantsRegister.value = false
-    errorMessage.value = ''
+    successMessage.value = '¡Cuenta creada! Ahora puedes iniciar sesión con tus credenciales.'
     emit('register-success')
   } catch (err) {
-    errorMessage.value = 'No se pudo conectar con el servidor. Comprueba tu conexión.'
+    serverError.value = 'No se pudo conectar con el servidor. Comprueba tu conexión.'
     emit('error', err)
   } finally {
     isLoading.value = false
@@ -270,7 +325,7 @@ export default {
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 4px;
     align-items: flex-start;
   }
 
@@ -296,10 +351,23 @@ export default {
     min-width: 120px;
     font: inherit;
     color: inherit;
+    transition: border-color 0.2s;
 
     &::placeholder {
       color: #999;
     }
+
+    &--error {
+      border-color: #b71c1c;
+    }
+  }
+
+  &__field-error {
+    color: #b71c1c;
+    font-size: 13px;
+    font-family: Roboto, system-ui, sans-serif;
+    line-height: 18px;
+    margin-top: 2px;
   }
 
   &__checkbox-row {
@@ -364,6 +432,15 @@ export default {
     margin: 0;
     padding: 8px 0;
     color: #b71c1c;
+    font-size: 14px;
+    font-family: Roboto, system-ui, sans-serif;
+  }
+
+  &__success {
+    width: 100%;
+    margin: 0;
+    padding: 8px 0;
+    color: #2e7d32;
     font-size: 14px;
     font-family: Roboto, system-ui, sans-serif;
   }
