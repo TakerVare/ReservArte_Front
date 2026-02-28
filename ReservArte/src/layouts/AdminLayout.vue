@@ -16,6 +16,9 @@ const headerTitle = computed(() => {
     'admin-customers': 'Gestión de Clientes',
     'admin-new-customer': 'Nuevo Cliente',
     'admin-edit-customer': 'Editar Cliente',
+    'admin-employees': 'Gestión de Empleados',
+    'admin-new-employee': 'Nuevo Empleado',
+    'admin-edit-employee': 'Editar Empleado',
     'admin-services': 'Gestión de Servicios',
     'admin-bookings': 'Gestión de Citas',
   }

@@ -22,6 +22,9 @@ function onMenuItemClick(itemId: string) {
     case 'clientes':
       router.push({ name: 'admin-customers' })
       break
+    case 'empleados':
+      router.push({ name: 'admin-employees' })
+      break
     case 'citas':
       // TODO: router.push({ name: 'admin-bookings' })
       console.log('Navegando a citas')
