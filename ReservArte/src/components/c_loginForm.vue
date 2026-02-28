@@ -39,6 +39,17 @@
             Acepto los términos y condiciones
           </label>
         </div>
+        <div class="c_loginForm__checkbox-wrap">
+          <input
+            id="login-register"
+            v-model="wantsRegister"
+            type="checkbox"
+            class="c_loginForm__checkbox"
+          />
+          <label class="c_loginForm__checkbox-label" for="login-register">
+            No tengo cuenta, quiero registrarme
+          </label>
+        </div>
         <div class="c_loginForm__forgot-row">
           <a
             v-if="forgotPasswordUrl"
@@ -55,7 +66,7 @@
       </p>
       <div class="c_loginForm__submit-wrap">
         <C_contentAreaPrimaryButton
-          :text="isLoading ? 'Iniciando sesión...' : 'Reservar Cita'"
+          :text="submitButtonText"
           :size="submitButtonSize"
           :disabled="isLoading"
           @click="handleSubmit"
@@ -84,7 +95,7 @@ const props = withDefaults(
   }
 )
 
-/** Tamaño del botón de envío según la versión del formulario: Form-L (XXL/XL/LG/MD), Form-M (SM), Form-S (XS). */
+/** Tamaño del botón de envío según la versión del formulario */
 const submitButtonSize = computed<ButtonSize>(() => {
   switch (props.size) {
     case 'XXL':
@@ -102,18 +113,29 @@ const submitButtonSize = computed<ButtonSize>(() => {
 })
 
 const LOGIN_API_URL = 'http://localhost:5297/api/Auth/Login'
+const REGISTER_API_URL = 'http://localhost:5297/api/Auth/Register'
 
 const emit = defineEmits<{
   submit: [{ email: string; password: string; acceptTerms: boolean }]
   success: [{ token: string }]
   error: [error: unknown]
+  'register-success': []
 }>()
 
 const email = ref('')
 const password = ref('')
 const acceptTerms = ref(false)
+const wantsRegister = ref(false)
 const isLoading = ref(false)
 const errorMessage = ref('')
+
+/** Texto dinámico del botón según el modo */
+const submitButtonText = computed(() => {
+  if (isLoading.value) {
+    return wantsRegister.value ? 'Registrando...' : 'Iniciando sesión...'
+  }
+  return wantsRegister.value ? 'Registrarme' : 'Reservar Cita'
+})
 
 async function handleSubmit() {
   errorMessage.value = ''
@@ -131,6 +153,14 @@ async function handleSubmit() {
     return
   }
 
+  if (wantsRegister.value) {
+    await handleRegister()
+  } else {
+    await handleLogin()
+  }
+}
+
+async function handleLogin() {
   isLoading.value = true
   try {
     const response = await fetch(LOGIN_API_URL, {
@@ -165,6 +195,40 @@ async function handleSubmit() {
       errorMessage.value = 'No se recibió token de sesión.'
       emit('error', new Error(errorMessage.value))
     }
+  } catch (err) {
+    errorMessage.value = 'No se pudo conectar con el servidor. Comprueba tu conexión.'
+    emit('error', err)
+  } finally {
+    isLoading.value = false
+  }
+}
+
+async function handleRegister() {
+  isLoading.value = true
+  try {
+    const response = await fetch(REGISTER_API_URL, {
+      method: 'POST',
+      headers: {
+        accept: '*/*',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        email: email.value.trim(),
+        password: password.value,
+      }),
+    })
+
+    if (!response.ok) {
+      const text = await response.text()
+      errorMessage.value = text || `Error ${response.status}. Vuelve a intentarlo.`
+      emit('error', new Error(errorMessage.value))
+      return
+    }
+
+    // Registro exitoso: desmarcar checkbox y avisar al usuario
+    wantsRegister.value = false
+    errorMessage.value = ''
+    emit('register-success')
   } catch (err) {
     errorMessage.value = 'No se pudo conectar con el servidor. Comprueba tu conexión.'
     emit('error', err)

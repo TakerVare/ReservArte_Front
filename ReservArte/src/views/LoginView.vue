@@ -17,6 +17,12 @@ function onLoginSuccess() {
 function onLoginError() {
   // El formulario ya muestra el mensaje de error
 }
+
+function onRegisterSuccess() {
+  // Registro exitoso: el formulario vuelve a modo login automáticamente
+  // El usuario solo tiene que iniciar sesión con las credenciales que acaba de crear
+  console.log('Registro exitoso')
+}
 </script>
 
 <script lang="ts">
@@ -31,5 +37,6 @@ export default {
     @submit="onLoginSubmit"
     @success="onLoginSuccess"
     @error="onLoginError"
+    @register-success="onRegisterSuccess"
   />
 </template>
