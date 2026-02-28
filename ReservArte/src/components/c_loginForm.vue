@@ -242,11 +242,7 @@ async function handleLogin(emailVal: string, passwordVal: string) {
     const token = await response.text()
     if (token) {
       const authStore = useAuthStore()
-      authStore.setAuth(token, {
-        id: '',
-        email: emailVal.trim(),
-        role: 'user',
-      })
+      authStore.setAuthFromToken(token, emailVal.trim())
       emit('success', { token })
       emit('submit', {
         email: emailVal,

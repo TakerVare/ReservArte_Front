@@ -3,18 +3,19 @@ import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import BannerPrincipal from '../components/c_bannerPrincipal.vue'
 import NavBottom from '../components/c_bottomNavBar.vue'
+import { useAuthStore } from '../stores/auth.store'
 import { useViewportSize } from '../composables/useViewportSize'
 
 const router = useRouter()
 const route = useRoute()
+const authStore = useAuthStore()
 const { size } = useViewportSize()
 
 /**
  * Índice activo del nav bottom según la ruta actual.
- * Mismo mapeo que tenías repetido en cada vista:
- *   0 = Inicio (home/booking)
- *   1 = Ubicación (contact)
- *   2 = Perfil (user)
+ * 0 = Inicio (home/booking)
+ * 1 = Ubicación (contact)
+ * 2 = Perfil (user)
  */
 const activeNavIndex = computed(() => {
   const name = route.name as string
@@ -32,7 +33,11 @@ function onNavNavigate(index: number) {
       router.push({ name: 'contact' })
       break
     case 2:
-      router.push({ name: 'user' })
+      if (authStore.isAuthenticated) {
+        router.push({ name: 'user' })
+      } else {
+        router.push({ name: 'booking' })
+      }
       break
   }
 }

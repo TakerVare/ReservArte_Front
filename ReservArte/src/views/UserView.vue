@@ -7,11 +7,15 @@ import { useViewportSize } from '../composables/useViewportSize'
 
 const router = useRouter()
 const authStore = useAuthStore()
-const { isAdmin } = storeToRefs(authStore)
+const { showAdminArea } = storeToRefs(authStore)
 const { size } = useViewportSize()
 
 function onMenuItemClick(itemId: string) {
   switch (itemId) {
+    case 'cerrar-sesion':
+      authStore.logout()
+      router.push({ name: 'login' })
+      break
     case 'usuarios':
       router.push({ name: 'admin-users' })
       break
@@ -40,7 +44,7 @@ export default {
   <div class="user-view">
     <CUserMenu
       :size="size"
-      :is-admin="isAdmin"
+      :is-admin="showAdminArea"
       @menu-item-click="onMenuItemClick"
     />
   </div>

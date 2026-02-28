@@ -20,7 +20,7 @@ const props = withDefaults(
     size?: UserMenuSize
     /** Secciones del menú */
     sections?: MenuSection[]
-    /** Si es admin muestra ambas secciones, si no solo la de usuario */
+    /** Si es true muestra el área de administración y la de usuario (admin/employee); si no, solo la de usuario */
     isAdmin?: boolean
   }>(),
   {
@@ -46,6 +46,7 @@ const props = withDefaults(
           { id: 'configuracion-user', text: 'Configuración' },
           { id: 'privacidad', text: 'Privacidad' },
           { id: 'acerca', text: 'Acerca de More Than Brows' },
+          { id: 'cerrar-sesion', text: 'Cerrar sesión' },
         ],
       },
     ],
