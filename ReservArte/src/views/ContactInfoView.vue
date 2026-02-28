@@ -2,7 +2,7 @@
 import { useRouter } from 'vue-router'
 import BannerPrincipal from '../components/c_bannerPrincipal.vue'
 import CContactMap from '../components/c_contactMap.vue'
-import CContactInfo from '../components/c_contactinfo.vue'
+import CContactInfo from '../components/c_contactInfo.vue'
 import NavBottom from '../components/c_bottomNavBar.vue'
 import { useViewportSize } from '../composables/useViewportSize'
 

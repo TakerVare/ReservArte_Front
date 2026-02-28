@@ -5,6 +5,7 @@ import ContactInfoView from "../views/ContactInfoView.vue";
 import BookingView from "../views/BookingView.vue";
 import UserView from "../views/UserView.vue";
 import UserManagementView from "../views/UserManagementView.vue";
+import NewUserView from "../views/NewUserView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,6 +16,7 @@ const router = createRouter({
     { path: "/booking", name: "booking", component: BookingView },
     { path: "/user", name: "user", component: UserView },
     { path: "/user/management", name: "user-management", component: UserManagementView },
+    { path: "/user/new", name: "new-user", component: NewUserView },
   ],
 });
 
