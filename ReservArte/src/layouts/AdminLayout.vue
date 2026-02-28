@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { useViewportSize } from '../composables/useViewportSize'
+import { useAuthStore } from '../stores/auth.store'
 
 const router = useRouter()
 const route = useRoute()
-const { size } = useViewportSize()
+const authStore = useAuthStore()
 
 /** Título dinámico del header según la ruta */
 const headerTitle = computed(() => {
@@ -25,6 +25,11 @@ function goBack() {
 
 function goToPanel() {
   router.push({ name: 'user' })
+}
+
+function logout() {
+  authStore.logout()
+  router.push({ name: 'login' })
 }
 </script>
 
@@ -48,14 +53,24 @@ export default {
           ← Volver
         </button>
         <h1 class="admin-layout__title">{{ headerTitle }}</h1>
-        <button
-          class="admin-layout__panel-btn"
-          type="button"
-          @click="goToPanel"
-          aria-label="Panel"
-        >
-          Panel
-        </button>
+        <div class="admin-layout__header-actions">
+          <button
+            class="admin-layout__panel-btn"
+            type="button"
+            @click="goToPanel"
+            aria-label="Panel"
+          >
+            Panel
+          </button>
+          <button
+            class="admin-layout__logout-btn"
+            type="button"
+            @click="logout"
+            aria-label="Cerrar sesión"
+          >
+            Cerrar sesión
+          </button>
+        </div>
       </div>
     </header>
 
@@ -99,6 +114,12 @@ export default {
   box-sizing: border-box;
 }
 
+.admin-layout__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .admin-layout__title {
   margin: 0;
   font-family: Georgia, serif;
@@ -109,7 +130,8 @@ export default {
 }
 
 .admin-layout__back-btn,
-.admin-layout__panel-btn {
+.admin-layout__panel-btn,
+.admin-layout__logout-btn {
   background: none;
   border: 1px solid #fff;
   color: #fff;
@@ -123,7 +145,8 @@ export default {
 }
 
 .admin-layout__back-btn:hover,
-.admin-layout__panel-btn:hover {
+.admin-layout__panel-btn:hover,
+.admin-layout__logout-btn:hover {
   background-color: rgba(255, 255, 255, 0.2);
 }
 

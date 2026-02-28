@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '../stores/auth.store'
 
 // Layouts
 import PublicLayout from '../layouts/PublicLayout.vue'
@@ -63,6 +64,17 @@ const router = createRouter({
       ],
     },
   ],
+})
+
+router.beforeEach((to) => {
+  const authStore = useAuthStore()
+  const isAdminRoute = to.path.startsWith('/admin')
+
+  if (isAdminRoute && !authStore.isAuthenticated) {
+    return { name: 'login' }
+  }
+
+  return true
 })
 
 export default router

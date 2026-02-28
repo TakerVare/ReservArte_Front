@@ -109,6 +109,7 @@
 import { ref, computed } from 'vue'
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
+import { useAuthStore } from '../stores/auth.store'
 import C_contentAreaPrimaryButton from './Buttons/c_contentAreaPrimaryButton.vue'
 import type { ButtonSize } from './Buttons/c_contentAreaPrimaryButton.vue'
 
@@ -240,7 +241,12 @@ async function handleLogin(emailVal: string, passwordVal: string) {
 
     const token = await response.text()
     if (token) {
-      localStorage.setItem('auth_token', token)
+      const authStore = useAuthStore()
+      authStore.setAuth(token, {
+        id: '',
+        email: emailVal.trim(),
+        role: 'user',
+      })
       emit('success', { token })
       emit('submit', {
         email: emailVal,

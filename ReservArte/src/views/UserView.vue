@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
 import CUserMenu from '../components/c_userMenu.vue'
+import { useAuthStore } from '../stores/auth.store'
 import { useViewportSize } from '../composables/useViewportSize'
 
 const router = useRouter()
+const authStore = useAuthStore()
+const { isAdmin } = storeToRefs(authStore)
 const { size } = useViewportSize()
 
 function onMenuItemClick(itemId: string) {
@@ -36,7 +40,7 @@ export default {
   <div class="user-view">
     <CUserMenu
       :size="size"
-      :is-admin="true"
+      :is-admin="isAdmin"
       @menu-item-click="onMenuItemClick"
     />
   </div>
