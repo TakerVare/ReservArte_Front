@@ -18,6 +18,8 @@ import LoginView from '../views/LoginView.vue'
 // Vistas admin
 import UserManagementView from '../views/UserManagementView.vue'
 import NewUserView from '../views/NewUserView.vue'
+import CustomerMasterView from '../views/customerMasterView.vue'
+import CustomerDetailView from '../views/customerDetailView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -60,6 +62,9 @@ const router = createRouter({
       children: [
         { path: 'users', name: 'admin-users', component: UserManagementView },
         { path: 'users/new', name: 'admin-new-user', component: NewUserView },
+        { path: 'customers', name: 'admin-customers', component: CustomerMasterView },
+        { path: 'customers/new', name: 'admin-new-customer', component: CustomerDetailView },
+        { path: 'customers/:id/edit', name: 'admin-edit-customer', component: CustomerDetailView },
         // { path: 'users/:id/edit', name: 'admin-edit-user', component: EditUserView },
       ],
     },
