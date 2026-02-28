@@ -333,6 +333,7 @@ export default {
     flex-direction: column;
     gap: 4px;
     align-items: flex-start;
+    color: #1a1a1a;
   }
 
   &__label {

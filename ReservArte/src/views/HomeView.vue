@@ -1,13 +1,19 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import CHeroSection from '../components/c_heroSection.vue'
+import { useAuthStore } from '../stores/auth.store'
 import { useViewportSize } from '../composables/useViewportSize'
 
 const router = useRouter()
+const authStore = useAuthStore()
 const { size } = useViewportSize()
 
 function onEnter() {
-  router.push({ name: 'booking' })
+  if (authStore.isAuthenticated) {
+    router.push({ name: 'booking' })
+  } else {
+    router.push({ name: 'login' })
+  }
 }
 </script>
 
