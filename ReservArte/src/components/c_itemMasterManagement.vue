@@ -193,6 +193,11 @@ export default {
         />
       </div>
 
+      <!-- Slot opcional para filtros adicionales (ej. select de categoría) -->
+      <div v-if="$slots.filters" class="c_itemMasterManagement__filters" :style="{ maxWidth: innerWidth }">
+        <slot name="filters" />
+      </div>
+
       <!-- Lista de ítems -->
       <div
         class="c_itemMasterManagement__item-list"
@@ -259,6 +264,14 @@ export default {
     box-sizing: border-box;
     border-top: 1px solid #f5f5f5;
     border-bottom: 1px solid #f5f5f5;
+  }
+
+  &__filters {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 8px 0;
+    box-sizing: border-box;
   }
 
   &__item-list {

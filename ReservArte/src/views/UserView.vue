@@ -30,8 +30,7 @@ function onMenuItemClick(itemId: string) {
       console.log('Navegando a citas')
       break
     case 'servicios':
-      // TODO: router.push({ name: 'admin-services' })
-      console.log('Navegando a servicios')
+      router.push({ name: 'admin-services' })
       break
     default:
       console.log(`Navegando a: ${itemId}`)

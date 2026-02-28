@@ -22,6 +22,8 @@ import CustomerMasterView from '../views/customerMasterView.vue'
 import CustomerDetailView from '../views/customerDetailView.vue'
 import EmployeeMasterView from '../views/employeeMasterView.vue'
 import EmployeeDetailView from '../views/employeeDetailView.vue'
+import ServiceMasterView from '../views/serviceMasterView.vue'
+import ServiceDetailView from '../views/serviceDetailView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -70,6 +72,9 @@ const router = createRouter({
         { path: 'employees', name: 'admin-employees', component: EmployeeMasterView },
         { path: 'employees/new', name: 'admin-new-employee', component: EmployeeDetailView },
         { path: 'employees/:id/edit', name: 'admin-edit-employee', component: EmployeeDetailView },
+        { path: 'services', name: 'admin-services', component: ServiceMasterView },
+        { path: 'services/new', name: 'admin-new-service', component: ServiceDetailView },
+        { path: 'services/:id/edit', name: 'admin-edit-service', component: ServiceDetailView },
         // { path: 'users/:id/edit', name: 'admin-edit-user', component: EditUserView },
       ],
     },

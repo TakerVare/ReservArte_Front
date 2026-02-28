@@ -20,6 +20,8 @@ const headerTitle = computed(() => {
     'admin-new-employee': 'Nuevo Empleado',
     'admin-edit-employee': 'Editar Empleado',
     'admin-services': 'Gestión de Servicios',
+    'admin-new-service': 'Nuevo Servicio',
+    'admin-edit-service': 'Editar Servicio',
     'admin-bookings': 'Gestión de Citas',
   }
   return titles[route.name as string] ?? 'Administración'
