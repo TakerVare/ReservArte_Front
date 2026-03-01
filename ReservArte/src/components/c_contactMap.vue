@@ -11,7 +11,7 @@
         allowfullscreen
         loading="lazy"
         referrerpolicy="no-referrer-when-downgrade"
-        title="Mapa de ubicación"
+        :title="$t('contact.mapTitle')"
       />
     </div>
     <a
@@ -21,7 +21,7 @@
       rel="noopener noreferrer"
       class="c_contactMap__view-larger"
     >
-      Ver mapa más grande
+      {{ $t('contact.viewLargerMap') }}
     </a>
   </div>
 </template>

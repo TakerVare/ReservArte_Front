@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import CPageTittle from './c_pageTittle.vue'
 import CNavAreaPrimaryButton from './Buttons/c_navAreaPrimaryButton.vue'
 import CNavAreaSecondaryButton from './Buttons/c_navAreaSecondaryButton.vue'
@@ -51,12 +52,12 @@ const props = withDefaults(
   }>(),
   {
     size: 'MD',
-    title: 'Usuario',
-    backText: 'Volver',
-    deleteText: 'Eliminar',
+    title: '',
+    backText: '',
+    deleteText: '',
     showDeleteButton: true,
     avatarUrl: '',
-    formTitle: 'Datos de usuario',
+    formTitle: '',
     formData: () => ({
       nombre: '',
       apellidos: '',
@@ -65,18 +66,29 @@ const props = withDefaults(
       rol: 'cliente',
       estado: 'activo',
     }),
-    rolOptions: () => [
-      { label: 'Cliente', value: 'cliente' },
-      { label: 'Empleado', value: 'empleado' },
-    ],
-    estadoOptions: () => [
-      { label: 'Activo', value: 'activo' },
-      { label: 'Inactivo', value: 'inactivo' },
-    ],
-    saveText: 'Guardar',
-    cancelText: 'Cancelar',
+    rolOptions: undefined,
+    estadoOptions: undefined,
+    saveText: undefined,
+    cancelText: undefined,
   }
 )
+
+const { t } = useI18n()
+const defaultRolOptions = computed(() => [
+  { label: t('options.client'), value: 'cliente' },
+  { label: t('options.employee'), value: 'empleado' },
+])
+const defaultEstadoOptions = computed(() => [
+  { label: t('options.active'), value: 'activo' },
+  { label: t('options.inactive'), value: 'inactivo' },
+])
+const rolOptionsComputed = computed(() => props.rolOptions ?? defaultRolOptions.value)
+const estadoOptionsComputed = computed(() => props.estadoOptions ?? defaultEstadoOptions.value)
+const backTextComputed = computed(() => props.backText ?? t('common.back'))
+const deleteTextComputed = computed(() => props.deleteText ?? t('common.delete'))
+const formTitleComputed = computed(() => props.formTitle ?? t('form.userData'))
+const saveTextComputed = computed(() => props.saveText ?? t('common.save'))
+const cancelTextComputed = computed(() => props.cancelText ?? t('common.cancel'))
 
 const emit = defineEmits<{
   back: []
@@ -170,13 +182,13 @@ export default {
     <div class="c_userDetailManagement__container" :style="{ maxWidth: containerMaxWidth }">
       <!-- Título rosa — ocupa todo el ancho -->
       <div class="c_userDetailManagement__title-wrap">
-        <CPageTittle :text="title" :size="titleSize" />
+        <CPageTittle :text="title || t('form.userData')" :size="titleSize" />
       </div>
 
       <!-- Área de botones nav -->
       <div class="c_userDetailManagement__nav-area" :style="{ maxWidth: innerWidth }">
         <CNavAreaPrimaryButton
-          :text="backText"
+          :text="backTextComputed"
           :size="buttonSize"
           icon-position="before"
           @click="emit('back')"
@@ -187,7 +199,7 @@ export default {
         </CNavAreaPrimaryButton>
         <CNavAreaSecondaryButton
           v-if="showDeleteButton"
-          :text="deleteText"
+          :text="deleteTextComputed"
           :size="buttonSize"
           icon-position="after"
           @click="emit('delete')"
@@ -216,53 +228,53 @@ export default {
       <div class="c_userDetailManagement__form-area" :style="{ maxWidth: innerWidth }">
         <!-- Título sección -->
         <div class="c_userDetailManagement__form-legend">
-          <p class="c_userDetailManagement__form-title">{{ formTitle }}</p>
+          <p class="c_userDetailManagement__form-title">{{ formTitleComputed }}</p>
         </div>
 
         <!-- Campos de texto -->
         <CInputField
-          label="Nombre"
+          :label="t('form.name')"
           :model-value="formData.nombre"
           :size="fieldSize"
-          placeholder="Value"
+          :placeholder="t('common.placeholder')"
           @update:model-value="updateField('nombre', $event)"
         />
         <CInputField
-          label="Apellidos"
+          :label="t('form.surname')"
           :model-value="formData.apellidos"
           :size="fieldSize"
-          placeholder="Value"
+          :placeholder="t('common.placeholder')"
           @update:model-value="updateField('apellidos', $event)"
         />
         <CInputField
-          label="Email"
+          :label="t('form.email')"
           type="email"
           :model-value="formData.email"
           :size="fieldSize"
-          placeholder="Value"
+          :placeholder="t('common.placeholder')"
           @update:model-value="updateField('email', $event)"
         />
         <CInputField
-          label="Teléfono"
+          :label="t('form.phone')"
           type="tel"
           :model-value="formData.telefono"
           :size="fieldSize"
-          placeholder="Value"
+          :placeholder="t('common.placeholder')"
           @update:model-value="updateField('telefono', $event)"
         />
 
         <!-- Selects -->
         <CSelectField
-          label="Rol"
+          :label="t('form.role')"
           :model-value="formData.rol"
-          :options="rolOptions"
+          :options="rolOptionsComputed"
           :size="fieldSize"
           @update:model-value="updateField('rol', $event)"
         />
         <CSelectField
-          label="Estado"
+          :label="t('form.status')"
           :model-value="formData.estado"
-          :options="estadoOptions"
+          :options="estadoOptionsComputed"
           :size="fieldSize"
           @update:model-value="updateField('estado', $event)"
         />
@@ -275,12 +287,12 @@ export default {
         <!-- Botones guardar / cancelar -->
         <div class="c_userDetailManagement__form-buttons">
           <CNavAreaPrimaryButton
-            :text="saveText"
+            :text="saveTextComputed"
             size="XS"
             @click="emit('save')"
           />
           <CNavAreaSecondaryButton
-            :text="cancelText"
+            :text="cancelTextComputed"
             size="XS"
             @click="emit('cancel')"
           />

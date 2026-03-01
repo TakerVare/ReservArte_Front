@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import CBookingTitle from './c_bookingTitle.vue'
 import CNoBooked from './c_noBooked.vue'
 import CContentAreaPrimaryButton from './Buttons/c_contentAreaPrimaryButton.vue'
@@ -19,11 +20,16 @@ const props = withDefaults(
   }>(),
   {
     size: 'MD',
-    title: 'Próxima cita:',
-    emptyMessage: 'No hay citas asignadas',
-    buttonText: 'Reservar Cita',
+    title: undefined,
+    emptyMessage: undefined,
+    buttonText: undefined,
   }
 )
+
+const { t } = useI18n()
+const titleText = computed(() => props.title ?? t('booking.nextAppointment'))
+const emptyMessageText = computed(() => props.emptyMessage ?? t('booking.noAppointments'))
+const buttonTextComputed = computed(() => props.buttonText ?? t('booking.bookButton'))
 
 const emit = defineEmits<{
   book: []
@@ -81,14 +87,14 @@ export default {
   >
     <div class="c_bookingEmpty__container" :style="{ maxWidth: containerMaxWidth }">
       <div class="c_bookingEmpty__title-wrap">
-        <CBookingTitle :text="title" :size="titleSize" />
+        <CBookingTitle :text="titleText" :size="titleSize" />
       </div>
       <div class="c_bookingEmpty__message-wrap">
-        <CNoBooked :text="emptyMessage" :size="emptySize" />
+        <CNoBooked :text="emptyMessageText" :size="emptySize" />
       </div>
       <div class="c_bookingEmpty__button-wrap">
         <CContentAreaPrimaryButton
-          :text="buttonText"
+          :text="buttonTextComputed"
           :size="buttonSize"
           @click="emit('book')"
         />

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import CPageTittle from './c_pageTittle.vue'
 import CNavAreaPrimaryButton from './Buttons/c_navAreaPrimaryButton.vue'
 import CNavAreaSecondaryButton from './Buttons/c_navAreaSecondaryButton.vue'
@@ -66,6 +67,10 @@ const emit = defineEmits<{
   'delete-item': [itemId: string]
   'view-item': [itemId: string]
 }>()
+
+const { t } = useI18n()
+const searchPlaceholder = computed(() => t('search.placeholder'))
+const listAriaLabel = computed(() => t('common.listOf', { label: props.itemLabel }))
 
 /** Ancho máximo del contenedor externo */
 const containerMaxWidth = computed(() => {
@@ -188,6 +193,7 @@ export default {
       <div class="c_itemMasterManagement__search-area" :style="{ maxWidth: innerWidth }">
         <CSearchBar
           :size="searchBarSize"
+          :placeholder="searchPlaceholder"
           :model-value="searchQuery"
           @update:model-value="emit('update:searchQuery', $event)"
         />
@@ -202,7 +208,7 @@ export default {
       <div
         class="c_itemMasterManagement__item-list"
         :style="{ maxWidth: innerWidth }"
-        :aria-label="`Lista de ${itemLabel}`"
+        :aria-label="listAriaLabel"
         role="list"
       >
         <CUserRow

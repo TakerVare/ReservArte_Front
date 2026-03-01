@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import CHeroTitle from './c_heroTitle.vue'
 import CHeroDescription from './c_heroDescription.vue'
 import CContentAreaPrimaryButton from './Buttons/c_contentAreaPrimaryButton.vue'
@@ -21,15 +22,20 @@ const props = withDefaults(
   }>(),
   {
     size: 'MD',
-    title: 'Tu mirada habla de ti.',
-    description: 'Tu espacio de confianza para el cuidado profesional de tus cejas. Unimos conocimiento experto con un trato cercano y humano.',
-    buttonText: 'Entrar',
+    title: undefined,
+    description: undefined,
+    buttonText: undefined,
   }
 )
 
 const emit = defineEmits<{
   enter: []
 }>()
+
+const { t } = useI18n()
+const heroTitle = computed(() => props.title ?? t('hero.title'))
+const heroDescription = computed(() => props.description ?? t('hero.description'))
+const heroButtonText = computed(() => props.buttonText ?? t('hero.enter'))
 
 /** Ancho máximo del contenedor interno */
 const containerMaxWidth = computed(() => {
@@ -97,14 +103,14 @@ export default {
   >
     <div class="c_heroSection__container" :style="{ maxWidth: containerMaxWidth }">
       <div class="c_heroSection__title-wrap">
-        <CHeroTitle :text="title" :size="titleSize" />
+        <CHeroTitle :text="heroTitle" :size="titleSize" />
       </div>
       <div class="c_heroSection__description-wrap">
-        <CHeroDescription :text="description" :size="descriptionSize" />
+        <CHeroDescription :text="heroDescription" :size="descriptionSize" />
       </div>
       <div class="c_heroSection__button-wrap">
         <CContentAreaPrimaryButton
-          :text="buttonText"
+          :text="heroButtonText"
           :size="buttonSize"
           @click="emit('enter')"
         />

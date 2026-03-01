@@ -1,9 +1,11 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import CUserManagement from '../components/c_userManagement.vue'
 import { useViewportSize } from '../composables/useViewportSize'
 
+const { t } = useI18n()
 const router = useRouter()
 const { size } = useViewportSize()
 
@@ -50,7 +52,9 @@ export default {
 <template>
   <CUserManagement
     :size="size"
-    title="Gestión de Usuarios"
+    :title="t('admin.users')"
+    :back-text="t('common.back')"
+    :new-text="t('common.new')"
     v-model:search-query="searchQuery"
     :users="users"
     @back="onBack"

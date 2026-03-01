@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import CItemMasterManagement from '../components/c_itemMasterManagement.vue'
 import { useCustomerStore } from '../stores/customer.store'
 import { useViewportSize } from '../composables/useViewportSize'
 
+const { t: $t } = useI18n()
 const router = useRouter()
 const customerStore = useCustomerStore()
 const { size } = useViewportSize()
@@ -30,7 +32,7 @@ function onViewItem(itemId: string) {
 }
 
 async function onDeleteItem(itemId: string) {
-  if (!confirm('¿Eliminar este cliente? Esta acción no se puede deshacer.')) return
+  if (!confirm($t('customer.deleteConfirm'))) return
   await customerStore.deleteCustomer(itemId)
 }
 </script>
@@ -47,8 +49,9 @@ export default {
     <CItemMasterManagement
       v-else
       :size="size"
-      item-label="clientes"
-      new-text="Nuevo cliente"
+      :back-text="$t('common.back')"
+      :item-label="$t('customer.label')"
+      :new-text="$t('customer.new')"
       :search-query="customerStore.searchQuery"
       @update:search-query="customerStore.setSearchQuery($event)"
       :items="customerStore.items"
@@ -58,7 +61,7 @@ export default {
       @delete-item="onDeleteItem"
       @view-item="onViewItem"
     />
-    <p v-if="customerStore.loading" class="customer-master-view__loading">Cargando clientes...</p>
+    <p v-if="customerStore.loading" class="customer-master-view__loading">{{ $t('customer.loading') }}</p>
   </div>
 </template>
 

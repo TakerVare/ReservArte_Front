@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import CPageTittle from './c_pageTittle.vue'
 import CNavAreaPrimaryButton from './Buttons/c_navAreaPrimaryButton.vue'
 import CNavAreaSecondaryButton from './Buttons/c_navAreaSecondaryButton.vue'
@@ -33,13 +34,19 @@ const props = withDefaults(
   }>(),
   {
     size: 'MD',
-    title: 'Gestión de Usuarios',
-    backText: 'Volver',
-    newText: 'Nuevo',
+    title: '',
+    backText: '',
+    newText: '',
     users: () => [],
     searchQuery: '',
   }
 )
+
+const { t } = useI18n()
+const titleComputed = computed(() => props.title || t('admin.users'))
+const backTextComputed = computed(() => props.backText || t('common.back'))
+const newTextComputed = computed(() => props.newText || t('common.new'))
+const searchPlaceholder = computed(() => t('search.placeholder'))
 
 const emit = defineEmits<{
   back: []
@@ -125,13 +132,13 @@ export default {
     <div class="c_userManagement__container" :style="{ maxWidth: containerMaxWidth }">
       <!-- Título rosa — ocupa todo el ancho -->
       <div class="c_userManagement__title-wrap">
-        <CPageTittle :text="title" :size="titleSize" />
+        <CPageTittle :text="titleComputed" :size="titleSize" />
       </div>
 
       <!-- Área de botones nav -->
       <div class="c_userManagement__nav-area" :style="{ maxWidth: innerWidth }">
         <CNavAreaPrimaryButton
-          :text="backText"
+          :text="backTextComputed"
           :size="buttonSize"
           icon-position="before"
           @click="emit('back')"
@@ -141,7 +148,7 @@ export default {
           </template>
         </CNavAreaPrimaryButton>
         <CNavAreaSecondaryButton
-          :text="newText"
+          :text="newTextComputed"
           :size="buttonSize"
           icon-position="after"
           @click="emit('new')"
@@ -159,6 +166,7 @@ export default {
       <div class="c_userManagement__search-area" :style="{ maxWidth: innerWidth }">
         <CSearchBar
           :size="searchBarSize"
+          :placeholder="searchPlaceholder"
           :model-value="searchQuery"
           @update:model-value="emit('update:searchQuery', $event)"
         />

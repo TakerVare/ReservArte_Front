@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import CUserDetailManagement from '../components/c_userDetailManagement.vue'
 import CInputField from '../components/c_inputField.vue'
 import CSelectField from '../components/c_selectField.vue'
 import type { UserFormData } from '../components/c_userDetailManagement.vue'
 import { useAuthStore } from '../stores/auth.store'
 import { useViewportSize } from '../composables/useViewportSize'
+import i18n from '../i18n'
 
 const CUSTOMER_API_URL = 'http://localhost:5297/api/Customer'
 
@@ -16,6 +18,7 @@ const PREFERRED_CONTACT_VALUES = ['Email', 'WhatsApp', 'SMS'] as const
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
+const { t } = useI18n()
 const { size } = useViewportSize()
 
 /** Id del cliente en edición; undefined en creación */
@@ -46,21 +49,21 @@ const preferredContactMethod = ref<string>('Email')
 const marketingConsent = ref(false)
 
 /** Opciones de categoría de cliente (mapeo API: category) */
-const categoryOptions = [
-  { label: 'Regular', value: 'regular' },
-  { label: 'VIP', value: 'vip' },
-]
+const categoryOptions = computed(() => [
+  { label: t('options.regular'), value: 'regular' },
+  { label: t('options.vip'), value: 'vip' },
+])
 
-const estadoOptions = [
-  { label: 'Activo', value: 'activo' },
-  { label: 'Inactivo', value: 'inactivo' },
-]
+const estadoOptions = computed(() => [
+  { label: t('options.active'), value: 'activo' },
+  { label: t('options.inactive'), value: 'inactivo' },
+])
 
-const preferredContactOptions = [
-  { label: 'Email', value: 'Email' },
-  { label: 'WhatsApp', value: 'WhatsApp' },
-  { label: 'SMS', value: 'SMS' },
-]
+const preferredContactOptions = computed(() => [
+  { label: t('options.email'), value: 'Email' },
+  { label: t('options.whatsapp'), value: 'WhatsApp' },
+  { label: t('options.sms'), value: 'SMS' },
+])
 
 /** Tamaño de campos extra (alineado con el componente) */
 const fieldSize = computed(() => (size.value === 'SM' || size.value === 'XS' ? 'SM' : 'MD'))
@@ -102,7 +105,7 @@ async function fetchCustomer(id: string) {
   error.value = ''
   const token = authStore.token
   if (!token) {
-    error.value = 'No hay sesión activa.'
+    error.value = i18n.global.t('customer.errors.noSession')
     loading.value = false
     return
   }
@@ -115,14 +118,14 @@ async function fetchCustomer(id: string) {
       },
     })
     if (!response.ok) {
-      error.value = `Error ${response.status}. No se pudo cargar el cliente.`
+      error.value = i18n.global.t('customer.errors.loadOneFailedStatus', { status: response.status })
       loading.value = false
       return
     }
     const data = await response.json()
     applyApiCustomerToForm(data)
   } catch {
-    error.value = 'No se pudo conectar con el servidor.'
+    error.value = i18n.global.t('customer.errors.connection')
   } finally {
     loading.value = false
   }
@@ -161,7 +164,7 @@ watch(customerId, (newId) => {
 })
 
 const pageTitle = computed(() =>
-  isEditMode.value ? 'Editar Cliente' : 'Nuevo Cliente'
+  isEditMode.value ? t('admin.editCustomer') : t('admin.newCustomer')
 )
 
 function onBack() {
@@ -193,7 +196,7 @@ async function onSave() {
   error.value = ''
   const token = authStore.token
   if (!token) {
-    error.value = 'No hay sesión activa.'
+    error.value = i18n.global.t('customer.errors.noSession')
     return
   }
   const payload = buildCustomerPayload()
@@ -210,7 +213,7 @@ async function onSave() {
       })
       if (!response.ok) {
         const text = await response.text()
-        error.value = text || `Error ${response.status}. No se pudo actualizar el cliente.`
+        error.value = text || i18n.global.t('customer.errors.saveFailedStatus', { status: response.status })
         return
       }
     } else {
@@ -225,13 +228,13 @@ async function onSave() {
       })
       if (!response.ok) {
         const text = await response.text()
-        error.value = text || `Error ${response.status}. No se pudo crear el cliente.`
+        error.value = text || i18n.global.t('customer.errors.saveFailedStatus', { status: response.status })
         return
       }
     }
     router.push({ name: 'admin-customers' })
   } catch {
-    error.value = 'No se pudo conectar con el servidor.'
+    error.value = i18n.global.t('customer.errors.connection')
   }
 }
 
@@ -257,7 +260,7 @@ export default {
       v-else
       :size="size"
       :title="pageTitle"
-      form-title="Datos del cliente"
+      :form-title="t('form.customerData')"
       :form-data="formData"
       :rol-options="categoryOptions"
       :estado-options="estadoOptions"
@@ -272,14 +275,14 @@ export default {
       <template #extra-fields>
         <CInputField
           v-model="birthDate"
-          label="Fecha de nacimiento"
+          :label="t('form.birthDate')"
           type="date"
           :size="fieldSize"
-          placeholder="YYYY-MM-DD"
+          :placeholder="t('form.datePlaceholder')"
         />
         <CSelectField
           v-model="preferredContactMethod"
-          label="Método de contacto preferido"
+          :label="t('form.preferredContact')"
           :options="preferredContactOptions"
           :size="fieldSize"
         />
@@ -291,12 +294,12 @@ export default {
             class="customer-detail-view__checkbox"
           />
           <label for="customer-marketing-consent" class="customer-detail-view__checkbox-label">
-            Acepto recibir comunicaciones de marketing
+            {{ t('form.marketingConsent') }}
           </label>
         </div>
       </template>
     </CUserDetailManagement>
-    <p v-if="loading" class="customer-detail-view__loading">Cargando...</p>
+    <p v-if="loading" class="customer-detail-view__loading">{{ t('customer.loading') }}</p>
   </div>
 </template>
 

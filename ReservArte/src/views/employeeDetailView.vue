@@ -1,16 +1,19 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import CUserDetailManagement from '../components/c_userDetailManagement.vue'
 import type { UserFormData } from '../components/c_userDetailManagement.vue'
 import { useAuthStore } from '../stores/auth.store'
 import { useViewportSize } from '../composables/useViewportSize'
+import i18n from '../i18n'
 
 const EMPLOYEE_API_URL = 'http://localhost:5297/api/Employee'
 
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
+const { t } = useI18n()
 const { size } = useViewportSize()
 
 /** Id del empleado en edición; undefined en creación */
@@ -36,15 +39,15 @@ const error = ref('')
 const avatarUrl = ref('')
 
 /** Opciones de rol para empleados */
-const rolOptions = [
-  { label: 'Empleado', value: 'empleado' },
-  { label: 'Administrador', value: 'admin' },
-]
+const rolOptions = computed(() => [
+  { label: t('options.employee'), value: 'empleado' },
+  { label: t('options.admin'), value: 'admin' },
+])
 
-const estadoOptions = [
-  { label: 'Activo', value: 'activo' },
-  { label: 'Inactivo', value: 'inactivo' },
-]
+const estadoOptions = computed(() => [
+  { label: t('options.active'), value: 'activo' },
+  { label: t('options.inactive'), value: 'inactivo' },
+])
 
 /** Mapea respuesta API de empleado al formulario (id, firstName, lastName, fullName, email, phone, profileImageUrl, hireDate, isActive) */
 function applyApiEmployeeToForm(e: {
@@ -74,7 +77,7 @@ async function fetchEmployee(id: string) {
   error.value = ''
   const token = authStore.token
   if (!token) {
-    error.value = 'No hay sesión activa.'
+    error.value = i18n.global.t('employee.errors.noSession')
     loading.value = false
     return
   }
@@ -87,14 +90,14 @@ async function fetchEmployee(id: string) {
       },
     })
     if (!response.ok) {
-      error.value = `Error ${response.status}. No se pudo cargar el empleado.`
+      error.value = i18n.global.t('employee.errors.loadOneFailedStatus', { status: response.status })
       loading.value = false
       return
     }
     const data = await response.json()
     applyApiEmployeeToForm(data)
   } catch {
-    error.value = 'No se pudo conectar con el servidor.'
+    error.value = i18n.global.t('employee.errors.connection')
   } finally {
     loading.value = false
   }
@@ -130,7 +133,7 @@ watch(employeeId, (newId) => {
 })
 
 const pageTitle = computed(() =>
-  isEditMode.value ? 'Editar Empleado' : 'Nuevo Empleado'
+  isEditMode.value ? t('admin.editEmployee') : t('admin.newEmployee')
 )
 
 function onBack() {
@@ -159,7 +162,7 @@ async function onSave() {
   error.value = ''
   const token = authStore.token
   if (!token) {
-    error.value = 'No hay sesión activa.'
+    error.value = i18n.global.t('employee.errors.noSession')
     return
   }
   const payload = buildEmployeePayload()
@@ -176,7 +179,7 @@ async function onSave() {
       })
       if (!response.ok) {
         const text = await response.text()
-        error.value = text || `Error ${response.status}. No se pudo actualizar el empleado.`
+        error.value = text || i18n.global.t('employee.errors.saveFailedStatus', { status: response.status })
         return
       }
     } else {
@@ -191,13 +194,13 @@ async function onSave() {
       })
       if (!response.ok) {
         const text = await response.text()
-        error.value = text || `Error ${response.status}. No se pudo crear el empleado.`
+        error.value = text || i18n.global.t('employee.errors.saveFailedStatus', { status: response.status })
         return
       }
     }
     router.push({ name: 'admin-employees' })
   } catch {
-    error.value = 'No se pudo conectar con el servidor.'
+    error.value = i18n.global.t('employee.errors.connection')
   }
 }
 
@@ -223,7 +226,7 @@ export default {
       v-else
       :size="size"
       :title="pageTitle"
-      form-title="Datos del empleado"
+      :form-title="t('form.employeeData')"
       :form-data="formData"
       :rol-options="rolOptions"
       :estado-options="estadoOptions"
@@ -235,7 +238,7 @@ export default {
       @save="onSave"
       @cancel="onCancel"
     />
-    <p v-if="loading" class="employee-detail-view__loading">Cargando...</p>
+    <p v-if="loading" class="employee-detail-view__loading">{{ t('employee.loading') }}</p>
   </div>
 </template>
 

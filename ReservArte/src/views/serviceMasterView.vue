@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import CItemMasterManagement from '../components/c_itemMasterManagement.vue'
 import { useServiceStore } from '../stores/service.store'
 import { useViewportSize } from '../composables/useViewportSize'
 
+const { t: $t } = useI18n()
 const router = useRouter()
 const serviceStore = useServiceStore()
 const { size } = useViewportSize()
@@ -37,7 +39,7 @@ function onViewItem(itemId: string) {
 }
 
 async function onDeleteItem(itemId: string) {
-  if (!confirm('¿Eliminar este servicio? Esta acción no se puede deshacer.')) return
+  if (!confirm($t('service.deleteConfirm'))) return
   await serviceStore.deleteService(itemId)
 }
 </script>
@@ -54,8 +56,9 @@ export default {
     <CItemMasterManagement
       v-else
       :size="size"
-      item-label="servicios"
-      new-text="Nuevo servicio"
+      :back-text="$t('common.back')"
+      :item-label="$t('service.label')"
+      :new-text="$t('service.new')"
       :search-query="serviceStore.searchQuery"
       @update:search-query="serviceStore.setSearchQuery($event)"
       :items="serviceStore.items"
@@ -67,14 +70,14 @@ export default {
     >
       <template #filters>
         <div class="service-master-view__category-filter">
-          <label for="service-category-select" class="service-master-view__category-label">Categoría</label>
+          <label for="service-category-select" class="service-master-view__category-label">{{ $t('common.category') }}</label>
           <select
             id="service-category-select"
             v-model="selectedCategoryId"
             class="service-master-view__category-select"
             :disabled="serviceStore.categoriesLoading"
           >
-            <option value="">Todas las categorías</option>
+            <option value="">{{ $t('common.allCategories') }}</option>
             <option
               v-for="cat in serviceStore.categoriesSorted"
               :key="cat.id"
@@ -86,7 +89,7 @@ export default {
         </div>
       </template>
     </CItemMasterManagement>
-    <p v-if="serviceStore.loading" class="service-master-view__loading">Cargando servicios...</p>
+    <p v-if="serviceStore.loading" class="service-master-view__loading">{{ $t('service.loading') }}</p>
   </div>
 </template>
 

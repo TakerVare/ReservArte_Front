@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import CItemMasterManagement from '../components/c_itemMasterManagement.vue'
 import { useEmployeeStore } from '../stores/employee.store'
 import { useViewportSize } from '../composables/useViewportSize'
 
+const { t: $t } = useI18n()
 const router = useRouter()
 const employeeStore = useEmployeeStore()
 const { size } = useViewportSize()
@@ -30,7 +32,7 @@ function onViewItem(itemId: string) {
 }
 
 async function onDeleteItem(itemId: string) {
-  if (!confirm('¿Eliminar este empleado? Esta acción no se puede deshacer.')) return
+  if (!confirm($t('employee.deleteConfirm'))) return
   await employeeStore.deleteEmployee(itemId)
 }
 </script>
@@ -47,8 +49,9 @@ export default {
     <CItemMasterManagement
       v-else
       :size="size"
-      item-label="empleados"
-      new-text="Nuevo empleado"
+      :back-text="$t('common.back')"
+      :item-label="$t('employee.label')"
+      :new-text="$t('employee.new')"
       :search-query="employeeStore.searchQuery"
       @update:search-query="employeeStore.setSearchQuery($event)"
       :items="employeeStore.items"
@@ -58,7 +61,7 @@ export default {
       @delete-item="onDeleteItem"
       @view-item="onViewItem"
     />
-    <p v-if="employeeStore.loading" class="employee-master-view__loading">Cargando empleados...</p>
+    <p v-if="employeeStore.loading" class="employee-master-view__loading">{{ $t('employee.loading') }}</p>
   </div>
 </template>
 

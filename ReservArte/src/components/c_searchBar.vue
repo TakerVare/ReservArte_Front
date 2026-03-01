@@ -1,35 +1,29 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 
 export type SearchBarSize = 'XL' | 'XS'
 
+const { t } = useI18n()
+
 const props = withDefaults(
   defineProps<{
-    /** Tamaño del componente */
     size?: SearchBarSize
-    /** Placeholder del input */
     placeholder?: string
-    /** Valor del input (v-model) */
     modelValue?: string
   }>(),
   {
     size: 'XL',
-    placeholder: 'Search',
+    placeholder: undefined,
     modelValue: '',
   }
 )
 
+const placeholderText = computed(() => props.placeholder ?? t('search.placeholder'))
+
 const emit = defineEmits<{
   'update:modelValue': [value: string]
 }>()
-
-const maxWidth = computed(() => {
-  const sizeMap: Record<SearchBarSize, string> = {
-    'XL': '690px',
-    'XS': '393px',
-  }
-  return sizeMap[props.size]
-})
 
 function onInput(event: Event) {
   const target = event.target as HTMLInputElement
@@ -62,7 +56,7 @@ export default {
       <input
         class="c_searchBar__input"
         type="text"
-        :placeholder="placeholder"
+        :placeholder="placeholderText"
         :value="modelValue"
         @input="onInput"
       />

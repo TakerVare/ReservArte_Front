@@ -9,7 +9,7 @@
     >
       <!-- Email -->
       <div class="c_loginForm__field">
-        <label class="c_loginForm__label" for="login-email">Email</label>
+        <label class="c_loginForm__label" for="login-email">{{ $t('auth.email') }}</label>
         <input
           id="login-email"
           v-model="email"
@@ -26,7 +26,7 @@
 
       <!-- Contraseña -->
       <div class="c_loginForm__field">
-        <label class="c_loginForm__label" for="login-password">Contraseña</label>
+        <label class="c_loginForm__label" for="login-password">{{ $t('auth.password') }}</label>
         <input
           id="login-password"
           v-model="password"
@@ -51,7 +51,7 @@
             class="c_loginForm__checkbox"
           />
           <label class="c_loginForm__checkbox-label" for="login-terms">
-            Acepto los términos y condiciones
+            {{ $t('auth.acceptTerms') }}
           </label>
         </div>
         <span v-if="acceptTermsError" class="c_loginForm__field-error">
@@ -66,7 +66,7 @@
             class="c_loginForm__checkbox"
           />
           <label class="c_loginForm__checkbox-label" for="login-register">
-            No tengo cuenta, quiero registrarme
+            {{ $t('auth.wantRegister') }}
           </label>
         </div>
 
@@ -76,9 +76,9 @@
             :href="forgotPasswordUrl"
             class="c_loginForm__forgot-link"
           >
-            He olvidado mi contraseña
+            {{ $t('auth.forgotPassword') }}
           </a>
-          <span v-else class="c_loginForm__forgot-link">He olvidado mi contraseña</span>
+          <span v-else class="c_loginForm__forgot-link">{{ $t('auth.forgotPassword') }}</span>
         </div>
       </div>
 
@@ -109,6 +109,7 @@
 import { ref, computed } from 'vue'
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
+import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '../stores/auth.store'
 import C_contentAreaPrimaryButton from './Buttons/c_contentAreaPrimaryButton.vue'
 import type { ButtonSize } from './Buttons/c_contentAreaPrimaryButton.vue'
@@ -126,6 +127,8 @@ const props = withDefaults(
   }
 )
 
+const { t } = useI18n()
+
 const emit = defineEmits<{
   submit: [{ email: string; password: string; acceptTerms: boolean }]
   success: [{ token: string }]
@@ -133,30 +136,32 @@ const emit = defineEmits<{
   'register-success': []
 }>()
 
-// ─── Esquema Yup ───
-const validationSchema = yup.object({
-  email: yup
-    .string()
-    .required('Introduce tu email')
-    .matches(
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-      'El formato del email no es válido (ej: usuario@dominio.com)'
-    ),
-  password: yup
-    .string()
-    .required('Introduce tu contraseña')
-    .min(8, 'La contraseña debe tener al menos 8 caracteres')
-    .matches(/[a-z]/, 'Debe contener al menos una letra minúscula')
-    .matches(/[A-Z]/, 'Debe contener al menos una letra mayúscula')
-    .matches(/[0-9]/, 'Debe contener al menos un número')
-    .matches(/[^a-zA-Z0-9]/, 'Debe contener al menos un símbolo (!@#$%...)'),
-  acceptTerms: yup
-    .boolean()
-    .oneOf([true], 'Debes aceptar los términos y condiciones'),
-})
+// ─── Esquema Yup (traducido) ───
+const validationSchema = computed(() =>
+  yup.object({
+    email: yup
+      .string()
+      .required(t('validation.loginEmailRequired'))
+      .matches(
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+        t('validation.emailInvalid')
+      ),
+    password: yup
+      .string()
+      .required(t('validation.loginPasswordRequired'))
+      .min(8, t('validation.loginPasswordMin'))
+      .matches(/[a-z]/, t('validation.loginPasswordLower'))
+      .matches(/[A-Z]/, t('validation.loginPasswordUpper'))
+      .matches(/[0-9]/, t('validation.loginPasswordNumber'))
+      .matches(/[^a-zA-Z0-9]/, t('validation.loginPasswordSymbol')),
+    acceptTerms: yup
+      .boolean()
+      .oneOf([true], t('validation.acceptTermsRequired')),
+  })
+)
 
 // ─── VeeValidate: useForm + useField ───
-const { handleSubmit, resetForm } = useForm({
+const { handleSubmit } = useForm({
   validationSchema,
   initialValues: {
     email: '',
@@ -196,9 +201,9 @@ const submitButtonSize = computed<ButtonSize>(() => {
 
 const submitButtonText = computed(() => {
   if (isLoading.value) {
-    return wantsRegister.value ? 'Registrando...' : 'Iniciando sesión...'
+    return wantsRegister.value ? t('auth.registering') : t('auth.loggingIn')
   }
-  return wantsRegister.value ? 'Registrarme' : 'Reservar Cita'
+  return wantsRegister.value ? t('auth.register') : t('auth.bookAppointment')
 })
 
 /**
@@ -284,7 +289,7 @@ async function handleRegister(emailVal: string, passwordVal: string) {
     }
 
     wantsRegister.value = false
-    successMessage.value = '¡Cuenta creada! Ahora puedes iniciar sesión con tus credenciales.'
+    successMessage.value = t('auth.registerSuccess')
     emit('register-success')
   } catch (err) {
     serverError.value = 'No se pudo conectar con el servidor. Comprueba tu conexión.'

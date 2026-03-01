@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import BannerPrincipal from '../components/c_bannerPrincipal.vue'
 import NavBottom from '../components/c_bottomNavBar.vue'
+import CLocaleSwitcher from '../components/c_localeSwitcher.vue'
 import { useAuthStore } from '../stores/auth.store'
 import { useViewportSize } from '../composables/useViewportSize'
 
@@ -51,7 +52,12 @@ export default {
 
 <template>
   <div class="public-layout">
-    <BannerPrincipal :size="size" />
+    <div class="public-layout__header-wrap">
+      <BannerPrincipal :size="size" />
+      <div class="public-layout__locale">
+        <CLocaleSwitcher />
+      </div>
+    </div>
     <main class="public-layout__main">
       <router-view />
     </main>
@@ -69,6 +75,17 @@ export default {
   flex-direction: column;
   min-height: 100vh;
   background-color: #fff;
+}
+
+.public-layout__header-wrap {
+  position: relative;
+}
+
+.public-layout__locale {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  color: #333;
 }
 
 .public-layout__main {

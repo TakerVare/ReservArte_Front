@@ -26,7 +26,7 @@ const minWidth = computed(() => {
     <div class="banner-content">
       <img
         src="/resources/images/Logo_Recto_More_Than_Brows_SIN_fondo.png"
-        alt="More Than Brows"
+        :alt="$t('brand.moreThanBrows')"
         class="banner-logo"
       />
     </div>

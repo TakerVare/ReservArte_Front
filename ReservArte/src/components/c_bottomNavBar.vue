@@ -27,9 +27,9 @@ const emit = defineEmits<{
 })
 
 const navItems = [
-  { icon: '/resources/images/home.svg', label: 'Inicio' },
-  { icon: '/resources/images/map.svg', label: 'Ubicación' },
-  { icon: '/resources/images/user.svg', label: 'Perfil' }
+  { icon: '/resources/images/home.svg', labelKey: 'nav.home' },
+  { icon: '/resources/images/map.svg', labelKey: 'nav.location' },
+  { icon: '/resources/images/user.svg', labelKey: 'nav.profile' },
 ]
 
 const handleClick = (index: number) => {
@@ -49,9 +49,9 @@ const handleClick = (index: number) => {
           @click="handleClick(index)"
         >
           <div class="icon-container">
-            <img :src="item.icon" :alt="item.label" class="nav-icon" />
+            <img :src="item.icon" :alt="$t(item.labelKey)" class="nav-icon" />
           </div>
-          <span class="nav-label">{{ item.label }}</span>
+          <span class="nav-label">{{ $t(item.labelKey) }}</span>
         </button>
       </div>
     </div>

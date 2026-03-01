@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { useAuthStore } from './auth.store'
+import i18n from '../i18n'
 
 const SERVICE_API_URL = 'http://localhost:5297/api/Service'
 const CATEGORIES_API_URL = 'http://localhost:5297/api/Service/categories'
@@ -93,7 +94,7 @@ export const useServiceStore = defineStore('service', () => {
     error.value = ''
     const token = authStore.token
     if (!token) {
-      error.value = 'No hay sesión activa.'
+      error.value = i18n.global.t('service.errors.noSession')
       loading.value = false
       return
     }
@@ -106,14 +107,14 @@ export const useServiceStore = defineStore('service', () => {
         },
       })
       if (!response.ok) {
-        error.value = `Error ${response.status}. No se pudieron cargar los servicios.`
+        error.value = i18n.global.t('service.errors.loadFailedStatus', { status: response.status })
         loading.value = false
         return
       }
       const data = await response.json()
       services.value = Array.isArray(data) ? data : []
     } catch {
-      error.value = 'No se pudo conectar con el servidor.'
+      error.value = i18n.global.t('service.errors.connection')
       services.value = []
     } finally {
       loading.value = false
@@ -151,7 +152,7 @@ export const useServiceStore = defineStore('service', () => {
   async function deleteService(id: string) {
     const token = authStore.token
     if (!token) {
-      error.value = 'No hay sesión activa.'
+      error.value = i18n.global.t('service.errors.noSession')
       return
     }
     error.value = ''
@@ -164,12 +165,12 @@ export const useServiceStore = defineStore('service', () => {
         },
       })
       if (!response.ok) {
-        error.value = `Error ${response.status}. No se pudo eliminar el servicio.`
+        error.value = i18n.global.t('service.errors.deleteFailedStatus', { status: response.status })
         return
       }
       await fetchServices()
     } catch {
-      error.value = 'No se pudo conectar con el servidor.'
+      error.value = i18n.global.t('service.errors.connection')
     }
   }
 

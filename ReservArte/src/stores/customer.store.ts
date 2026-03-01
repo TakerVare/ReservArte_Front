@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { useAuthStore } from './auth.store'
+import i18n from '../i18n'
 
 const CUSTOMER_API_URL = 'http://localhost:5297/api/Customer'
 
@@ -61,7 +62,7 @@ export const useCustomerStore = defineStore('customer', () => {
     error.value = ''
     const token = authStore.token
     if (!token) {
-      error.value = 'No hay sesión activa.'
+      error.value = i18n.global.t('customer.errors.noSession')
       loading.value = false
       return
     }
@@ -74,14 +75,14 @@ export const useCustomerStore = defineStore('customer', () => {
         },
       })
       if (!response.ok) {
-        error.value = `Error ${response.status}. No se pudieron cargar los clientes.`
+        error.value = i18n.global.t('customer.errors.loadFailedStatus', { status: response.status })
         loading.value = false
         return
       }
       const data = await response.json()
       customers.value = Array.isArray(data) ? data : []
     } catch {
-      error.value = 'No se pudo conectar con el servidor.'
+      error.value = i18n.global.t('customer.errors.connection')
       customers.value = []
     } finally {
       loading.value = false
@@ -91,7 +92,7 @@ export const useCustomerStore = defineStore('customer', () => {
   async function deleteCustomer(id: string) {
     const token = authStore.token
     if (!token) {
-      error.value = 'No hay sesión activa.'
+      error.value = i18n.global.t('customer.errors.noSession')
       return
     }
     error.value = ''
@@ -104,12 +105,12 @@ export const useCustomerStore = defineStore('customer', () => {
         },
       })
       if (!response.ok) {
-        error.value = `Error ${response.status}. No se pudo eliminar el cliente.`
+        error.value = i18n.global.t('customer.errors.deleteFailedStatus', { status: response.status })
         return
       }
       await fetchCustomers()
     } catch {
-      error.value = 'No se pudo conectar con el servidor.'
+      error.value = i18n.global.t('customer.errors.connection')
     }
   }
 

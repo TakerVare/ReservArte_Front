@@ -1,6 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import { useAuthStore } from './auth.store'
+import i18n from '../i18n'
 
 const EMPLOYEE_API_URL = 'http://localhost:5297/api/Employee'
 
@@ -60,7 +61,7 @@ export const useEmployeeStore = defineStore('employee', () => {
     error.value = ''
     const token = authStore.token
     if (!token) {
-      error.value = 'No hay sesión activa.'
+      error.value = i18n.global.t('employee.errors.noSession')
       loading.value = false
       return
     }
@@ -73,14 +74,14 @@ export const useEmployeeStore = defineStore('employee', () => {
         },
       })
       if (!response.ok) {
-        error.value = `Error ${response.status}. No se pudieron cargar los empleados.`
+        error.value = i18n.global.t('employee.errors.loadFailedStatus', { status: response.status })
         loading.value = false
         return
       }
       const data = await response.json()
       employees.value = Array.isArray(data) ? data : []
     } catch {
-      error.value = 'No se pudo conectar con el servidor.'
+      error.value = i18n.global.t('employee.errors.connection')
       employees.value = []
     } finally {
       loading.value = false
@@ -90,7 +91,7 @@ export const useEmployeeStore = defineStore('employee', () => {
   async function deleteEmployee(id: string) {
     const token = authStore.token
     if (!token) {
-      error.value = 'No hay sesión activa.'
+      error.value = i18n.global.t('employee.errors.noSession')
       return
     }
     error.value = ''
@@ -103,12 +104,12 @@ export const useEmployeeStore = defineStore('employee', () => {
         },
       })
       if (!response.ok) {
-        error.value = `Error ${response.status}. No se pudo eliminar el empleado.`
+        error.value = i18n.global.t('employee.errors.deleteFailedStatus', { status: response.status })
         return
       }
       await fetchEmployees()
     } catch {
-      error.value = 'No se pudo conectar con el servidor.'
+      error.value = i18n.global.t('employee.errors.connection')
     }
   }
 

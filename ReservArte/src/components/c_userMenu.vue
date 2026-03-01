@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import CMenuItem from './c_menuItem.vue'
 import type { MenuItemSize } from './c_menuItem.vue'
 
@@ -7,50 +8,54 @@ export type UserMenuSize = 'XXL' | 'XL' | 'LG' | 'MD' | 'SM' | 'XS'
 
 export interface MenuItemData {
   id: string
-  text: string
+  textKey: string
 }
 
 export interface MenuSection {
-  title: string
+  id: string
+  titleKey: string
   items: MenuItemData[]
 }
+
+const { t } = useI18n()
 
 const props = withDefaults(
   defineProps<{
     size?: UserMenuSize
-    /** Secciones del menú */
     sections?: MenuSection[]
-    /** Si es true muestra el área de administración y la de usuario (admin/employee); si no, solo la de usuario */
     isAdmin?: boolean
   }>(),
   {
     size: 'MD',
     isAdmin: true,
-    sections: () => [
-      {
-        title: 'Área de administración',
-        items: [
-          { id: 'citas', text: 'Citas' },
-          { id: 'clientes', text: 'Clientes' },
-          { id: 'servicios', text: 'Servicios' },
-          { id: 'empleados', text: 'Empleados' },
-          { id: 'usuarios', text: 'Todos los usuarios' },
-          { id: 'configuracion-admin', text: 'Configuración' },
-        ],
-      },
-      {
-        title: 'Área de usuario',
-        items: [
-          { id: 'datos-usuario', text: 'Datos de usuario' },
-          { id: 'metodos-pago', text: 'Métodos de pago' },
-          { id: 'notificaciones', text: 'Notificaciones' },
-          { id: 'configuracion-user', text: 'Configuración' },
-          { id: 'privacidad', text: 'Privacidad' },
-          { id: 'acerca', text: 'Acerca de More Than Brows' },
-          { id: 'cerrar-sesion', text: 'Cerrar sesión' },
-        ],
-      },
-    ],
+    sections: () =>
+      [
+        {
+          id: 'admin',
+          titleKey: 'menu.adminArea',
+          items: [
+            { id: 'citas', textKey: 'menu.bookings' },
+            { id: 'clientes', textKey: 'menu.customers' },
+            { id: 'servicios', textKey: 'menu.services' },
+            { id: 'empleados', textKey: 'menu.employees' },
+            { id: 'usuarios', textKey: 'menu.allUsers' },
+            { id: 'configuracion-admin', textKey: 'menu.settings' },
+          ],
+        },
+        {
+          id: 'user',
+          titleKey: 'menu.userArea',
+          items: [
+            { id: 'datos-usuario', textKey: 'menu.userData' },
+            { id: 'metodos-pago', textKey: 'menu.paymentMethods' },
+            { id: 'notificaciones', textKey: 'menu.notifications' },
+            { id: 'configuracion-user', textKey: 'menu.settings' },
+            { id: 'privacidad', textKey: 'menu.privacy' },
+            { id: 'acerca', textKey: 'menu.about' },
+            { id: 'cerrar-sesion', textKey: 'menu.logout' },
+          ],
+        },
+      ] as MenuSection[],
   }
 )
 
@@ -85,8 +90,17 @@ const itemSize = computed<MenuItemSize>(() => {
 /** Secciones visibles según rol */
 const visibleSections = computed(() => {
   if (props.isAdmin) return props.sections
-  return props.sections.filter(s => s.title !== 'Área de administración')
+  return props.sections.filter(s => s.id !== 'admin')
 })
+
+/** Secciones con títulos e ítems traducidos */
+const translatedSections = computed(() =>
+  visibleSections.value.map(section => ({
+    ...section,
+    title: t(section.titleKey),
+    items: section.items.map(item => ({ ...item, text: t(item.textKey) })),
+  }))
+)
 </script>
 
 <script lang="ts">
@@ -103,7 +117,7 @@ export default {
     <div class="c_userMenu__container" :style="{ maxWidth: containerMaxWidth }">
       <div class="c_userMenu__card">
         <div
-          v-for="(section, sIndex) in visibleSections"
+          v-for="(section, sIndex) in translatedSections"
           :key="sIndex"
           class="c_userMenu__list"
         >

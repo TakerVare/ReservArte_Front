@@ -119,14 +119,14 @@ export default {
         class="c_userRow__actions"
         :style="{ gap: actionsStyle.gap, width: actionsStyle.width }"
       >
-        <button class="c_userRow__action c_userRow__action--small" @click="emit('edit')">
-          <img :src="pencilIcon" alt="Editar" width="24" height="24" />
+        <button class="c_userRow__action c_userRow__action--small" @click="emit('edit')" :aria-label="$t('actions.edit')">
+          <img :src="pencilIcon" :alt="$t('actions.edit')" width="24" height="24" />
         </button>
-        <button class="c_userRow__action c_userRow__action--small" @click="emit('delete')">
-          <img :src="trashIcon" alt="Eliminar" width="24" height="24" />
+        <button class="c_userRow__action c_userRow__action--small" @click="emit('delete')" :aria-label="$t('actions.delete')">
+          <img :src="trashIcon" :alt="$t('actions.delete')" width="24" height="24" />
         </button>
-        <button class="c_userRow__action c_userRow__action--eye" @click="emit('view')">
-          <img :src="eyeIcon" alt="Ver" width="48" height="48" />
+        <button class="c_userRow__action c_userRow__action--eye" @click="emit('view')" :aria-label="$t('actions.view')">
+          <img :src="eyeIcon" :alt="$t('actions.view')" width="48" height="48" />
         </button>
       </div>
     </div>

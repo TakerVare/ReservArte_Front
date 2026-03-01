@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import CPageTittle from './c_pageTittle.vue'
 import CNavAreaPrimaryButton from './Buttons/c_navAreaPrimaryButton.vue'
 import CNavAreaSecondaryButton from './Buttons/c_navAreaSecondaryButton.vue'
@@ -43,11 +44,11 @@ const props = withDefaults(
   }>(),
   {
     size: 'MD',
-    title: 'Servicio',
-    backText: 'Volver',
-    deleteText: 'Eliminar',
+    title: '',
+    backText: '',
+    deleteText: '',
     showDeleteButton: true,
-    formTitle: 'Datos del servicio',
+    formTitle: '',
     formData: () => ({
       name: '',
       description: '',
@@ -59,10 +60,18 @@ const props = withDefaults(
       requiresAllergyTest: false,
     }),
     categories: () => [],
-    saveText: 'Guardar',
-    cancelText: 'Cancelar',
+    saveText: '',
+    cancelText: '',
   }
 )
+
+const { t } = useI18n()
+const titleComputed = computed(() => props.title || t('form.serviceData'))
+const backTextComputed = computed(() => props.backText || t('common.back'))
+const deleteTextComputed = computed(() => props.deleteText || t('common.delete'))
+const formTitleComputed = computed(() => props.formTitle || t('form.serviceData'))
+const saveTextComputed = computed(() => props.saveText || t('common.save'))
+const cancelTextComputed = computed(() => props.cancelText || t('common.cancel'))
 
 const emit = defineEmits<{
   back: []
@@ -113,12 +122,12 @@ export default {
   >
     <div class="c_serviceDetailManagement__container" :style="{ maxWidth: containerMaxWidth }">
       <div class="c_serviceDetailManagement__title-wrap">
-        <CPageTittle :text="title" :size="titleSize" />
+        <CPageTittle :text="titleComputed" :size="titleSize" />
       </div>
 
       <div class="c_serviceDetailManagement__nav-area" :style="{ maxWidth: innerWidth }">
         <CNavAreaPrimaryButton
-          :text="backText"
+          :text="backTextComputed"
           :size="buttonSize"
           icon-position="before"
           @click="emit('back')"
@@ -129,7 +138,7 @@ export default {
         </CNavAreaPrimaryButton>
         <CNavAreaSecondaryButton
           v-if="showDeleteButton"
-          :text="deleteText"
+          :text="deleteTextComputed"
           :size="buttonSize"
           icon-position="after"
           @click="emit('delete')"
@@ -145,44 +154,44 @@ export default {
 
       <div class="c_serviceDetailManagement__form-area" :style="{ maxWidth: innerWidth }">
         <div class="c_serviceDetailManagement__form-legend">
-          <p class="c_serviceDetailManagement__form-title">{{ formTitle }}</p>
+          <p class="c_serviceDetailManagement__form-title">{{ formTitleComputed }}</p>
         </div>
 
         <CInputField
-          label="Nombre"
+          :label="t('form.name')"
           :model-value="formData.name"
           :size="fieldSize"
-          placeholder="Nombre del servicio"
+          :placeholder="t('form.placeholderName')"
           @update:model-value="updateField('name', $event)"
         />
         <div class="c_serviceDetailManagement__field">
-          <label class="c_serviceDetailManagement__label">Descripción</label>
+          <label class="c_serviceDetailManagement__label">{{ t('form.description') }}</label>
           <textarea
             :value="formData.description"
             class="c_serviceDetailManagement__textarea"
-            placeholder="Descripción del servicio"
+            :placeholder="t('form.placeholderDescription')"
             rows="3"
             @input="updateField('description', ($event.target as HTMLTextAreaElement).value)"
           />
         </div>
         <CInputField
-          label="Duración (minutos)"
+          :label="t('form.durationMinutes')"
           type="number"
           :model-value="formData.durationMinutes"
           :size="fieldSize"
-          placeholder="Ej: 30"
+          :placeholder="t('form.placeholderDuration')"
           @update:model-value="updateField('durationMinutes', $event)"
         />
         <CInputField
-          label="Precio base (€)"
+          :label="t('form.basePrice')"
           type="number"
           :model-value="formData.basePrice"
           :size="fieldSize"
-          placeholder="Ej: 25"
+          :placeholder="t('form.placeholderPrice')"
           @update:model-value="updateField('basePrice', $event)"
         />
         <div class="c_serviceDetailManagement__field">
-          <label for="service-category-select" class="c_serviceDetailManagement__label">Categoría</label>
+          <label for="service-category-select" class="c_serviceDetailManagement__label">{{ t('common.category') }}</label>
           <select
             id="service-category-select"
             :value="formData.categoryName"
@@ -190,7 +199,7 @@ export default {
             :disabled="!categories || categories.length === 0"
             @change="updateField('categoryName', ($event.target as HTMLSelectElement).value)"
           >
-            <option value="">Seleccione categoría</option>
+            <option value="">{{ t('form.selectCategory') }}</option>
             <option
               v-for="cat in categories"
               :key="cat.id"
@@ -201,10 +210,10 @@ export default {
           </select>
         </div>
         <CInputField
-          label="URL imagen"
+          :label="t('form.imageUrl')"
           :model-value="formData.imageUrl"
           :size="fieldSize"
-          placeholder="https://..."
+          :placeholder="t('form.placeholderUrl')"
           @update:model-value="updateField('imageUrl', $event)"
         />
         <div class="c_serviceDetailManagement__checkbox-row">
@@ -216,7 +225,7 @@ export default {
               class="c_serviceDetailManagement__checkbox"
               @change="updateField('isActive', ($event.target as HTMLInputElement).checked)"
             />
-            <label for="service-is-active" class="c_serviceDetailManagement__checkbox-label">Activo</label>
+            <label for="service-is-active" class="c_serviceDetailManagement__checkbox-label">{{ t('form.active') }}</label>
           </div>
           <div class="c_serviceDetailManagement__checkbox-wrap">
             <input
@@ -226,13 +235,13 @@ export default {
               class="c_serviceDetailManagement__checkbox"
               @change="updateField('requiresAllergyTest', ($event.target as HTMLInputElement).checked)"
             />
-            <label for="service-requires-allergy" class="c_serviceDetailManagement__checkbox-label">Requiere prueba de alergia</label>
+            <label for="service-requires-allergy" class="c_serviceDetailManagement__checkbox-label">{{ t('form.requiresAllergyTest') }}</label>
           </div>
         </div>
 
         <div class="c_serviceDetailManagement__form-buttons">
-          <CNavAreaPrimaryButton :text="saveText" size="XS" @click="emit('save')" />
-          <CNavAreaSecondaryButton :text="cancelText" size="XS" @click="emit('cancel')" />
+          <CNavAreaPrimaryButton :text="saveTextComputed" size="XS" @click="emit('save')" />
+          <CNavAreaSecondaryButton :text="cancelTextComputed" size="XS" @click="emit('cancel')" />
         </div>
       </div>
     </div>

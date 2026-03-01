@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import CServiceDetailManagement from '../components/c_serviceDetailManagement.vue'
 import type { ServiceFormData } from '../components/c_serviceDetailManagement.vue'
 import { useAuthStore } from '../stores/auth.store'
 import { useViewportSize } from '../composables/useViewportSize'
+import i18n from '../i18n'
 
 const SERVICE_API_URL = 'http://localhost:5297/api/Service'
 const CATEGORIES_API_URL = 'http://localhost:5297/api/Service/categories'
@@ -22,6 +24,7 @@ type ServiceCategory = {
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
+const { t } = useI18n()
 const { size } = useViewportSize()
 
 const serviceId = computed(() => {
@@ -78,7 +81,7 @@ async function fetchService(id: string) {
   error.value = ''
   const token = authStore.token
   if (!token) {
-    error.value = 'No hay sesión activa.'
+    error.value = i18n.global.t('service.errors.noSession')
     loading.value = false
     return
   }
@@ -91,14 +94,14 @@ async function fetchService(id: string) {
       },
     })
     if (!response.ok) {
-      error.value = `Error ${response.status}. No se pudo cargar el servicio.`
+      error.value = i18n.global.t('service.errors.loadOneFailedStatus', { status: response.status })
       loading.value = false
       return
     }
     const data = await response.json()
     applyApiServiceToForm(data)
   } catch {
-    error.value = 'No se pudo conectar con el servidor.'
+    error.value = i18n.global.t('service.errors.connection')
   } finally {
     loading.value = false
   }
@@ -155,7 +158,7 @@ watch(serviceId, (newId) => {
 })
 
 const pageTitle = computed(() =>
-  isEditMode.value ? 'Editar Servicio' : 'Nuevo Servicio'
+  isEditMode.value ? t('admin.editService') : t('admin.newService')
 )
 
 function onBack() {
@@ -167,7 +170,7 @@ async function onDelete() {
   if (!confirm('¿Eliminar este servicio? Esta acción no se puede deshacer.')) return
   const token = authStore.token
   if (!token) {
-    error.value = 'No hay sesión activa.'
+    error.value = i18n.global.t('service.errors.noSession')
     return
   }
   error.value = ''
@@ -180,12 +183,12 @@ async function onDelete() {
       },
     })
     if (!response.ok) {
-      error.value = `Error ${response.status}. No se pudo eliminar el servicio.`
+      error.value = i18n.global.t('service.errors.deleteFailedStatus', { status: response.status })
       return
     }
     router.push({ name: 'admin-services' })
   } catch {
-    error.value = 'No se pudo conectar con el servidor.'
+    error.value = i18n.global.t('service.errors.connection')
   }
 }
 
@@ -206,7 +209,7 @@ async function onSave() {
   error.value = ''
   const token = authStore.token
   if (!token) {
-    error.value = 'No hay sesión activa.'
+    error.value = i18n.global.t('service.errors.noSession')
     return
   }
   const payload = buildServicePayload()
@@ -223,7 +226,7 @@ async function onSave() {
       })
       if (!response.ok) {
         const text = await response.text()
-        error.value = text || `Error ${response.status}. No se pudo actualizar el servicio.`
+        error.value = text || i18n.global.t('service.errors.saveFailedStatus', { status: response.status })
         return
       }
     } else {
@@ -238,13 +241,13 @@ async function onSave() {
       })
       if (!response.ok) {
         const text = await response.text()
-        error.value = text || `Error ${response.status}. No se pudo crear el servicio.`
+        error.value = text || i18n.global.t('service.errors.saveFailedStatus', { status: response.status })
         return
       }
     }
     router.push({ name: 'admin-services' })
   } catch {
-    error.value = 'No se pudo conectar con el servidor.'
+    error.value = i18n.global.t('service.errors.connection')
   }
 }
 
@@ -270,7 +273,7 @@ export default {
       v-else
       :size="size"
       :title="pageTitle"
-      form-title="Datos del servicio"
+      :form-title="t('form.serviceData')"
       :form-data="formData"
       :categories="categoriesSorted"
       :show-delete-button="isEditMode"
@@ -280,7 +283,7 @@ export default {
       @save="onSave"
       @cancel="onCancel"
     />
-    <p v-if="loading" class="service-detail-view__loading">Cargando...</p>
+    <p v-if="loading" class="service-detail-view__loading">{{ t('service.loading') }}</p>
   </div>
 </template>
 

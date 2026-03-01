@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import cameraIcon from '../assets/camera.svg'
 import uploadIcon from '../assets/upload.svg'
 import trashIcon from '../assets/trashAvatar.svg'
@@ -18,10 +19,13 @@ const props = withDefaults(
   }>(),
   {
     avatarUrl: '',
-    alt: 'Avatar de usuario',
+    alt: undefined,
     size: 'XS',
   }
 )
+
+const { t } = useI18n()
+const altText = computed(() => props.alt ?? t('actions.avatarAlt'))
 
 const emit = defineEmits<{
   camera: []
@@ -81,27 +85,27 @@ export default {
       <img
         v-if="avatarUrl"
         :src="avatarUrl"
-        :alt="alt"
+        :alt="altText"
         class="c_avatarUpload__image"
       />
       <img
         v-else
         :src="avatarPlaceholder"
-        :alt="alt"
+        :alt="altText"
         class="c_avatarUpload__image"
       />
     </div>
 
     <!-- Iconos de acción -->
     <div class="c_avatarUpload__actions">
-      <button class="c_avatarUpload__action c_avatarUpload__action--camera" @click="emit('camera')">
-        <img :src="cameraIcon" alt="Tomar foto" />
+      <button class="c_avatarUpload__action c_avatarUpload__action--camera" @click="emit('camera')" :aria-label="t('actions.takePhoto')">
+        <img :src="cameraIcon" :alt="t('actions.takePhoto')" />
       </button>
-      <button class="c_avatarUpload__action c_avatarUpload__action--upload" @click="emit('upload')">
-        <img :src="uploadIcon" alt="Subir imagen" />
+      <button class="c_avatarUpload__action c_avatarUpload__action--upload" @click="emit('upload')" :aria-label="t('actions.uploadImage')">
+        <img :src="uploadIcon" :alt="t('actions.uploadImage')" />
       </button>
-      <button class="c_avatarUpload__action c_avatarUpload__action--trash" @click="emit('delete')">
-        <img :src="trashIcon" alt="Eliminar imagen" />
+      <button class="c_avatarUpload__action c_avatarUpload__action--trash" @click="emit('delete')" :aria-label="t('actions.deleteImage')">
+        <img :src="trashIcon" :alt="t('actions.deleteImage')" />
       </button>
     </div>
   </div>

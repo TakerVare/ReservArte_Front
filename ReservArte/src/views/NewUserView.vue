@@ -1,45 +1,49 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { useForm, useField } from 'vee-validate'
 import * as yup from 'yup'
+import { useI18n } from 'vue-i18n'
 import CNewUser from '../components/c_newUser.vue'
 import { useViewportSize } from '../composables/useViewportSize'
 import type { UserFormData } from '../components/c_newUser.vue'
 
 const router = useRouter()
+const { t } = useI18n()
 const { size } = useViewportSize()
 
-// ─── Esquema Yup para nuevo usuario ───
-const validationSchema = yup.object({
-  nombre: yup
-    .string()
-    .required('El nombre es obligatorio')
-    .min(2, 'El nombre debe tener al menos 2 caracteres'),
-  apellidos: yup
-    .string()
-    .required('Los apellidos son obligatorios')
-    .min(2, 'Los apellidos deben tener al menos 2 caracteres'),
-  email: yup
-    .string()
-    .required('El email es obligatorio')
-    .matches(
-      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-      'El formato del email no es válido (ej: usuario@dominio.com)'
-    ),
-  telefono: yup
-    .string()
-    .required('El teléfono es obligatorio')
-    .matches(/^[0-9+\-\s()]{6,20}$/, 'El formato del teléfono no es válido'),
-  rol: yup
-    .string()
-    .required('Selecciona un rol')
-    .oneOf(['cliente', 'admin', 'empleado'], 'Rol no válido'),
-  estado: yup
-    .string()
-    .required('Selecciona un estado')
-    .oneOf(['activo', 'inactivo'], 'Estado no válido'),
-})
+// ─── Esquema Yup para nuevo usuario (traducido) ───
+const validationSchema = computed(() =>
+  yup.object({
+    nombre: yup
+      .string()
+      .required(t('validation.nameRequired'))
+      .min(2, t('validation.nameMin')),
+    apellidos: yup
+      .string()
+      .required(t('validation.surnameRequired'))
+      .min(2, t('validation.surnameMin')),
+    email: yup
+      .string()
+      .required(t('validation.emailRequired'))
+      .matches(
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+        t('validation.emailInvalid')
+      ),
+    telefono: yup
+      .string()
+      .required(t('validation.phoneRequired'))
+      .matches(/^[0-9+\-\s()]{6,20}$/, t('validation.phoneInvalid')),
+    rol: yup
+      .string()
+      .required(t('validation.roleRequired'))
+      .oneOf(['cliente', 'admin', 'empleado'], t('validation.roleInvalid')),
+    estado: yup
+      .string()
+      .required(t('validation.statusRequired'))
+      .oneOf(['activo', 'inactivo'], t('validation.statusInvalid')),
+  })
+)
 
 // ─── VeeValidate ───
 const { errors, validate } = useForm({
@@ -143,7 +147,7 @@ export default {
   <div class="new-user-view">
     <CNewUser
       :size="size"
-      title="Nuevo Usuario"
+      :title="$t('admin.newUser')"
       :avatar-url="avatarUrl"
       :form-data="formData"
       @back="onBack"

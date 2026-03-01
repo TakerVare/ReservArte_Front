@@ -1,31 +1,36 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '../stores/auth.store'
+import CLocaleSwitcher from '../components/c_localeSwitcher.vue'
 
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
+const { t } = useI18n()
 
-/** Título dinámico del header según la ruta */
-const headerTitle = computed(() => {
-  const titles: Record<string, string> = {
-    'admin-users': 'Gestión de Usuarios',
-    'admin-new-user': 'Nuevo Usuario',
-    'admin-edit-user': 'Editar Usuario',
-    'admin-customers': 'Gestión de Clientes',
-    'admin-new-customer': 'Nuevo Cliente',
-    'admin-edit-customer': 'Editar Cliente',
-    'admin-employees': 'Gestión de Empleados',
-    'admin-new-employee': 'Nuevo Empleado',
-    'admin-edit-employee': 'Editar Empleado',
-    'admin-services': 'Gestión de Servicios',
-    'admin-new-service': 'Nuevo Servicio',
-    'admin-edit-service': 'Editar Servicio',
-    'admin-bookings': 'Gestión de Citas',
+/** Clave i18n del título según la ruta */
+const headerTitleKey = computed(() => {
+  const keyMap: Record<string, string> = {
+    'admin-users': 'admin.users',
+    'admin-new-user': 'admin.newUser',
+    'admin-edit-user': 'admin.editUser',
+    'admin-customers': 'admin.customers',
+    'admin-new-customer': 'admin.newCustomer',
+    'admin-edit-customer': 'admin.editCustomer',
+    'admin-employees': 'admin.employees',
+    'admin-new-employee': 'admin.newEmployee',
+    'admin-edit-employee': 'admin.editEmployee',
+    'admin-services': 'admin.services',
+    'admin-new-service': 'admin.newService',
+    'admin-edit-service': 'admin.editService',
+    'admin-bookings': 'admin.bookings',
   }
-  return titles[route.name as string] ?? 'Administración'
+  return keyMap[route.name as string] ?? 'admin.title'
 })
+
+const headerTitle = computed(() => t(headerTitleKey.value))
 
 function goBack() {
   router.back()
@@ -56,27 +61,28 @@ export default {
           class="admin-layout__back-btn"
           type="button"
           @click="goBack"
-          aria-label="Volver"
+          :aria-label="$t('common.back')"
         >
-          ← Volver
+          ← {{ $t('common.back') }}
         </button>
         <h1 class="admin-layout__title">{{ headerTitle }}</h1>
         <div class="admin-layout__header-actions">
+          <CLocaleSwitcher />
           <button
             class="admin-layout__panel-btn"
             type="button"
             @click="goToPanel"
-            aria-label="Panel"
+            :aria-label="$t('admin.panel')"
           >
-            Panel
+            {{ $t('admin.panel') }}
           </button>
           <button
             class="admin-layout__logout-btn"
             type="button"
             @click="logout"
-            aria-label="Cerrar sesión"
+            :aria-label="$t('admin.logout')"
           >
-            Cerrar sesión
+            {{ $t('admin.logout') }}
           </button>
         </div>
       </div>
@@ -90,7 +96,7 @@ export default {
     <footer class="admin-layout__footer">
       <div class="admin-layout__footer-inner">
         <span class="admin-layout__footer-text">
-          Panel de Administración — ReservArte
+          {{ $t('admin.footer') }}
         </span>
       </div>
     </footer>

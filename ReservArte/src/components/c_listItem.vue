@@ -11,31 +11,31 @@
         <button
           type="button"
           class="c_listItem__action"
-          aria-label="Editar"
+          :aria-label="$t('actions.edit')"
           @click="$emit('edit')"
         >
           <slot name="icon-edit">
-            <img :src="editIcon" alt="Editar" class="c_listItem__action-img" />
+            <img :src="editIcon" :alt="$t('actions.edit')" class="c_listItem__action-img" />
           </slot>
         </button>
         <button
           type="button"
           class="c_listItem__action"
-          aria-label="Eliminar"
+          :aria-label="$t('actions.delete')"
           @click="$emit('delete')"
         >
           <slot name="icon-delete">
-            <img :src="deleteIcon" alt="Eliminar" class="c_listItem__action-img" />
+            <img :src="deleteIcon" :alt="$t('actions.delete')" class="c_listItem__action-img" />
           </slot>
         </button>
         <button
           type="button"
           class="c_listItem__action"
-          aria-label="Confirmar"
+          :aria-label="$t('actions.confirm')"
           @click="$emit('check')"
         >
           <slot name="icon-check">
-            <img :src="checkIcon" alt="Confirmar" class="c_listItem__action-img" />
+            <img :src="checkIcon" :alt="$t('actions.confirm')" class="c_listItem__action-img" />
           </slot>
         </button>
       </div>

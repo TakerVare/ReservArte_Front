@@ -1,11 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
+import { useI18n } from 'vue-i18n'
 import CBookingTitle from './c_bookingTitle.vue'
 import CBookedDate from './c_bookedDate.vue'
 import CContentAreaPrimaryButton from './Buttons/c_contentAreaPrimaryButton.vue'
 import CContentAreaSecondaryButton from './Buttons/c_contentAreaSecondaryButton.vue'
-import type { ButtonSize } from './Buttons/c_contentAreaPrimaryButton.vue'
-
 export type BookingAssignedSize = 'XXL' | 'XL' | 'LG' | 'MD' | 'SM' | 'XS'
 
 const props = withDefaults(
@@ -22,12 +21,18 @@ const props = withDefaults(
   }>(),
   {
     size: 'MD',
-    title: 'Próxima cita:',
-    dateTime: '24 Dic - 10:00h',
-    primaryText: 'Modificar',
-    secondaryText: 'Cancelar',
+    title: undefined,
+    dateTime: undefined,
+    primaryText: undefined,
+    secondaryText: undefined,
   }
 )
+
+const { t } = useI18n()
+const titleText = computed(() => props.title ?? t('booking.nextAppointment'))
+const dateTimeText = computed(() => props.dateTime ?? t('booking.exampleDateTime'))
+const primaryTextComputed = computed(() => props.primaryText ?? t('booking.modify'))
+const secondaryTextComputed = computed(() => props.secondaryText ?? t('booking.cancel'))
 
 const emit = defineEmits<{
   modify: []
@@ -69,8 +74,8 @@ const dateSize = computed<'XL' | 'XS'>(() => {
   }
 })
 
-/** Tamaño de los botones — siempre grande */
-const buttonSize = computed<ButtonSize>(() => 'LG')
+/** Tamaño de los botones — siempre grande (LG es compatible con ambos botones) */
+const buttonSize = 'LG' as const
 </script>
 
 <script lang="ts">
@@ -86,19 +91,19 @@ export default {
   >
     <div class="c_bookingAssigned__container" :style="{ maxWidth: containerMaxWidth }">
       <div class="c_bookingAssigned__title-wrap">
-        <CBookingTitle :text="title" :size="titleSize" />
+        <CBookingTitle :text="titleText" :size="titleSize" />
       </div>
       <div class="c_bookingAssigned__date-wrap">
-        <CBookedDate :text="dateTime" :size="dateSize" />
+        <CBookedDate :text="dateTimeText" :size="dateSize" />
       </div>
       <div class="c_bookingAssigned__buttons-wrap">
         <CContentAreaPrimaryButton
-          :text="primaryText"
+          :text="primaryTextComputed"
           :size="buttonSize"
           @click="emit('modify')"
         />
         <CContentAreaSecondaryButton
-          :text="secondaryText"
+          :text="secondaryTextComputed"
           :size="buttonSize"
           @click="emit('cancel')"
         />
