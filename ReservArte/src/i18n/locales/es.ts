@@ -107,7 +107,7 @@ export default {
     surnameRequired: 'Los apellidos son obligatorios',
     surnameMin: 'Los apellidos deben tener al menos 2 caracteres',
     emailRequired: 'El email es obligatorio',
-    emailInvalid: 'El formato del email no es válido (ej: usuario@dominio.com)',
+    emailInvalid: "El formato del email no es válido (ej: usuario{'@'}dominio.com)",
     phoneRequired: 'El teléfono es obligatorio',
     phoneInvalid: 'El formato del teléfono no es válido',
     roleRequired: 'Selecciona un rol',
@@ -120,7 +120,7 @@ export default {
     loginPasswordLower: 'Debe contener al menos una letra minúscula',
     loginPasswordUpper: 'Debe contener al menos una letra mayúscula',
     loginPasswordNumber: 'Debe contener al menos un número',
-    loginPasswordSymbol: 'Debe contener al menos un símbolo (!@#$%...)',
+    loginPasswordSymbol: "Debe contener al menos un símbolo (!{'@'}#$%...)",
     acceptTermsRequired: 'Debes aceptar los términos y condiciones',
   },
   brand: {

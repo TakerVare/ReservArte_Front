@@ -180,8 +180,8 @@ const isLoading = ref(false)
 const serverError = ref('')
 const successMessage = ref('')
 
-const LOGIN_API_URL = 'http://localhost:5297/api/Auth/Login'
-const REGISTER_API_URL = 'http://localhost:5297/api/Auth/Register'
+const LOGIN_API_URL = '/api/Auth/Login'
+const REGISTER_API_URL = '/api/Auth/Register'
 
 const submitButtonSize = computed<ButtonSize>(() => {
   switch (props.size) {

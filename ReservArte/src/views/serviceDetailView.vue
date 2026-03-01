@@ -8,8 +8,8 @@ import { useAuthStore } from '../stores/auth.store'
 import { useViewportSize } from '../composables/useViewportSize'
 import i18n from '../i18n'
 
-const SERVICE_API_URL = 'http://localhost:5297/api/Service'
-const CATEGORIES_API_URL = 'http://localhost:5297/api/Service/categories'
+const SERVICE_API_URL = '/api/Service'
+const CATEGORIES_API_URL = '/api/Service/categories'
 
 type ServiceCategory = {
   id: number

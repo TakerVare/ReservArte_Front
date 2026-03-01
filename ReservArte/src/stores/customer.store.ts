@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 import { useAuthStore } from './auth.store'
 import i18n from '../i18n'
 
-const CUSTOMER_API_URL = 'http://localhost:5297/api/Customer'
+const CUSTOMER_API_URL = '/api/Customer'
 
 export interface CustomerListItem {
   id: number
