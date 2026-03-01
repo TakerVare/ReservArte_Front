@@ -128,7 +128,7 @@ function onBack() {
 
 async function onDelete() {
   if (!bookingId.value) return
-  if (!confirm(t('appointment.deleteConfirm'))) return
+  console.log(t('appointment.deleteConfirm'))
   const ok = await appointmentStore.deleteAppointment(bookingId.value)
   if (ok) {
     router.push({ name: 'admin-bookings' })

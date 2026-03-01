@@ -39,7 +39,7 @@ function onViewItem(itemId: string) {
 }
 
 async function onDeleteItem(itemId: string) {
-  if (!confirm($t('service.deleteConfirm'))) return
+  console.log($t('service.deleteConfirm'))
   await serviceStore.deleteService(itemId)
 }
 </script>

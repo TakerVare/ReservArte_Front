@@ -167,7 +167,7 @@ function onBack() {
 
 async function onDelete() {
   if (!serviceId.value) return
-  if (!confirm('¿Eliminar este servicio? Esta acción no se puede deshacer.')) return
+  console.log('¿Eliminar este servicio? Esta acción no se puede deshacer.')
   const token = authStore.token
   if (!token) {
     error.value = i18n.global.t('service.errors.noSession')

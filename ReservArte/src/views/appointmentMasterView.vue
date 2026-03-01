@@ -46,7 +46,7 @@ function onViewItem(itemId: string) {
 }
 
 async function onDeleteItem(itemId: string) {
-  if (!confirm($t('appointment.deleteConfirm'))) return
+  console.log($t('appointment.deleteConfirm'))
   await appointmentStore.deleteAppointment(itemId)
 }
 </script>

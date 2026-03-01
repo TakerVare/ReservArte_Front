@@ -32,7 +32,7 @@ function onViewItem(itemId: string) {
 }
 
 async function onDeleteItem(itemId: string) {
-  if (!confirm($t('customer.deleteConfirm'))) return
+  console.log($t('customer.deleteConfirm'))
   await customerStore.deleteCustomer(itemId)
 }
 </script>
