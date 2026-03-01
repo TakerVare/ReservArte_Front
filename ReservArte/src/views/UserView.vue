@@ -16,9 +16,6 @@ function onMenuItemClick(itemId: string) {
       authStore.logout()
       router.push({ name: 'login' })
       break
-    case 'usuarios':
-      router.push({ name: 'admin-users' })
-      break
     case 'clientes':
       router.push({ name: 'admin-customers' })
       break
@@ -26,8 +23,7 @@ function onMenuItemClick(itemId: string) {
       router.push({ name: 'admin-employees' })
       break
     case 'citas':
-      // TODO: router.push({ name: 'admin-bookings' })
-      console.log('Navegando a citas')
+      router.push({ name: 'admin-bookings' })
       break
     case 'servicios':
       router.push({ name: 'admin-services' })

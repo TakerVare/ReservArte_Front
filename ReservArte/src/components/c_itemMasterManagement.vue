@@ -29,7 +29,7 @@ function capitalize(str: string): string {
 const props = withDefaults(
   defineProps<{
     size?: ItemMasterManagementSize
-    /** Qué se está listando, en plural (ej: "servicios", "categorías", "usuarios"). Se usa para el título por defecto. */
+    /** Qué se está listando, en plural (ej: "servicios", "categorías", "clientes"). Se usa para el título por defecto. */
     itemLabel?: string
     /** Título de la sección; si no se indica se construye como "Gestión de {itemLabel}" */
     title?: string

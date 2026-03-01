@@ -13,9 +13,6 @@ const { t } = useI18n()
 /** Clave i18n del título según la ruta */
 const headerTitleKey = computed(() => {
   const keyMap: Record<string, string> = {
-    'admin-users': 'admin.users',
-    'admin-new-user': 'admin.newUser',
-    'admin-edit-user': 'admin.editUser',
     'admin-customers': 'admin.customers',
     'admin-new-customer': 'admin.newCustomer',
     'admin-edit-customer': 'admin.editCustomer',
@@ -26,6 +23,8 @@ const headerTitleKey = computed(() => {
     'admin-new-service': 'admin.newService',
     'admin-edit-service': 'admin.editService',
     'admin-bookings': 'admin.bookings',
+    'admin-new-booking': 'admin.newBooking',
+    'admin-edit-booking': 'admin.editBooking',
   }
   return keyMap[route.name as string] ?? 'admin.title'
 })

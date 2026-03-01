@@ -79,7 +79,16 @@ export const useEmployeeStore = defineStore('employee', () => {
         return
       }
       const data = await response.json()
-      employees.value = Array.isArray(data) ? data : []
+      const rawList = Array.isArray(data) ? data : (data?.data && Array.isArray(data.data) ? data.data : [])
+      employees.value = rawList.map((item: Record<string, unknown>) => ({
+        id: Number(item.id ?? item.Id ?? 0),
+        fullName: String(item.fullName ?? item.FullName ?? ''),
+        email: String(item.email ?? item.Email ?? ''),
+        phone: item.phone != null || item.Phone != null ? String(item.phone ?? item.Phone) : undefined,
+        role: item.role != null || item.Role != null ? String(item.role ?? item.Role) : undefined,
+        isBlocked: Boolean(item.isBlocked ?? item.IsBlocked),
+        createdAt: item.createdAt != null || item.CreatedAt != null ? String(item.createdAt ?? item.CreatedAt) : undefined,
+      }))
     } catch {
       error.value = i18n.global.t('employee.errors.connection')
       employees.value = []

@@ -16,14 +16,14 @@ import UserView from '../views/UserView.vue'
 import LoginView from '../views/LoginView.vue'
 
 // Vistas admin
-import UserManagementView from '../views/UserManagementView.vue'
-import NewUserView from '../views/NewUserView.vue'
 import CustomerMasterView from '../views/customerMasterView.vue'
 import CustomerDetailView from '../views/customerDetailView.vue'
 import EmployeeMasterView from '../views/employeeMasterView.vue'
 import EmployeeDetailView from '../views/employeeDetailView.vue'
 import ServiceMasterView from '../views/serviceMasterView.vue'
 import ServiceDetailView from '../views/serviceDetailView.vue'
+import AppointmentMasterView from '../views/appointmentMasterView.vue'
+import AppointmentDetailView from '../views/appointmentDetailView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -64,8 +64,6 @@ const router = createRouter({
       path: '/admin',
       component: AdminLayout,
       children: [
-        { path: 'users', name: 'admin-users', component: UserManagementView },
-        { path: 'users/new', name: 'admin-new-user', component: NewUserView },
         { path: 'customers', name: 'admin-customers', component: CustomerMasterView },
         { path: 'customers/new', name: 'admin-new-customer', component: CustomerDetailView },
         { path: 'customers/:id/edit', name: 'admin-edit-customer', component: CustomerDetailView },
@@ -75,7 +73,9 @@ const router = createRouter({
         { path: 'services', name: 'admin-services', component: ServiceMasterView },
         { path: 'services/new', name: 'admin-new-service', component: ServiceDetailView },
         { path: 'services/:id/edit', name: 'admin-edit-service', component: ServiceDetailView },
-        // { path: 'users/:id/edit', name: 'admin-edit-user', component: EditUserView },
+        { path: 'bookings', name: 'admin-bookings', component: AppointmentMasterView },
+        { path: 'bookings/new', name: 'admin-new-booking', component: AppointmentDetailView },
+        { path: 'bookings/:id/edit', name: 'admin-edit-booking', component: AppointmentDetailView },
       ],
     },
   ],
