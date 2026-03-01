@@ -8,7 +8,7 @@ import { useAuthStore } from '../stores/auth.store'
 import { useViewportSize } from '../composables/useViewportSize'
 import i18n from '../i18n'
 
-const EMPLOYEE_API_URL = 'http://localhost:5297/api/Employee'
+const EMPLOYEE_API_URL = '/api/Employee'
 
 const router = useRouter()
 const route = useRoute()

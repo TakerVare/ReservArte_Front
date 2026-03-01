@@ -108,7 +108,7 @@ export default {
     surnameRequired: 'Last name is required',
     surnameMin: 'Last name must be at least 2 characters',
     emailRequired: 'Email is required',
-    emailInvalid: 'Invalid email format (e.g. user@domain.com)',
+    emailInvalid: "Invalid email format (e.g. user{'@'}domain.com)",
     phoneRequired: 'Phone is required',
     phoneInvalid: 'Invalid phone format',
     roleRequired: 'Select a role',
@@ -121,7 +121,7 @@ export default {
     loginPasswordLower: 'Must contain at least one lowercase letter',
     loginPasswordUpper: 'Must contain at least one uppercase letter',
     loginPasswordNumber: 'Must contain at least one number',
-    loginPasswordSymbol: 'Must contain at least one symbol (!@#$%...)',
+    loginPasswordSymbol: "Must contain at least one symbol (!{'@'}#$%...)",
     acceptTermsRequired: 'You must accept the terms and conditions',
   },
   brand: {
