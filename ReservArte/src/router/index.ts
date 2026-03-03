@@ -10,6 +10,7 @@ import AdminLayout from '../layouts/AdminLayout.vue'
 import HomeView from '../views/HomeView.vue'
 import ContactInfoView from '../views/ContactInfoView.vue'
 import BookingView from '../views/BookingView.vue'
+import AppointmentCalendarView from '../views/appointmentCalendarView.vue'
 import UserView from '../views/UserView.vue'
 
 // Vistas auth
@@ -39,6 +40,7 @@ const router = createRouter({
         { path: '', name: 'home', component: HomeView },
         { path: 'contact', name: 'contact', component: ContactInfoView },
         { path: 'booking', name: 'booking', component: BookingView },
+        { path: 'appointment-calendar', name: 'appointment-calendar', component: AppointmentCalendarView },
         { path: 'user', name: 'user', component: UserView },
       ],
     },
