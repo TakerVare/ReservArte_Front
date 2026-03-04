@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 import { useAuthStore } from './auth.store'
 import i18n from '../i18n'
 
-const APPOINTMENT_API_URL = 'http://localhost:5297/api/Appointment'
+const APPOINTMENT_API_URL = 'http://localhost:5173/api/Appointment'
 
 /** Elemento de la lista GET /api/Appointment */
 export interface AppointmentListItem {
@@ -136,6 +136,30 @@ export const useAppointmentStore = defineStore('appointment', () => {
   const items = computed<AppointmentItemData[]>(() =>
     loading.value ? [] : itemsFiltered.value
   )
+
+  /** Próxima cita del usuario actual (fecha/hora >= ahora, ordenada por fecha). */
+  const nextAppointment = computed<AppointmentListItem | null>(() => {
+    const userId = authStore.user?.id
+    if (!userId) return null
+    const now = new Date()
+    const today = now.toISOString().slice(0, 10)
+    const currentTime = now.toTimeString().slice(0, 5)
+
+    const upcoming = appointments.value
+      .filter(
+        (a) =>
+          String(a.customerId) === String(userId) &&
+          a.status?.toLowerCase() !== 'cancelled' &&
+          (a.appointmentDate > today ||
+            (a.appointmentDate === today && a.startTime.slice(0, 5) >= currentTime))
+      )
+      .sort((a, b) => {
+        const da = `${a.appointmentDate}T${a.startTime.slice(0, 5)}`
+        const db = `${b.appointmentDate}T${b.startTime.slice(0, 5)}`
+        return da.localeCompare(db)
+      })
+    return upcoming[0] ?? null
+  })
 
   async function fetchAppointments() {
     loading.value = true
@@ -340,6 +364,7 @@ export const useAppointmentStore = defineStore('appointment', () => {
     filterStatus,
     filterEmployeeId,
     items,
+    nextAppointment,
     fetchAppointments,
     fetchAppointment,
     createAppointment,

@@ -38,6 +38,7 @@ const router = createRouter({
       component: PublicLayout,
       children: [
         { path: '', name: 'home', component: LoginView },
+        { path: 'login', name: 'login', component: LoginView },
         { path: 'inicio', name: 'inicio', component: HomeView },
         { path: 'contact', name: 'contact', component: ContactInfoView },
         { path: 'booking', name: 'booking', component: BookingView },
@@ -48,13 +49,12 @@ const router = createRouter({
 
     /**
      * RUTAS AUTH
-     * Heredan de AuthLayout → Sin header ni footer
+     * Heredan de AuthLayout → Sin header ni footer (p. ej. registro)
      */
     {
       path: '/auth',
       component: AuthLayout,
       children: [
-        { path: 'login', name: 'login', component: LoginView },
         // { path: 'register', name: 'register', component: RegisterView },
       ],
     },

@@ -1,25 +1,35 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import CBookingEmpty from '../components/c_bookingEmpty.vue'
 import CBookingAssigned from '../components/c_bookingAssigned.vue'
 import { useViewportSize } from '../composables/useViewportSize'
+import { useAppointmentStore } from '../stores/appointment.store'
 
+const router = useRouter()
 const { size } = useViewportSize()
+const appointmentStore = useAppointmentStore()
 
-const hasBooking = ref(false)
+const hasBooking = computed(() => !!appointmentStore.nextAppointment)
 
-function onBook() {
-  hasBooking.value = true
+/** Formato de la próxima cita para CBookedDate (ej: "24 Dic - 10:00h"). */
+const nextAppointmentDateText = computed(() => {
+  const next = appointmentStore.nextAppointment
+  if (!next) return ''
+  const date = new Date(`${next.appointmentDate}T12:00:00`)
+  const day = date.getDate()
+  const month = date.toLocaleDateString('es-ES', { month: 'short' }).replace('.', '')
+  const time = next.startTime.slice(0, 5)
+  return `${day} ${month} - ${time}h`
+})
+
+function goToCalendar() {
+  router.push({ name: 'appointment-calendar' })
 }
 
-function onModify() {
-  // TODO: reemplazar por toast con Pinia
-  console.log('Modificar cita')
-}
-
-function onCancel() {
-  hasBooking.value = false
-}
+onMounted(() => {
+  appointmentStore.fetchAppointments()
+})
 </script>
 
 <script lang="ts">
@@ -32,12 +42,13 @@ export default {
   <CBookingAssigned
     v-if="hasBooking"
     :size="size"
-    @modify="onModify"
-    @cancel="onCancel"
+    :date-time="nextAppointmentDateText"
+    @modify="goToCalendar"
+    @cancel="goToCalendar"
   />
   <CBookingEmpty
     v-else
     :size="size"
-    @book="onBook"
+    @book="goToCalendar"
   />
 </template>
