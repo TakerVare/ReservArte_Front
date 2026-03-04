@@ -1,11 +1,15 @@
 <template>
   <div
     class="c_pageTittle"
-    :class="`c_pageTittle--${size.toLowerCase()}`"
+    :class="[`c_pageTittle--${size.toLowerCase()}`, className]"
     role="heading"
     :aria-level="1"
   >
-    <p class="c_pageTittle__text">{{ text }}</p>
+    <div class="c_pageTittle__screen-title">
+      <div class="c_pageTittle__content">
+        <div class="c_pageTittle__label">{{ text }}</div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -16,9 +20,12 @@ const props = withDefaults(
   defineProps<{
     text: string
     size?: PageTitleSize
+    /** Clase CSS adicional para el contenedor raíz */
+    className?: string
   }>(),
   {
     size: 'MD',
+    className: '',
   }
 )
 </script>
@@ -33,85 +40,107 @@ export default {
 .c_pageTittle {
   width: 100%;
   box-sizing: border-box;
-  overflow: hidden;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background-color: #ffffff;
+}
+
+.c_pageTittle__screen-title {
+  display: flex;
+  flex: 1;
+  flex-grow: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 32px;
   min-width: 48px;
+  background-color: #ffc0cb;
+}
+
+.c_pageTittle__content {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
+  align-self: stretch;
+  flex: 0 0 auto;
+  gap: 8px;
+  min-width: 48px;
+  width: 100%;
+}
 
-  &__text {
-    margin: 0;
-    width: 100%;
-    max-width: 100%;
-    text-align: left;
-    color: #49454f;
-    font-style: normal;
-    font-family: Georgia, serif;
-    font-weight: 400;
-    line-height: normal;
-    letter-spacing: 0;
-    text-transform: none;
-    text-decoration: none;
-  }
+.c_pageTittle__label {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  color: #49454f;
+  font-style: normal;
+  font-family: Georgia, serif;
+  font-weight: 400;
+  line-height: normal;
+  letter-spacing: 0;
+}
 
-  &--xxl {
-    padding: 64px;
-    gap: 32px;
-    flex-direction: column;
-    justify-content: center;
-  }
-  &--xxl &__text {
-    font-size: 48px;
-  }
+/* Tamaños: padding del screen-title y content, tipografía del label */
+.c_pageTittle--xxl .c_pageTittle__screen-title {
+  padding: 64px;
+  gap: 32px;
+}
+.c_pageTittle--xxl .c_pageTittle__label {
+  font-size: 48px;
+}
 
-  &--xl {
-    padding: 48px;
-    gap: 32px;
-    flex-direction: column;
-    justify-content: center;
-  }
-  &--xl &__text {
-    font-size: 48px;
-  }
+.c_pageTittle--xl .c_pageTittle__screen-title {
+  padding: 48px;
+  gap: 32px;
+}
+.c_pageTittle--xl .c_pageTittle__content {
+  padding: 0 12px;
+}
+.c_pageTittle--xl .c_pageTittle__label {
+  font-size: 48px;
+}
 
-  &--lg {
-    padding: 32px 12px;
-    gap: 32px;
-    flex-direction: column;
-    justify-content: center;
-  }
-  &--lg &__text {
-    font-size: 36px;
-  }
+.c_pageTittle--lg .c_pageTittle__screen-title {
+  padding: 32px;
+  gap: 32px;
+}
+.c_pageTittle--lg .c_pageTittle__content {
+  padding: 5px 12px;
+}
+.c_pageTittle--lg .c_pageTittle__label {
+  font-size: 36px;
+}
 
-  &--md {
-    padding: 24px 12px;
-    gap: 24px;
-    flex-direction: column;
-    justify-content: center;
-  }
-  &--md &__text {
-    font-size: 36px;
-  }
+.c_pageTittle--md .c_pageTittle__screen-title {
+  padding: 24px;
+  gap: 24px;
+}
+.c_pageTittle--md .c_pageTittle__content {
+  padding: 5px 12px;
+}
+.c_pageTittle--md .c_pageTittle__label {
+  font-size: 36px;
+}
 
-  &--sm {
-    padding: 16px 12px;
-    gap: 16px;
-    flex-direction: column;
-    justify-content: center;
-  }
-  &--sm &__text {
-    font-size: 24px;
-  }
+.c_pageTittle--sm .c_pageTittle__screen-title {
+  padding: 16px;
+  gap: 16px;
+}
+.c_pageTittle--sm .c_pageTittle__content {
+  padding: 5px 12px;
+}
+.c_pageTittle--sm .c_pageTittle__label {
+  font-size: 24px;
+}
 
-  &--xs {
-    padding: 8px 12px;
-    gap: 8px;
-    flex-direction: column;
-    justify-content: center;
-  }
-  &--xs &__text {
-    font-size: 24px;
-  }
+.c_pageTittle--xs .c_pageTittle__screen-title {
+  padding: 8px;
+  gap: 8px;
+}
+.c_pageTittle--xs .c_pageTittle__content {
+  padding: 5px 12px;
+}
+.c_pageTittle--xs .c_pageTittle__label {
+  font-size: 24px;
 }
 </style>
