@@ -1,22 +1,6 @@
 <template>
-  <c_heroTitle
-    text="c_heroTitle.vue"
-    :size="size"
-  />
-  <c_heroDescription
-    text="c_heroDescription.vue"
-    :size="size"
-  />
-  <c_heroSection
-    title="c_heroSection.vue"
-    :size="size"
-  />
-  <div
-    class="c_appointmentCalendar"
-    :class="`c_appointmentCalendar--${size.toLowerCase()}`"
-    role="application"
-    :aria-label="$t('calendar.title')"
-  >
+  
+  
     <div class="c_appointmentCalendar__inner">
       <header class="c_appointmentCalendar__month-picker">
         <div class="c_appointmentCalendar__month-year">
