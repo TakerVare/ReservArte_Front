@@ -51,6 +51,7 @@ const props = withDefaults(
             { id: 'configuracion-user', textKey: 'menu.settings' },
             { id: 'privacidad', textKey: 'menu.privacy' },
             { id: 'acerca', textKey: 'menu.about' },
+            { id: 'guia-estilo', textKey: 'menu.styleGuide' },
             { id: 'cerrar-sesion', textKey: 'menu.logout' },
           ],
         },

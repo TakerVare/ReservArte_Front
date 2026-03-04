@@ -28,6 +28,9 @@ function onMenuItemClick(itemId: string) {
     case 'servicios':
       router.push({ name: 'admin-services' })
       break
+    case 'guia-estilo':
+      router.push({ name: 'style-guide' })
+      break
     default:
       console.log(`Navegando a: ${itemId}`)
       break

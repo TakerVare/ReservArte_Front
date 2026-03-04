@@ -28,6 +28,7 @@ export default {
     privacy: 'Privacy',
     about: 'About More Than Brows',
     logout: 'Log out',
+    styleGuide: 'Style guide',
   },
   contact: {
     openingTitle: 'Opening hours',

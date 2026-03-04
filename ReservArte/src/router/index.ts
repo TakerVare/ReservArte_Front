@@ -12,6 +12,7 @@ import ContactInfoView from '../views/ContactInfoView.vue'
 import BookingView from '../views/BookingView.vue'
 import AppointmentCalendarView from '../views/appointmentCalendarView.vue'
 import PageTitleDemoView from '../views/pageTitleDemoView.vue'
+import StileGuideView from '../views/stileGuideView.vue'
 import UserView from '../views/UserView.vue'
 
 // Vistas auth
@@ -45,6 +46,7 @@ const router = createRouter({
         { path: 'booking', name: 'booking', component: BookingView },
         { path: 'appointment-calendar', name: 'appointment-calendar', component: AppointmentCalendarView },
         { path: 'demo-page-title', name: 'demo-page-title', component: PageTitleDemoView },
+        { path: 'style-guide', name: 'style-guide', component: StileGuideView },
         { path: 'user', name: 'user', component: UserView },
       ],
     },
