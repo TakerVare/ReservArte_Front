@@ -56,6 +56,7 @@ export default {
     selectDate: 'Seleccionar {date}',
     selectedDate: 'Fecha seleccionada: {date}',
     unavailable: 'No disponible',
+    availableSlotsTitle: 'Citas disponibles:',
   },
   booking: {
     nextAppointment: 'Próxima cita:',

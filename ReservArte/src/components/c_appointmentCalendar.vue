@@ -121,14 +121,15 @@ const emit = defineEmits<{
 
 const { t: $t } = useI18n()
 
+/** Semana empieza en lunes (LUN … DOM) */
 const weekdayKeys = [
-  'weekdaySun',
   'weekdayMon',
   'weekdayTue',
   'weekdayWed',
   'weekdayThu',
   'weekdayFri',
   'weekdaySat',
+  'weekdaySun',
 ] as const
 
 const currentView = ref({
@@ -172,7 +173,8 @@ const calendarCells = computed((): DayCell[] => {
   const { year, month } = currentView.value
   const first = new Date(year, month, 1)
   const last = new Date(year, month + 1, 0)
-  const startWeekday = first.getDay()
+  /** getDay(): 0=domingo,…, 6=sábado. Lunes=0 → (getDay() + 6) % 7 */
+  const startWeekday = (first.getDay() + 6) % 7
   const daysInMonth = last.getDate()
   const hasAvailability = normalizedAvailable.value !== null
 
