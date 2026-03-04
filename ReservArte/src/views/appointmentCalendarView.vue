@@ -2,8 +2,8 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import c_heroBanner from '../components/c_heroBanner.vue'
 import CAppointmentCalendar from '../components/c_appointmentCalendar.vue'
-import CPageTittle from '../components/c_pageTittle.vue'
 import { useViewportSize } from '../composables/useViewportSize'
 
 const router = useRouter()
@@ -27,15 +27,13 @@ export default {
 
 <template>
   <div class="appointmentCalendarView">
-    <CPageTittle text="Selección de cita" :size="size" />
-    <button
-      type="button"
-      class="appointmentCalendarView__back"
-      :aria-label="t('common.back')"
-      @click="goBack"
-    >
-      &lt; {{ t('common.back') }}
-    </button>
+    <c_heroBanner
+      :title="t('calendar.title')"
+      :size="size"
+      :show-new-button="false"
+      :show-search-bar="false"
+      @back="goBack"
+    />
     <CAppointmentCalendar
       v-model="selectedDate"
       :available-dates="availableDates"
@@ -53,29 +51,5 @@ export default {
   flex-direction: column;
   align-items: center;
   padding: 0 0 16px;
-}
-
-.appointmentCalendarView__back {
-  align-self: flex-start;
-  margin: 16px 16px 24px;
-  padding: 10px 20px;
-  background-color: #fdb8c4;
-  color: #fff;
-  border: none;
-  border-radius: 8px;
-  font-family: Inter, system-ui, sans-serif;
-  font-size: 16px;
-  font-weight: 600;
-  line-height: 1.25;
-  cursor: pointer;
-}
-
-.appointmentCalendarView__back:hover {
-  background-color: #fc9caa;
-}
-
-.appointmentCalendarView__back:focus-visible {
-  outline: 2px solid #0369f0;
-  outline-offset: 2px;
 }
 </style>

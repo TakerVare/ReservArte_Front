@@ -1,6 +1,10 @@
 <template>
-  
-  
+  <div
+    class="c_appointmentCalendar"
+    :class="`c_appointmentCalendar--${size.toLowerCase()}`"
+    role="application"
+    :aria-label="$t('calendar.title')"
+  >
     <div class="c_appointmentCalendar__inner">
       <header class="c_appointmentCalendar__month-picker">
         <div class="c_appointmentCalendar__month-year">
@@ -65,7 +69,7 @@
             class="c_appointmentCalendar__day c_appointmentCalendar__day--empty"
             role="gridcell"
             aria-hidden="true"
-          />
+          ></div>
           <button
             v-else
             type="button"

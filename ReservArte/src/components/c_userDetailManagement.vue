@@ -1,14 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import CPageTittle from './c_pageTittle.vue'
-import CNavAreaPrimaryButton from './Buttons/c_navAreaPrimaryButton.vue'
-import CNavAreaSecondaryButton from './Buttons/c_navAreaSecondaryButton.vue'
+import c_heroBanner from './c_heroBanner.vue'
 import CAvatarUpload from './c_avatarUpload.vue'
 import CInputField from './c_inputField.vue'
 import CSelectField from './c_selectField.vue'
-import type { PageTitleSize } from './c_pageTittle.vue'
-import type { ButtonSize } from './Buttons/c_navAreaPrimaryButton.vue'
 import type { SelectOption } from './c_selectField.vue'
 import type { InputFieldSize } from './c_inputField.vue'
 import type { AvatarUploadSize } from './c_avatarUpload.vue'
@@ -131,16 +127,6 @@ const innerWidth = computed(() => {
   return map[props.size]
 })
 
-/** Tamaño del pageTittle */
-const titleSize = computed<PageTitleSize>(() => {
-  return props.size as PageTitleSize
-})
-
-/** Tamaño de los nav buttons */
-const buttonSize = computed<ButtonSize>(() => {
-  return props.size as ButtonSize
-})
-
 /** Tamaño de los campos input/select */
 const fieldSize = computed<InputFieldSize>(() => {
   const map: Record<UserDetailManagementSize, InputFieldSize> = {
@@ -179,40 +165,18 @@ export default {
     class="c_userDetailManagement"
     :class="`c_userDetailManagement--${size.toLowerCase()}`"
   >
+    <c_heroBanner
+      :title="title || t('form.userData')"
+      :size="size"
+      :primary-text="backTextComputed"
+      :secondary-text="deleteTextComputed"
+      :show-search-bar="false"
+      :show-new-button="showDeleteButton"
+      secondary-action="delete"
+      @back="emit('back')"
+      @delete="emit('delete')"
+    />
     <div class="c_userDetailManagement__container" :style="{ maxWidth: containerMaxWidth }">
-      <!-- Título rosa — ocupa todo el ancho -->
-      <div class="c_userDetailManagement__title-wrap">
-        <CPageTittle :text="title || t('form.userData')" :size="titleSize" />
-      </div>
-
-      <!-- Área de botones nav -->
-      <div class="c_userDetailManagement__nav-area" :style="{ maxWidth: innerWidth }">
-        <CNavAreaPrimaryButton
-          :text="backTextComputed"
-          :size="buttonSize"
-          icon-position="before"
-          @click="emit('back')"
-        >
-          <template #icon>
-            <img src="../assets/arrowLeft.svg" alt="" />
-          </template>
-        </CNavAreaPrimaryButton>
-        <CNavAreaSecondaryButton
-          v-if="showDeleteButton"
-          :text="deleteTextComputed"
-          :size="buttonSize"
-          icon-position="after"
-          @click="emit('delete')"
-        >
-          <template #icon>
-            <img src="../assets/trashUser.svg" alt="" />
-          </template>
-          <template #icon-hover>
-            <img src="../assets/trashUserWhite.svg" alt="" />
-          </template>
-        </CNavAreaSecondaryButton>
-      </div>
-
       <!-- Avatar upload -->
       <div class="c_userDetailManagement__avatar-area" :style="{ maxWidth: innerWidth }">
         <CAvatarUpload

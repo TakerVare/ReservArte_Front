@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import c_pageTittle from '../components/c_pageTittle.vue'
 import c_heroTitle from '../components/c_heroTitle.vue'
 import c_heroDescription from '../components/c_heroDescription.vue'
+import c_heroBanner from '../components/c_heroBanner.vue'
 import c_heroSection from '../components/c_heroSection.vue'
 import c_sectionTittle from '../components/c_sectionTittle.vue'
 import c_contactMap from '../components/c_contactMap.vue'
@@ -29,6 +30,7 @@ const TEXTLABEL_VARIANTS = [
 ] as const
 
 const calendarDate = ref<Date | null>(null)
+const heroBannerSearch = ref('')
 </script>
 
 <script lang="ts">
@@ -74,6 +76,19 @@ export default {
       <div v-for="s in SIZES" :key="'heroSection-' + s" class="stileGuideView__variant">
         <span class="stileGuideView__variant-label">size: {{ s }}</span>
         <c_heroSection :title="`c_heroSection — ${s}`" :size="s" />
+      </div>
+    </section>
+
+    <!-- c_heroBanner -->
+    <section class="stileGuideView__section">
+      <h2 class="stileGuideView__section-title">c_heroBanner</h2>
+      <div v-for="s in SIZES" :key="'heroBanner-' + s" class="stileGuideView__variant">
+        <span class="stileGuideView__variant-label">size: {{ s }}</span>
+        <c_heroBanner
+          :title="`c_heroBanner — ${s}`"
+          :size="s"
+          v-model="heroBannerSearch"
+        />
       </div>
     </section>
 

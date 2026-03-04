@@ -4,11 +4,14 @@ import { useRouter, useRoute } from 'vue-router'
 import { useI18n } from 'vue-i18n'
 import { useAuthStore } from '../stores/auth.store'
 import CLocaleSwitcher from '../components/c_localeSwitcher.vue'
+import c_bottomNavBar from '../components/c_bottomNavBar.vue'
+import { useViewportSize } from '../composables/useViewportSize'
 
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
 const { t } = useI18n()
+const { size } = useViewportSize()
 
 /** Clave i18n del título según la ruta */
 const headerTitleKey = computed(() => {
@@ -43,6 +46,23 @@ function logout() {
   authStore.logout()
   router.push({ name: 'login' })
 }
+
+/** Índice activo del nav bottom: 0 = Inicio, 1 = Ubicación, 2 = Perfil. En admin no coincide con ruta pública. */
+const activeNavIndex = computed(() => 0)
+
+function onNavNavigate(index: number) {
+  switch (index) {
+    case 0:
+      router.push({ name: 'home' })
+      break
+    case 1:
+      router.push({ name: 'contact' })
+      break
+    case 2:
+      router.push({ name: 'user' })
+      break
+  }
+}
 </script>
 
 <script lang="ts">
@@ -53,52 +73,21 @@ export default {
 
 <template>
   <div class="admin-layout">
-    <!-- Header admin: distinto al público (sin banner logo, con nav admin) -->
+    
     <header class="admin-layout__header">
-      <div class="admin-layout__header-inner">
-        <button
-          class="admin-layout__back-btn"
-          type="button"
-          @click="goBack"
-          :aria-label="$t('common.back')"
-        >
-          ← {{ $t('common.back') }}
-        </button>
-        <h1 class="admin-layout__title">{{ headerTitle }}</h1>
-        <div class="admin-layout__header-actions">
-          <CLocaleSwitcher />
-          <button
-            class="admin-layout__panel-btn"
-            type="button"
-            @click="goToPanel"
-            :aria-label="$t('admin.panel')"
-          >
-            {{ $t('admin.panel') }}
-          </button>
-          <button
-            class="admin-layout__logout-btn"
-            type="button"
-            @click="logout"
-            :aria-label="$t('admin.logout')"
-          >
-            {{ $t('admin.logout') }}
-          </button>
-        </div>
-      </div>
+      
+      
     </header>
 
     <main class="admin-layout__main">
       <router-view />
     </main>
 
-    <!-- Footer admin: distinto al público (sin nav con iconos) -->
-    <footer class="admin-layout__footer">
-      <div class="admin-layout__footer-inner">
-        <span class="admin-layout__footer-text">
-          {{ $t('admin.footer') }}
-        </span>
-      </div>
-    </footer>
+    <c_bottomNavBar
+      :size="size"
+      :active-index="activeNavIndex"
+      @navigate="onNavNavigate"
+    />
   </div>
 </template>
 
@@ -170,30 +159,5 @@ export default {
   flex-direction: column;
   align-items: center;
   width: 100%;
-}
-
-/* ---- Footer admin ---- */
-.admin-layout__footer {
-  width: 100%;
-  background-color: #FFB6C1;
-  border-top: 2px solid #f5a0ab;
-}
-
-.admin-layout__footer-inner {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px 24px;
-  box-sizing: border-box;
-}
-
-.admin-layout__footer-text {
-  font-family: Georgia, serif;
-  font-size: 14px;
-  font-weight: 400;
-  color: #fff;
-  letter-spacing: 0.3px;
 }
 </style>

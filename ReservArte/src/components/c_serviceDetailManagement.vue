@@ -1,12 +1,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
-import CPageTittle from './c_pageTittle.vue'
-import CNavAreaPrimaryButton from './Buttons/c_navAreaPrimaryButton.vue'
-import CNavAreaSecondaryButton from './Buttons/c_navAreaSecondaryButton.vue'
+import c_heroBanner from './c_heroBanner.vue'
 import CInputField from './c_inputField.vue'
-import type { PageTitleSize } from './c_pageTittle.vue'
-import type { ButtonSize } from './Buttons/c_navAreaPrimaryButton.vue'
 import type { InputFieldSize } from './c_inputField.vue'
 
 export type ServiceDetailManagementSize = 'XXL' | 'XL' | 'LG' | 'MD' | 'SM' | 'XS'
@@ -99,8 +95,6 @@ const innerWidth = computed(() => {
   return map[props.size]
 })
 
-const titleSize = computed<PageTitleSize>(() => props.size as PageTitleSize)
-const buttonSize = computed<ButtonSize>(() => props.size as ButtonSize)
 const fieldSize = computed<InputFieldSize>(() => {
   const map: Record<ServiceDetailManagementSize, InputFieldSize> = {
     'XXL': 'LG', 'XL': 'LG', 'LG': 'MD', 'MD': 'MD', 'SM': 'SM', 'XS': 'XS',
@@ -120,38 +114,18 @@ export default {
     class="c_serviceDetailManagement"
     :class="`c_serviceDetailManagement--${size.toLowerCase()}`"
   >
+    <c_heroBanner
+      :title="titleComputed"
+      :size="size"
+      :primary-text="backTextComputed"
+      :secondary-text="deleteTextComputed"
+      :show-search-bar="false"
+      :show-new-button="showDeleteButton"
+      secondary-action="delete"
+      @back="emit('back')"
+      @delete="emit('delete')"
+    />
     <div class="c_serviceDetailManagement__container" :style="{ maxWidth: containerMaxWidth }">
-      <div class="c_serviceDetailManagement__title-wrap">
-        <CPageTittle :text="titleComputed" :size="titleSize" />
-      </div>
-
-      <div class="c_serviceDetailManagement__nav-area" :style="{ maxWidth: innerWidth }">
-        <CNavAreaPrimaryButton
-          :text="backTextComputed"
-          :size="buttonSize"
-          icon-position="before"
-          @click="emit('back')"
-        >
-          <template #icon>
-            <img src="../assets/arrowLeft.svg" alt="" />
-          </template>
-        </CNavAreaPrimaryButton>
-        <CNavAreaSecondaryButton
-          v-if="showDeleteButton"
-          :text="deleteTextComputed"
-          :size="buttonSize"
-          icon-position="after"
-          @click="emit('delete')"
-        >
-          <template #icon>
-            <img src="../assets/trashUser.svg" alt="" />
-          </template>
-          <template #icon-hover>
-            <img src="../assets/trashUser.svg" alt="" />
-          </template>
-        </CNavAreaSecondaryButton>
-      </div>
-
       <div class="c_serviceDetailManagement__form-area" :style="{ maxWidth: innerWidth }">
         <div class="c_serviceDetailManagement__form-legend">
           <p class="c_serviceDetailManagement__form-title">{{ formTitleComputed }}</p>
