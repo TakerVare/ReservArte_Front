@@ -37,7 +37,8 @@ const router = createRouter({
       path: '/',
       component: PublicLayout,
       children: [
-        { path: '', name: 'home', component: HomeView },
+        { path: '', name: 'home', component: LoginView },
+        { path: 'inicio', name: 'inicio', component: HomeView },
         { path: 'contact', name: 'contact', component: ContactInfoView },
         { path: 'booking', name: 'booking', component: BookingView },
         { path: 'appointment-calendar', name: 'appointment-calendar', component: AppointmentCalendarView },
@@ -89,6 +90,11 @@ router.beforeEach((to) => {
 
   if (isAdminRoute && !authStore.isAuthenticated) {
     return { name: 'login' }
+  }
+
+  // Si está logueado y va a la página de inicio, mostrar BookingView
+  if (to.name === 'home' && authStore.isAuthenticated) {
+    return { name: 'booking' }
   }
 
   return true
