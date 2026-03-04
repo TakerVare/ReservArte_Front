@@ -93,9 +93,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue'
 import { useI18n } from 'vue-i18n'
-import c_heroDescription from './c_heroDescription.vue'
-import c_heroSection from './c_heroSection.vue'
-import c_heroTitle from './c_heroTitle.vue'
 
 export type AppointmentCalendarSize = 'XXL' | 'XL' | 'LG' | 'MD' | 'SM' | 'XS'
 
@@ -166,6 +163,8 @@ interface DayCell {
   isAvailable: boolean
   isDisabled: boolean
   isEmpty: boolean
+  /** Sombreado gris: pasado, fin de semana o sin huecos disponibles. El resto (entre semana, con huecos, no seleccionado) en blanco. */
+  isShadedGrey: boolean
   ariaLabel: string
 }
 
@@ -180,6 +179,8 @@ const calendarCells = computed((): DayCell[] => {
 
   const cells: DayCell[] = []
 
+  const todayKey = dateKey(new Date())
+
   for (let i = 0; i < startWeekday; i++) {
     cells.push({
       day: 0,
@@ -188,6 +189,7 @@ const calendarCells = computed((): DayCell[] => {
       isAvailable: false,
       isDisabled: true,
       isEmpty: true,
+      isShadedGrey: false,
       ariaLabel: '',
     })
   }
@@ -200,6 +202,15 @@ const calendarCells = computed((): DayCell[] => {
       props.modelValue &&
       dateKey(props.modelValue) === key
     )
+    const isPast = key < todayKey
+    const dayOfWeek = date.getDay()
+    /** Sábados (6) y domingos (0): siempre gris. También pasado o sin huecos. El resto en blanco; rosa solo el seleccionado. */
+    const isWeekend = dayOfWeek === 0 || dayOfWeek === 6
+    const isShadedGrey =
+      isWeekend ||
+      isPast ||
+      (hasAvailability && !isAvailable)
+
     const label = date.toLocaleDateString(undefined, { day: 'numeric', month: 'long', year: 'numeric' })
     const aria = isSelected
       ? $t('calendar.selectedDate', { date: label })
@@ -214,6 +225,7 @@ const calendarCells = computed((): DayCell[] => {
       isAvailable,
       isDisabled: !isAvailable,
       isEmpty: false,
+      isShadedGrey,
       ariaLabel: aria,
     })
   }
@@ -229,6 +241,7 @@ const calendarCells = computed((): DayCell[] => {
       isAvailable: false,
       isDisabled: true,
       isEmpty: true,
+      isShadedGrey: false,
       ariaLabel: '',
     })
   }
@@ -241,6 +254,7 @@ function dayModifiers(cell: DayCell): Record<string, boolean> {
     'c_appointmentCalendar__day--selected': cell.isSelected,
     'c_appointmentCalendar__day--available': cell.isAvailable && !cell.isSelected,
     'c_appointmentCalendar__day--disabled': cell.isDisabled,
+    'c_appointmentCalendar__day--shaded-grey': cell.isShadedGrey,
   }
 }
 
@@ -427,15 +441,25 @@ export default {
       opacity: 0.5;
     }
 
-    &--selected {
-      background-color: #ffb6c1;
-      color: #fff;
-      font-weight: 600;
-      cursor: default;
-    }
-
     &--available {
       background-color: transparent;
+    }
+
+    &--shaded-grey {
+      background-color: #f5f5f5;
+      color: #999;
+    }
+
+    &--shaded-grey:disabled {
+      opacity: 1;
+    }
+
+    /* Solo el día seleccionado en rosa #FFC0CB; el resto de días válidos en blanco */
+    &--selected {
+      background-color: #ffc0cb;
+      color: #1a1a1a;
+      font-weight: 600;
+      cursor: default;
     }
 
     &--empty {

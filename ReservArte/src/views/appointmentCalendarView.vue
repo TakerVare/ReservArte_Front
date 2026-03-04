@@ -22,7 +22,8 @@ const authStore = useAuthStore()
 const employeeStore = useEmployeeStore()
 const customerStore = useCustomerStore()
 const appointmentStore = useAppointmentStore()
-const selectedDate = ref<Date | null>(null)
+/** Fecha seleccionada; por defecto hoy al cargar la pantalla */
+const selectedDate = ref<Date | null>(new Date())
 
 /** Cliente seleccionado en el desplegable (solo admin/empleado). */
 const selectedCustomerId = ref('')
