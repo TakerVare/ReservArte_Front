@@ -66,6 +66,25 @@ export interface CreateAppointmentPayload {
   notes?: string | null
 }
 
+/** Payload para cancelar cita PUT /api/Appointment/:id/cancel */
+export interface CancelAppointmentPayload {
+  reason: string
+  cancelledById: number
+  cancelledByType: 'Customer' | 'Employee' | 'Admin'
+  isJustified: boolean
+}
+
+/** Respuesta de PUT /api/Appointment/:id/cancel */
+export interface CancelAppointmentResponse {
+  appointmentId: number
+  status: string
+  cancelledAt: string
+  penaltyApplied: boolean
+  penaltyAmount: number
+  penaltyPercentage: number
+  message: string
+}
+
 /** Formato ítem para CItemMasterManagement */
 export interface AppointmentItemData {
   id: string
@@ -305,6 +324,53 @@ export const useAppointmentStore = defineStore('appointment', () => {
     }
   }
 
+  async function cancelAppointment(
+    appointmentId: number,
+    reason?: string
+  ): Promise<CancelAppointmentResponse | null> {
+    const token = authStore.token
+    const user = authStore.user
+    if (!token || !user) {
+      error.value = i18n.global.t('appointment.errors.noSession')
+      return null
+    }
+    const cancelledById = Number(user.id) || 0
+    const cancelledByType: CancelAppointmentPayload['cancelledByType'] =
+      user.role === 'admin' ? 'Admin' : user.role === 'employee' ? 'Employee' : 'Customer'
+    const body: CancelAppointmentPayload = {
+      reason: reason ?? i18n.global.t('appointment.cancelReasonDefault'),
+      cancelledById,
+      cancelledByType,
+      isJustified: false,
+    }
+    try {
+      const response = await fetch(`${APPOINTMENT_API_URL}/${appointmentId}/cancel`, {
+        method: 'PUT',
+        headers: {
+          accept: 'application/json',
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(body),
+      })
+      if (!response.ok) {
+        const text = await response.text()
+        error.value =
+          text ||
+          i18n.global.t('appointment.errors.cancelFailedStatus', {
+            status: response.status,
+          })
+        return null
+      }
+      const result: CancelAppointmentResponse = await response.json()
+      await fetchAppointments()
+      return result
+    } catch {
+      error.value = i18n.global.t('appointment.errors.connection')
+      return null
+    }
+  }
+
   async function deleteAppointment(id: string): Promise<boolean> {
     const token = authStore.token
     if (!token) {
@@ -369,6 +435,7 @@ export const useAppointmentStore = defineStore('appointment', () => {
     fetchAppointment,
     createAppointment,
     updateAppointment,
+    cancelAppointment,
     deleteAppointment,
     setSearchQuery,
     setFilterDateFrom,

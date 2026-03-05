@@ -214,6 +214,7 @@ export default {
     selectCustomer: 'Seleccione cliente',
     selectEmployee: 'Seleccione empleado',
     selectService: 'Seleccione servicio',
+    cancelReasonDefault: 'Cancelación desde la página principal de la app',
     errors: {
       noSession: 'No hay sesión activa.',
       loadFailed: 'No se pudieron cargar las citas.',
@@ -224,6 +225,7 @@ export default {
       deleteFailedStatus: 'Error {status}. No se pudo eliminar la cita.',
       saveFailed: 'No se pudo guardar la cita.',
       saveFailedStatus: 'Error {status}. No se pudo guardar la cita.',
+      cancelFailedStatus: 'Error {status}. No se pudo cancelar la cita.',
       connection: 'No se pudo conectar con el servidor.',
     },
     statusPending: 'Pendiente',

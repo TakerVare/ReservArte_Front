@@ -214,6 +214,7 @@ export default {
     selectCustomer: 'Select customer',
     selectEmployee: 'Select employee',
     selectService: 'Select service',
+    cancelReasonDefault: 'Cancellation from the main app page',
     errors: {
       noSession: 'No active session.',
       loadFailed: 'Failed to load appointments.',
@@ -224,6 +225,7 @@ export default {
       deleteFailedStatus: 'Error {status}. Failed to delete appointment.',
       saveFailed: 'Failed to save appointment.',
       saveFailedStatus: 'Error {status}. Failed to save appointment.',
+      cancelFailedStatus: 'Error {status}. Failed to cancel appointment.',
       connection: 'Could not connect to the server.',
     },
     statusPending: 'Pending',

@@ -27,6 +27,16 @@ function goToCalendar() {
   router.push({ name: 'appointment-calendar' })
 }
 
+async function onCancel() {
+  const next = appointmentStore.nextAppointment
+  if (!next) return
+  const result = await appointmentStore.cancelAppointment(next.id)
+  if (result) {
+    // fetchAppointments ya se llama dentro de cancelAppointment; la vista se actualiza
+    // (hasBooking pasa a false si no hay más citas y se muestra CBookingEmpty)
+  }
+}
+
 onMounted(() => {
   appointmentStore.fetchAppointments()
 })
@@ -44,7 +54,7 @@ export default {
     :size="size"
     :date-time="nextAppointmentDateText"
     @modify="goToCalendar"
-    @cancel="goToCalendar"
+    @cancel="onCancel"
   />
   <CBookingEmpty
     v-else
