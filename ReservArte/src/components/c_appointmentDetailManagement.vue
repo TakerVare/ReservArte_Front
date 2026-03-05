@@ -4,13 +4,14 @@ import { useI18n } from 'vue-i18n'
 import c_heroBanner from './c_heroBanner.vue'
 import CInputField from './c_inputField.vue'
 import CSelectField from './c_selectField.vue'
+import CNavAreaPrimaryButton from './Buttons/c_navAreaPrimaryButton.vue'
+import CNavAreaSecondaryButton from './Buttons/c_navAreaSecondaryButton.vue'
 import type { InputFieldSize } from './c_inputField.vue'
 import type { SelectOption } from './c_selectField.vue'
 import type { AppointmentDetail } from '../stores/appointment.store'
 
 export type AppointmentDetailManagementSize = 'XXL' | 'XL' | 'LG' | 'MD' | 'SM' | 'XS'
 
-/** Estado del formulario para crear cita */
 export interface CreateAppointmentFormState {
   customerId: string
   employeeId: string
@@ -29,11 +30,8 @@ const props = withDefaults(
     deleteText?: string
     showDeleteButton?: boolean
     formTitle?: string
-    /** Modo creación: formulario para nueva cita */
     isEditMode?: boolean
-    /** En creación: estado del formulario */
     createForm?: CreateAppointmentFormState
-    /** En edición: cita cargada */
     detail?: AppointmentDetail | null
     customerOptions?: SelectOption[]
     employeeOptions?: SelectOption[]
@@ -100,6 +98,13 @@ const fieldSize = computed<InputFieldSize>(() => {
   return map[props.size]
 })
 
+const buttonSize = computed(() => {
+  const map: Record<AppointmentDetailManagementSize, 'XS' | 'SM' | 'MD'> = {
+    XXL: 'MD', XL: 'MD', LG: 'SM', MD: 'SM', SM: 'XS', XS: 'XS',
+  }
+  return map[props.size]
+})
+
 const customerSelectOptions = computed<SelectOption[]>(() =>
   (props.customerOptions ?? []).map((c) => ({ label: c.label, value: c.value }))
 )
@@ -124,10 +129,7 @@ function updateCreateFormServiceIds(index: number, value: string) {
 
 function addServiceSlot() {
   if (!props.createForm) return
-  emit('update:createForm', {
-    ...props.createForm,
-    serviceIds: [...props.createForm.serviceIds, ''],
-  })
+  emit('update:createForm', { ...props.createForm, serviceIds: [...props.createForm.serviceIds, ''] })
 }
 
 function removeServiceSlot(index: number) {
@@ -144,21 +146,13 @@ function updateDetailField<K extends keyof AppointmentDetail>(field: K, value: A
 function onCustomerChange(value: string) {
   if (!props.detail) return
   const label = props.customerOptions?.find((c) => c.value === value)?.label ?? ''
-  emit('update:detail', {
-    ...props.detail,
-    customerId: Number(value),
-    customerName: label,
-  })
+  emit('update:detail', { ...props.detail, customerId: Number(value), customerName: label })
 }
 
 function onEmployeeChange(value: string) {
   if (!props.detail) return
   const label = props.employeeOptions?.find((e) => e.value === value)?.label ?? ''
-  emit('update:detail', {
-    ...props.detail,
-    employeeId: Number(value),
-    employeeName: label,
-  })
+  emit('update:detail', { ...props.detail, employeeId: Number(value), employeeName: label })
 }
 </script>
 
@@ -236,11 +230,7 @@ export default {
                 @change="updateCreateFormServiceIds(idx, ($event.target as HTMLSelectElement).value)"
               >
                 <option value="">{{ t('appointment.selectService') }}</option>
-                <option
-                  v-for="svc in serviceOptions"
-                  :key="svc.id"
-                  :value="String(svc.id)"
-                >
+                <option v-for="svc in serviceOptions" :key="svc.id" :value="String(svc.id)">
                   {{ svc.name }}
                 </option>
               </select>
@@ -253,11 +243,7 @@ export default {
                 {{ t('common.delete') }}
               </button>
             </div>
-            <button
-              type="button"
-              class="c_appointmentDetailManagement__add-svc"
-              @click="addServiceSlot"
-            >
+            <button type="button" class="c_appointmentDetailManagement__add-svc" @click="addServiceSlot">
               + {{ t('appointment.services') }}
             </button>
           </div>
@@ -319,18 +305,14 @@ export default {
             :size="fieldSize"
             @update:model-value="updateDetailField('endTime', $event)"
           />
-          <div class="c_appointmentDetailManagement__field" v-if="statusOptions && statusOptions.length">
+          <div v-if="statusOptions && statusOptions.length" class="c_appointmentDetailManagement__field">
             <label class="c_appointmentDetailManagement__label">{{ t('appointment.status') }}</label>
             <select
               :value="detail.status"
               class="c_appointmentDetailManagement__select"
               @change="updateDetailField('status', ($event.target as HTMLSelectElement).value)"
             >
-              <option
-                v-for="opt in statusOptions"
-                :key="opt.value"
-                :value="opt.value"
-              >
+              <option v-for="opt in statusOptions" :key="opt.value" :value="opt.value">
                 {{ t(opt.labelKey) }}
               </option>
             </select>
@@ -346,15 +328,16 @@ export default {
           </div>
         </template>
 
+        <!-- Botones guardar / cancelar -->
         <div class="c_appointmentDetailManagement__form-buttons">
           <CNavAreaPrimaryButton
             :text="saveTextComputed"
-            size="XS"
+            :size="buttonSize"
             @click="emit('save')"
           />
           <CNavAreaSecondaryButton
             :text="cancelTextComputed"
-            size="XS"
+            :size="buttonSize"
             @click="emit('cancel')"
           />
         </div>
@@ -369,9 +352,8 @@ export default {
   max-width: 100%;
   box-sizing: border-box;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  overflow: hidden;
   background-color: #fff;
 
   &__container {
@@ -383,29 +365,13 @@ export default {
     background-color: #fff;
   }
 
-  &__title-wrap {
-    width: 100%;
-    background-color: pink;
-  }
-
-  &__nav-area {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 26px 0;
-    box-sizing: border-box;
-    overflow: hidden;
-    background-color: #fff;
-  }
-
   &__form-area {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: stretch;
     gap: 10px;
-    padding: 10px 22px;
+    padding: 10px 22px 100px 22px;
     box-sizing: border-box;
   }
 
@@ -501,9 +467,20 @@ export default {
     display: flex;
     align-items: center;
     gap: 16px;
+    padding-top: 8px;
 
     > * {
       flex: 1;
+
+      :deep(.c_navAreaPrimaryButton),
+      :deep(.c_navAreaSecondaryButton) {
+        width: 100%;
+      }
+
+      :deep(.c_navAreaPrimaryButton__btn),
+      :deep(.c_navAreaSecondaryButton__btn) {
+        width: 100%;
+      }
     }
   }
 

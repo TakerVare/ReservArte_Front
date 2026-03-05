@@ -16,6 +16,7 @@ import StileGuideView from '../views/stileGuideView.vue'
 import UserView from '../views/UserView.vue'
 import PrivacyView from '../views/PrivacyView.vue'
 import PaymentMethodsView from '../views/PaymentMethodsView.vue'
+import AboutView from '../views/AboutView.vue'
 
 // Vistas auth
 import LoginView from '../views/LoginView.vue'
@@ -33,10 +34,6 @@ import AppointmentDetailView from '../views/appointmentDetailView.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    /**
-     * RUTAS PÚBLICAS
-     * Heredan de PublicLayout → Banner + contenido + NavBottom
-     */
     {
       path: '/',
       component: PublicLayout,
@@ -52,25 +49,14 @@ const router = createRouter({
         { path: 'user', name: 'user', component: UserView },
         { path: 'privacy', name: 'privacy', component: PrivacyView },
         { path: 'payment-methods', name: 'payment-methods', component: PaymentMethodsView },
+        { path: 'about', name: 'about', component: AboutView },
       ],
     },
-
-    /**
-     * RUTAS AUTH
-     * Heredan de AuthLayout → Sin header ni footer (p. ej. registro)
-     */
     {
       path: '/auth',
       component: AuthLayout,
-      children: [
-        // { path: 'register', name: 'register', component: RegisterView },
-      ],
+      children: [],
     },
-
-    /**
-     * RUTAS ADMIN
-     * Heredan de AdminLayout → Header y footer distintos
-     */
     {
       path: '/admin',
       component: AdminLayout,
@@ -100,7 +86,6 @@ router.beforeEach((to) => {
     return { name: 'login' }
   }
 
-  // Si está logueado y va a la página de inicio, mostrar BookingView
   if (to.name === 'home' && authStore.isAuthenticated) {
     return { name: 'booking' }
   }

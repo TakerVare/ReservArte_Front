@@ -5,6 +5,8 @@ import c_heroBanner from './c_heroBanner.vue'
 import CAvatarUpload from './c_avatarUpload.vue'
 import CInputField from './c_inputField.vue'
 import CSelectField from './c_selectField.vue'
+import CNavAreaPrimaryButton from './Buttons/c_navAreaPrimaryButton.vue'
+import CNavAreaSecondaryButton from './Buttons/c_navAreaSecondaryButton.vue'
 import type { SelectOption } from './c_selectField.vue'
 import type { InputFieldSize } from './c_inputField.vue'
 import type { AvatarUploadSize } from './c_avatarUpload.vue'
@@ -23,27 +25,16 @@ export interface UserFormData {
 const props = withDefaults(
   defineProps<{
     size?: UserDetailManagementSize
-    /** Título de la pantalla (ej: "Nuevo Cliente", "Editar Empleado") */
     title?: string
-    /** Texto botón volver */
     backText?: string
-    /** Texto botón eliminar; si no se indica o showDeleteButton es false no se muestra */
     deleteText?: string
-    /** Mostrar botón eliminar (útil ocultarlo en modo creación) */
     showDeleteButton?: boolean
-    /** URL del avatar */
     avatarUrl?: string
-    /** Título de la sección del formulario (ej: "Datos de usuario", "Datos del cliente") */
     formTitle?: string
-    /** Datos del formulario */
     formData?: UserFormData
-    /** Opciones para el select de rol (ej: Cliente/Empleado o categorías) */
     rolOptions?: SelectOption[]
-    /** Opciones para el select de estado */
     estadoOptions?: SelectOption[]
-    /** Texto botón guardar */
     saveText?: string
-    /** Texto botón cancelar */
     cancelText?: string
   }>(),
   {
@@ -80,9 +71,9 @@ const defaultEstadoOptions = computed(() => [
 ])
 const rolOptionsComputed = computed(() => props.rolOptions ?? defaultRolOptions.value)
 const estadoOptionsComputed = computed(() => props.estadoOptions ?? defaultEstadoOptions.value)
-const backTextComputed = computed(() => props.backText ?? t('common.back'))
-const deleteTextComputed = computed(() => props.deleteText ?? t('common.delete'))
-const formTitleComputed = computed(() => props.formTitle ?? t('form.userData'))
+const backTextComputed = computed(() => props.backText || t('common.back'))
+const deleteTextComputed = computed(() => props.deleteText || t('common.delete'))
+const formTitleComputed = computed(() => props.formTitle || t('form.userData'))
 const saveTextComputed = computed(() => props.saveText ?? t('common.save'))
 const cancelTextComputed = computed(() => props.cancelText ?? t('common.cancel'))
 
@@ -101,54 +92,42 @@ function updateField(field: keyof UserFormData, value: string) {
   emit('update:formData', { ...props.formData, [field]: value })
 }
 
-/** Ancho máximo del contenedor externo */
 const containerMaxWidth = computed(() => {
   const map: Record<UserDetailManagementSize, string> = {
-    'XXL': '1440px',
-    'XL': '1200px',
-    'LG': '992px',
-    'MD': '768px',
-    'SM': '576px',
-    'XS': '375px',
+    'XXL': '1440px', 'XL': '1200px', 'LG': '992px',
+    'MD': '768px', 'SM': '576px', 'XS': '375px',
   }
   return map[props.size]
 })
 
-/** Ancho interior para botones, avatar y formulario */
 const innerWidth = computed(() => {
   const map: Record<UserDetailManagementSize, string> = {
-    'XXL': '1024px',
-    'XL': '1024px',
-    'LG': '768px',
-    'MD': '768px',
-    'SM': '576px',
-    'XS': '375px',
+    'XXL': '1024px', 'XL': '1024px', 'LG': '768px',
+    'MD': '768px', 'SM': '576px', 'XS': '375px',
   }
   return map[props.size]
 })
 
-/** Tamaño de los campos input/select */
 const fieldSize = computed<InputFieldSize>(() => {
   const map: Record<UserDetailManagementSize, InputFieldSize> = {
-    'XXL': 'LG',
-    'XL': 'LG',
-    'LG': 'MD',
-    'MD': 'MD',
-    'SM': 'SM',
-    'XS': 'XS',
+    'XXL': 'LG', 'XL': 'LG', 'LG': 'MD',
+    'MD': 'MD', 'SM': 'SM', 'XS': 'XS',
   }
   return map[props.size]
 })
 
-/** Tamaño del avatar */
 const avatarSize = computed<AvatarUploadSize>(() => {
   const map: Record<UserDetailManagementSize, AvatarUploadSize> = {
-    'XXL': 'LG',
-    'XL': 'LG',
-    'LG': 'MD',
-    'MD': 'MD',
-    'SM': 'SM',
-    'XS': 'XS',
+    'XXL': 'LG', 'XL': 'LG', 'LG': 'MD',
+    'MD': 'MD', 'SM': 'SM', 'XS': 'XS',
+  }
+  return map[props.size]
+})
+
+const buttonSize = computed(() => {
+  const map: Record<UserDetailManagementSize, 'XS' | 'SM' | 'MD'> = {
+    'XXL': 'MD', 'XL': 'MD', 'LG': 'SM',
+    'MD': 'SM', 'SM': 'XS', 'XS': 'XS',
   }
   return map[props.size]
 })
@@ -177,7 +156,7 @@ export default {
       @delete="emit('delete')"
     />
     <div class="c_userDetailManagement__container" :style="{ maxWidth: containerMaxWidth }">
-      <!-- Avatar upload -->
+      <!-- Avatar -->
       <div class="c_userDetailManagement__avatar-area" :style="{ maxWidth: innerWidth }">
         <CAvatarUpload
           :avatar-url="avatarUrl"
@@ -188,14 +167,12 @@ export default {
         />
       </div>
 
-      <!-- Formulario datos de usuario -->
+      <!-- Formulario -->
       <div class="c_userDetailManagement__form-area" :style="{ maxWidth: innerWidth }">
-        <!-- Título sección -->
         <div class="c_userDetailManagement__form-legend">
           <p class="c_userDetailManagement__form-title">{{ formTitleComputed }}</p>
         </div>
 
-        <!-- Campos de texto -->
         <CInputField
           :label="t('form.name')"
           :model-value="formData.nombre"
@@ -227,7 +204,6 @@ export default {
           @update:model-value="updateField('telefono', $event)"
         />
 
-        <!-- Selects -->
         <CSelectField
           :label="t('form.role')"
           :model-value="formData.rol"
@@ -243,7 +219,6 @@ export default {
           @update:model-value="updateField('estado', $event)"
         />
 
-        <!-- Slot opcional: campos extra para casos concretos (ej. cliente: birthDate, preferredContactMethod, marketingConsent) -->
         <div v-if="$slots['extra-fields']" class="c_userDetailManagement__extra-fields">
           <slot name="extra-fields" />
         </div>
@@ -252,12 +227,12 @@ export default {
         <div class="c_userDetailManagement__form-buttons">
           <CNavAreaPrimaryButton
             :text="saveTextComputed"
-            size="XS"
+            :size="buttonSize"
             @click="emit('save')"
           />
           <CNavAreaSecondaryButton
             :text="cancelTextComputed"
-            size="XS"
+            :size="buttonSize"
             @click="emit('cancel')"
           />
         </div>
@@ -272,9 +247,8 @@ export default {
   max-width: 100%;
   box-sizing: border-box;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  overflow: hidden;
   background-color: #fff;
 
   &__container {
@@ -283,22 +257,6 @@ export default {
     flex-direction: column;
     align-items: center;
     gap: 10px;
-    background-color: #fff;
-  }
-
-  &__title-wrap {
-    width: 100%;
-    background-color: pink;
-  }
-
-  &__nav-area {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 26px 0;
-    box-sizing: border-box;
-    overflow: hidden;
     background-color: #fff;
   }
 
@@ -317,7 +275,7 @@ export default {
     flex-direction: column;
     align-items: stretch;
     gap: 10px;
-    padding: 10px 22px;
+    padding: 10px 22px 100px 22px;
     box-sizing: border-box;
   }
 
@@ -352,13 +310,23 @@ export default {
     display: flex;
     align-items: center;
     gap: 16px;
+    padding-top: 8px;
 
     > * {
       flex: 1;
+
+      :deep(.c_navAreaPrimaryButton),
+      :deep(.c_navAreaSecondaryButton) {
+        width: 100%;
+      }
+
+      :deep(.c_navAreaPrimaryButton__btn),
+      :deep(.c_navAreaSecondaryButton__btn) {
+        width: 100%;
+      }
     }
   }
 
-  /* Variantes de tamaño */
   &--xxl { max-width: 1440px; margin: 0 auto; }
   &--xl  { max-width: 1200px; margin: 0 auto; }
   &--lg  { max-width: 992px;  margin: 0 auto; }

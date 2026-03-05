@@ -13,7 +13,6 @@ const authStore = useAuthStore()
 const { t } = useI18n()
 const { size } = useViewportSize()
 
-/** Clave i18n del título según la ruta */
 const headerTitleKey = computed(() => {
   const keyMap: Record<string, string> = {
     'admin-customers': 'admin.customers',
@@ -34,33 +33,20 @@ const headerTitleKey = computed(() => {
 
 const headerTitle = computed(() => t(headerTitleKey.value))
 
-function goBack() {
-  router.back()
-}
-
-function goToPanel() {
-  router.push({ name: 'user' })
-}
-
+function goBack() { router.back() }
+function goToPanel() { router.push({ name: 'user' }) }
 function logout() {
   authStore.logout()
   router.push({ name: 'login' })
 }
 
-/** Índice activo del nav bottom: 0 = Inicio, 1 = Ubicación, 2 = Perfil. En admin no coincide con ruta pública. */
 const activeNavIndex = computed(() => 0)
 
 function onNavNavigate(index: number) {
   switch (index) {
-    case 0:
-      router.push({ name: 'home' })
-      break
-    case 1:
-      router.push({ name: 'contact' })
-      break
-    case 2:
-      router.push({ name: 'user' })
-      break
+    case 0: router.push({ name: 'home' }); break
+    case 1: router.push({ name: 'contact' }); break
+    case 2: router.push({ name: 'user' }); break
   }
 }
 </script>
@@ -168,9 +154,9 @@ export default {
 /* ---- Main ---- */
 .admin-layout__main {
   flex: 1;
+  width: 100%;          /* ← ocupa todo el ancho */
+  box-sizing: border-box;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 100%;
 }
 </style>

@@ -328,4 +328,30 @@ export default {
       or: 'o llámanos al',
     },
   },
+  about: {
+    title: 'Acerca de More Than Brows',
+    subtitle: 'Cuidado profesional de cejas en Zaragoza',
+    hero: 'Tu espacio de confianza para el cuidado profesional de tus cejas. Unimos conocimiento experto con un trato cercano y humano — porque tu mirada habla de ti.',
+    whoWeAre: {
+      title: 'Quiénes somos',
+      text: 'More Than Brows es un estudio de belleza profesional especializado en tratamientos de cejas y cuidado facial. Fundado con pasión por realzar la belleza natural, ofrecemos un espacio acogedor donde cada cliente se siente valorada y cuidada.',
+    },
+    ourValues: {
+      title: 'Nuestros valores',
+      text: 'Todo lo que hacemos está guiado por cuatro principios fundamentales:',
+      value1: 'Excelencia — la más alta calidad en cada tratamiento',
+      value2: 'Confianza — un espacio seguro y acogedor para cada cliente',
+      value3: 'Personalización — tratamientos adaptados a ti',
+      value4: 'Cuidado — atención cercana y humana en cada visita',
+    },
+    services: {
+      title: 'Qué ofrecemos',
+      text: 'Nos especializamos en diseño, depilación, tinte, laminado de cejas y una gama de tratamientos faciales. Cada servicio es realizado por profesionales formadas con productos de primera calidad para garantizar los mejores resultados.',
+    },
+    contact: {
+      title: 'Contacta con nosotras',
+      text: 'Estaremos encantadas de ayudarte. Escríbenos a',
+      or: 'o llámanos al',
+    },
+  },
 } as const

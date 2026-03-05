@@ -328,4 +328,30 @@ export default {
       or: 'or call us on',
     },
   },
+  about: {
+    title: 'About More Than Brows',
+    subtitle: 'Professional eyebrow care in Zaragoza',
+    hero: 'Your trusted space for professional eyebrow care. We combine expert knowledge with a close, personal approach — because your look speaks for you.',
+    whoWeAre: {
+      title: 'Who we are',
+      text: 'More Than Brows is a professional beauty studio specialising in eyebrow treatments and facial care. Founded with a passion for enhancing natural beauty, we offer a welcoming space where every client feels valued and cared for.',
+    },
+    ourValues: {
+      title: 'Our values',
+      text: 'Everything we do is guided by four core principles:',
+      value1: 'Excellence — the highest quality in every treatment',
+      value2: 'Trust — a safe, welcoming space for every client',
+      value3: 'Personalisation — treatments tailored to you',
+      value4: 'Care — attentive, human service at every visit',
+    },
+    services: {
+      title: 'What we offer',
+      text: 'We specialise in eyebrow design, shaping, tinting, lamination, and a range of facial treatments. Each service is performed by trained professionals using premium products to ensure the best results for your unique features.',
+    },
+    contact: {
+      title: 'Get in touch',
+      text: 'We\'d love to hear from you. Reach us at',
+      or: 'or call us on',
+    },
+  },
 } as const
