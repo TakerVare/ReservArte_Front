@@ -295,4 +295,37 @@ export default {
     generic: 'An error occurred.',
     status: 'Error {status}',
   },
+  payment: {
+    title: 'Payment Methods',
+    subtitle: 'Accepted payment methods at More Than Brows',
+    card: {
+      title: 'Bank card',
+      description: 'We accept Visa, Mastercard and American Express debit and credit cards. Payment is made at the time of service using the card reader at the centre.',
+    },
+    cash: {
+      title: 'Cash',
+      description: 'You can also pay in cash directly at the centre after your appointment.',
+    },
+    bizum: {
+      title: 'Bizum',
+      description: 'We accept Bizum payments. You can send the transfer to',
+      timing: 'before or after your appointment.',
+    },
+    cancellation: {
+      title: 'Cancellation policy',
+      description: 'If you need to cancel or modify your appointment, please do so at least 24 hours in advance to avoid late cancellation charges.',
+      rule1: 'Cancellation with more than 24h notice: no charge',
+      rule2: 'Cancellation with less than 24h notice: 50% of the service may be charged',
+      rule3: 'No-show: 100% of the service will be charged',
+    },
+    vouchers: {
+      title: 'Vouchers & gift cards',
+      description: 'We offer session vouchers and gift cards. You can purchase them directly at the centre or by contacting us at',
+    },
+    contact: {
+      title: 'Contact',
+      description: 'For any payment-related enquiries, email us at',
+      or: 'or call us on',
+    },
+  },
 } as const

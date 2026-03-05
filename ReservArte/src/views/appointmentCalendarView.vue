@@ -84,6 +84,12 @@ onMounted(() => {
   }
 })
 
+watch(customerSelectOptions, (options) => {
+  if (options.length > 0 && !selectedCustomerId.value) {
+    selectedCustomerId.value = options[0]?.value ?? ''
+  }
+}, { immediate: true })
+
 watch(
   () => route.query.edit,
   (editId) => {

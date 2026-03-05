@@ -31,6 +31,12 @@ function onMenuItemClick(itemId: string) {
     case 'guia-estilo':
       router.push({ name: 'style-guide' })
       break
+    case 'privacidad':
+      router.push({ name: 'privacy' })
+      break
+    case 'metodos-pago': 
+      router.push({ name: 'payment-methods' }); 
+      break
     default:
       console.log(`Navegando a: ${itemId}`)
       break
@@ -46,11 +52,7 @@ export default {
 
 <template>
   <div class="user-view">
-    <CUserMenu
-      :size="size"
-      :is-admin="showAdminArea"
-      @menu-item-click="onMenuItemClick"
-    />
+    <CUserMenu :size="size" :is-admin="showAdminArea" @menu-item-click="onMenuItemClick" />
   </div>
 </template>
 

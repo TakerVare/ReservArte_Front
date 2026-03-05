@@ -73,21 +73,34 @@ export default {
 
 <template>
   <div class="admin-layout">
-    
+
     <header class="admin-layout__header">
-      
-      
+      <div class="admin-layout__header-inner">
+        <div class="admin-layout__header-actions">
+          <button class="admin-layout__back-btn" @click="goBack">
+            ← {{ t('common.back') }}
+          </button>
+          <button class="admin-layout__panel-btn" @click="goToPanel">
+            {{ t('admin.panel') }}
+          </button>
+        </div>
+
+        <span class="admin-layout__title">{{ headerTitle }}</span>
+
+        <div class="admin-layout__header-actions">
+          <CLocaleSwitcher />
+          <button class="admin-layout__logout-btn" @click="logout">
+            {{ t('auth.logout') }}
+          </button>
+        </div>
+      </div>
     </header>
 
     <main class="admin-layout__main">
       <router-view />
     </main>
 
-    <c_bottomNavBar
-      :size="size"
-      :active-index="activeNavIndex"
-      @navigate="onNavNavigate"
-    />
+    <c_bottomNavBar :size="size" :active-index="activeNavIndex" @navigate="onNavNavigate" />
   </div>
 </template>
 

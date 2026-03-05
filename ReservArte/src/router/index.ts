@@ -14,6 +14,8 @@ import AppointmentCalendarView from '../views/appointmentCalendarView.vue'
 import PageTitleDemoView from '../views/pageTitleDemoView.vue'
 import StileGuideView from '../views/stileGuideView.vue'
 import UserView from '../views/UserView.vue'
+import PrivacyView from '../views/PrivacyView.vue'
+import PaymentMethodsView from '../views/PaymentMethodsView.vue'
 
 // Vistas auth
 import LoginView from '../views/LoginView.vue'
@@ -48,6 +50,8 @@ const router = createRouter({
         { path: 'demo-page-title', name: 'demo-page-title', component: PageTitleDemoView },
         { path: 'style-guide', name: 'style-guide', component: StileGuideView },
         { path: 'user', name: 'user', component: UserView },
+        { path: 'privacy', name: 'privacy', component: PrivacyView },
+        { path: 'payment-methods', name: 'payment-methods', component: PaymentMethodsView },
       ],
     },
 

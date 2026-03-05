@@ -10,21 +10,18 @@ export interface SelectOption {
 
 const props = withDefaults(
   defineProps<{
-    /** Texto de la etiqueta */
     label: string
-    /** Valor seleccionado */
     modelValue?: string
-    /** Opciones del desplegable */
     options: SelectOption[]
-    /** Desactivado */
     disabled?: boolean
-    /** Tamaño responsive */
     size?: SelectFieldSize
+    placeholder?: string
   }>(),
   {
     modelValue: '',
     disabled: false,
     size: 'MD',
+    placeholder: '',
   }
 )
 
@@ -37,9 +34,6 @@ function onChange(event: Event) {
   emit('update:modelValue', target.value)
 }
 
-/**
- * Tipografía del label — mismo patrón que c_inputField
- */
 const labelStyle = computed(() => {
   const cfg: Record<SelectFieldSize, {
     fontSize: string
@@ -59,9 +53,6 @@ const labelStyle = computed(() => {
   }
 })
 
-/**
- * Tipografía del select según tamaño
- */
 const selectStyle = computed(() => {
   const cfg: Record<SelectFieldSize, {
     fontSize: string
@@ -94,6 +85,10 @@ export default {
         :disabled="disabled"
         @change="onChange"
       >
+        <!-- Opción vacía placeholder -->
+        <option value="" disabled :selected="!modelValue">
+          {{ placeholder || '— ' + label + ' —' }}
+        </option>
         <option
           v-for="option in options"
           :key="option.value"
@@ -120,7 +115,6 @@ export default {
   font-style: normal;
   color: #1e1e1e;
   line-height: normal;
-  /* fontSize, fontWeight, letterSpacing vienen por :style */
 }
 
 .c_selectField__select-wrap {
@@ -141,18 +135,13 @@ export default {
   box-sizing: border-box;
   outline: none;
   cursor: pointer;
-
-  /* Quitar flecha nativa */
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
-
-  /* Chevron custom */
   background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M4 6L8 10L12 6' stroke='%23999' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
   background-size: 16px 16px;
-  /* fontSize, height, padding vienen por :style */
 }
 
 .c_selectField__select:focus {

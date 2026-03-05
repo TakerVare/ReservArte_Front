@@ -295,4 +295,37 @@ export default {
     generic: 'Ha ocurrido un error.',
     status: 'Error {status}',
   },
+  payment: {
+    title: 'Métodos de Pago',
+    subtitle: 'Formas de pago aceptadas en More Than Brows',
+    card: {
+      title: 'Tarjeta bancaria',
+      description: 'Aceptamos tarjetas de débito y crédito Visa, Mastercard y American Express. El pago se realiza en el momento del servicio con datáfono en el centro.',
+    },
+    cash: {
+      title: 'Efectivo',
+      description: 'También puedes pagar en efectivo directamente en el centro al finalizar tu cita.',
+    },
+    bizum: {
+      title: 'Bizum',
+      description: 'Aceptamos pagos por Bizum. Puedes realizar la transferencia al número',
+      timing: 'antes o después de tu cita.',
+    },
+    cancellation: {
+      title: 'Política de cancelación',
+      description: 'Si necesitas cancelar o modificar tu cita, te pedimos que lo hagas con al menos 24 horas de antelación para evitar cargos por cancelación tardía.',
+      rule1: 'Cancelación con más de 24h: sin coste',
+      rule2: 'Cancelación con menos de 24h: puede aplicarse un cargo del 50% del servicio',
+      rule3: 'No presentación (no-show): cargo del 100% del servicio',
+    },
+    vouchers: {
+      title: 'Bonos y tarjetas regalo',
+      description: 'Disponemos de bonos de sesiones y tarjetas regalo. Puedes adquirirlos directamente en el centro o contactando con nosotros en',
+    },
+    contact: {
+      title: 'Contacto',
+      description: 'Para cualquier consulta sobre pagos, escríbenos a',
+      or: 'o llámanos al',
+    },
+  },
 } as const
