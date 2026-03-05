@@ -5,10 +5,15 @@ import CBookingEmpty from '../components/c_bookingEmpty.vue'
 import CBookingAssigned from '../components/c_bookingAssigned.vue'
 import { useViewportSize } from '../composables/useViewportSize'
 import { useAppointmentStore } from '../stores/appointment.store'
+import { useAuthStore } from '../stores/auth.store'
 
 const router = useRouter()
 const { size } = useViewportSize()
 const appointmentStore = useAppointmentStore()
+const authStore = useAuthStore()
+
+/** Solo los clientes ven esta vista; empleados y administradores se redirigen al calendario. */
+const isClient = computed(() => authStore.user?.role === 'user')
 
 const hasBooking = computed(() => !!appointmentStore.nextAppointment)
 
@@ -36,8 +41,12 @@ function goToCalendar() {
   router.push({ name: 'appointment-calendar' })
 }
 
-onMounted(() => {
-  appointmentStore.fetchAppointments()
+onMounted(async () => {
+  if (authStore.showAdminArea) {
+    router.replace({ name: 'appointment-calendar' })
+    return
+  }
+  await appointmentStore.fetchAppointments()
 })
 </script>
 
@@ -48,16 +57,18 @@ export default {
 </script>
 
 <template>
-  <CBookingAssigned
-    v-if="hasBooking"
-    :size="size"
-    :date-time="nextAppointmentDateText"
-    @modify="goToModifyCalendar"
-    @cancel="goToCalendar"
-  />
-  <CBookingEmpty
-    v-else
-    :size="size"
-    @book="goToCalendar"
-  />
+  <template v-if="isClient">
+    <CBookingAssigned
+      v-if="hasBooking"
+      :size="size"
+      :date-time="nextAppointmentDateText"
+      @modify="goToModifyCalendar"
+      @cancel="goToCalendar"
+    />
+    <CBookingEmpty
+      v-else
+      :size="size"
+      @book="goToCalendar"
+    />
+  </template>
 </template>
