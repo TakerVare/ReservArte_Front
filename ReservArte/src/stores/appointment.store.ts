@@ -3,7 +3,7 @@ import { ref, computed } from 'vue'
 import { useAuthStore } from './auth.store'
 import i18n from '../i18n'
 
-const APPOINTMENT_API_URL = 'http://localhost:5297/api/Appointment'
+const APPOINTMENT_API_URL = '/api/Appointment'
 
 /** Elemento de la lista GET /api/Appointment */
 export interface AppointmentListItem {
