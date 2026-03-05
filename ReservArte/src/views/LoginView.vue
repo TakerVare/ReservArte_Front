@@ -6,12 +6,8 @@ import { useViewportSize } from '../composables/useViewportSize'
 const router = useRouter()
 const { size } = useViewportSize()
 
-function onLoginSubmit(payload: { email: string; password: string; acceptTerms: boolean }) {
-  console.log('Login:', payload)
-}
-
 function onLoginSuccess() {
-  router.push({ name: 'home' })
+  router.push({ name: 'booking' })
 }
 
 function onLoginError() {
@@ -20,8 +16,6 @@ function onLoginError() {
 
 function onRegisterSuccess() {
   // Registro exitoso: el formulario vuelve a modo login automáticamente
-  // El usuario solo tiene que iniciar sesión con las credenciales que acaba de crear
-  console.log('Registro exitoso')
 }
 </script>
 
@@ -34,7 +28,6 @@ export default {
 <template>
   <CLoginForm
     :size="size"
-    @submit="onLoginSubmit"
     @success="onLoginSuccess"
     @error="onLoginError"
     @register-success="onRegisterSuccess"

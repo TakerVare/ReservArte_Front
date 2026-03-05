@@ -23,18 +23,17 @@ const nextAppointmentDateText = computed(() => {
   return `${day} ${month} - ${time}h`
 })
 
-function goToCalendar() {
-  router.push({ name: 'appointment-calendar' })
+function goToModifyCalendar() {
+  const next = appointmentStore.nextAppointment
+  if (next?.id != null) {
+    router.push({ name: 'appointment-calendar', query: { edit: String(next.id) } })
+  } else {
+    router.push({ name: 'appointment-calendar' })
+  }
 }
 
-async function onCancel() {
-  const next = appointmentStore.nextAppointment
-  if (!next) return
-  const result = await appointmentStore.cancelAppointment(next.id)
-  if (result) {
-    // fetchAppointments ya se llama dentro de cancelAppointment; la vista se actualiza
-    // (hasBooking pasa a false si no hay más citas y se muestra CBookingEmpty)
-  }
+function goToCalendar() {
+  router.push({ name: 'appointment-calendar' })
 }
 
 onMounted(() => {
@@ -53,8 +52,8 @@ export default {
     v-if="hasBooking"
     :size="size"
     :date-time="nextAppointmentDateText"
-    @modify="goToCalendar"
-    @cancel="onCancel"
+    @modify="goToModifyCalendar"
+    @cancel="goToCalendar"
   />
   <CBookingEmpty
     v-else
