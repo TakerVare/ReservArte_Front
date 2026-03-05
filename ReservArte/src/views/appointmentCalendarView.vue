@@ -11,7 +11,6 @@ import type { SelectOption } from '../components/c_selectField.vue'
 import type { AppointmentDetail } from '../stores/appointment.store'
 import { useViewportSize } from '../composables/useViewportSize'
 import { useAgendaAvailability } from '../composables/useAgendaAvailability'
-import { useEmployeeStore } from '../stores/employee.store'
 import { useCustomerStore } from '../stores/customer.store'
 import { useAuthStore } from '../stores/auth.store'
 import { useAppointmentStore } from '../stores/appointment.store'
@@ -21,7 +20,6 @@ const route = useRoute()
 const { t } = useI18n()
 const { size } = useViewportSize()
 const authStore = useAuthStore()
-const employeeStore = useEmployeeStore()
 const customerStore = useCustomerStore()
 const appointmentStore = useAppointmentStore()
 
@@ -66,7 +64,7 @@ const customerSelectOptions = computed<SelectOption[]>(() =>
 
 const { employeesWithSlots, loading: loadingAgenda, error: agendaError } = useAgendaAvailability(
   () => selectedDate.value,
-  () => employeeStore.items
+  { serviceId: 1 }
 )
 
 async function loadAppointmentToEdit(id: string) {
@@ -78,9 +76,6 @@ async function loadAppointmentToEdit(id: string) {
 }
 
 onMounted(() => {
-  if (employeeStore.employees.length === 0) {
-    employeeStore.fetchEmployees()
-  }
   if (showCustomerDropdown.value && customerStore.customers.length === 0) {
     customerStore.fetchCustomers()
   }

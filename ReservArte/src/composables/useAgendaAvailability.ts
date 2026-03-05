@@ -2,73 +2,45 @@ import { ref, watch } from 'vue'
 import { useAuthStore } from '../stores/auth.store'
 import type { EmployeeWithSlots } from '../components/c_employeeAvailability.vue'
 
-const AGENDA_API_URL = '/api/Appointment/agenda'
+const SLOTS_API_URL = '/api/Appointment/slots'
 
-/** Horario de trabajo y duración de slot para calcular disponibilidad */
-const WORK_START_MINUTES = 9 * 60 // 09:00
-const WORK_END_MINUTES = 18 * 60 // 18:00
-const SLOT_DURATION_MINUTES = 45
-
-/** Respuesta del endpoint GET /api/Appointment/agenda */
-interface AgendaAppointment {
-  id: number
-  appointmentDate: string
+/** Slot devuelto por GET /api/Appointment/slots (por empleado) */
+interface SlotItem {
   startTime: string
   endTime: string
+}
+
+/** Empleado con slots en la respuesta de GET /api/Appointment/slots */
+interface EmployeeSlotsFromApi {
   employeeId: number
   employeeName: string
-  [key: string]: unknown
+  slots: SlotItem[]
 }
 
-interface AgendaDay {
+/** Respuesta de GET /api/Appointment/slots */
+interface SlotsApiResponse {
   date: string
-  appointments: AgendaAppointment[]
+  serviceId: number
+  serviceName?: string
+  durationMinutes?: number
+  employeeSlots: EmployeeSlotsFromApi[]
+  totalSlotsAvailable?: number
 }
 
-interface AgendaResponse {
-  startDate: string
-  endDate: string
-  days: AgendaDay[]
-}
-
-/** Convierte "HH:mm:ss" o "HH:mm" a minutos desde medianoche */
-function timeToMinutes(time: string): number {
-  const parts = time.trim().split(':')
-  const h = parseInt(parts[0] ?? '0', 10)
-  const m = parseInt(parts[1] ?? '0', 10)
-  return h * 60 + m
-}
-
-/** Genera slots libres en el rango [workStart, workEnd) restando los bloques ocupados. Formato "HH:mm". */
-function computeAvailableSlots(busyBlocks: { start: number; end: number }[]): string[] {
-  const slots: string[] = []
-  for (let slotStart = WORK_START_MINUTES; slotStart + SLOT_DURATION_MINUTES <= WORK_END_MINUTES; slotStart += SLOT_DURATION_MINUTES) {
-    const slotEnd = slotStart + SLOT_DURATION_MINUTES
-    const overlaps = busyBlocks.some(
-      (b) => slotStart < b.end && slotEnd > b.start
-    )
-    if (!overlaps) {
-      const h = Math.floor(slotStart / 60)
-      const m = slotStart % 60
-      slots.push(`${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}`)
-    }
-  }
-  return slots
-}
-
-export interface AgendaEmployeeInput {
-  id: string | number
-  name: string
+export interface UseAgendaAvailabilityOptions {
+  /** ID del servicio para filtrar slots (por defecto 1) */
+  serviceId?: number
 }
 
 /**
- * Obtiene los tramos disponibles por empleado para una fecha llamando al endpoint de agenda
- * y calculando huecos libres (horario 09:00–18:00, slots de 45 min).
+ * Obtiene los tramos disponibles por empleado para una fecha mediante
+ * GET /api/Appointment/slots?Date=...&ServiceId=... (una sola petición).
  */
 export function useAgendaAvailability(
   selectedDate: () => Date | null,
-  getEmployees: () => AgendaEmployeeInput[]
+  options: UseAgendaAvailabilityOptions = {}
 ) {
+  const { serviceId = 1 } = options
   const authStore = useAuthStore()
   const employeesWithSlots = ref<EmployeeWithSlots[]>([])
   const loading = ref(false)
@@ -76,8 +48,7 @@ export function useAgendaAvailability(
 
   async function fetchAvailability() {
     const date = selectedDate()
-    const employees = getEmployees()
-    if (!date || employees.length === 0) {
+    if (!date) {
       employeesWithSlots.value = []
       return
     }
@@ -92,47 +63,31 @@ export function useAgendaAvailability(
     const dateStr = date.toISOString().slice(0, 10)
     loading.value = true
     error.value = ''
-    const results: EmployeeWithSlots[] = []
 
     try {
-      for (const emp of employees) {
-        const employeeId = typeof emp.id === 'number' ? emp.id : parseInt(String(emp.id), 10)
-        if (Number.isNaN(employeeId)) continue
+      const url = `${SLOTS_API_URL}?Date=${encodeURIComponent(dateStr)}&ServiceId=${serviceId}`
+      const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+          accept: 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      })
 
-        const url = `${AGENDA_API_URL}?StartDate=${dateStr}&EndDate=${dateStr}&EmployeeId=${employeeId}`
-        const response = await fetch(url, {
-          method: 'GET',
-          headers: {
-            accept: 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        })
-
-        if (!response.ok) {
-          error.value = `Error ${response.status}`
-          loading.value = false
-          return
-        }
-
-        const data = (await response.json()) as AgendaResponse
-        const day = data.days?.find((d) => d.date === dateStr)
-        const appointments = day?.appointments ?? []
-
-        const busyBlocks = appointments.map((a) => ({
-          start: timeToMinutes(a.startTime),
-          end: timeToMinutes(a.endTime),
-        }))
-
-        const slots = computeAvailableSlots(busyBlocks)
-        if (slots.length > 0) {
-          results.push({
-            id: emp.id,
-            name: emp.name,
-            slots,
-          })
-        }
+      if (!response.ok) {
+        error.value = `Error ${response.status}`
+        employeesWithSlots.value = []
+        return
       }
-      employeesWithSlots.value = results
+
+      const data = (await response.json()) as SlotsApiResponse
+      const employeeSlots = data.employeeSlots ?? []
+
+      employeesWithSlots.value = employeeSlots.map((emp) => ({
+        id: emp.employeeId,
+        name: emp.employeeName,
+        slots: emp.slots.map((s) => s.startTime.slice(0, 5)),
+      }))
     } catch {
       error.value = 'Error de conexión'
       employeesWithSlots.value = []
@@ -144,7 +99,7 @@ export function useAgendaAvailability(
   watch(
     () => ({
       dateStr: selectedDate()?.toISOString().slice(0, 10) ?? null,
-      employeeCount: getEmployees().length,
+      serviceId,
     }),
     ({ dateStr }) => {
       if (!dateStr) {
