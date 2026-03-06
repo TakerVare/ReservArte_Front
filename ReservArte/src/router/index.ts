@@ -19,6 +19,7 @@ import PaymentMethodsView from '../views/PaymentMethodsView.vue'
 import AboutView from '../views/AboutView.vue'
 import NotificationsView from '../views/NotificationsView.vue'
 import ProfileView from '../views/ProfileView.vue'
+import TermsView from '../views/TermsView.vue'
 
 // Vistas auth
 import LoginView from '../views/LoginView.vue'
@@ -40,7 +41,7 @@ const router = createRouter({
       path: '/',
       component: PublicLayout,
       children: [
-        { path: '', name: 'home', component: LoginView },
+        { path: '', name: 'home', component: HomeView },
         { path: 'login', name: 'login', component: LoginView },
         { path: 'inicio', name: 'inicio', component: HomeView },
         { path: 'contact', name: 'contact', component: ContactInfoView },
@@ -55,6 +56,7 @@ const router = createRouter({
         { path: 'notifications', name: 'notifications', component: NotificationsView },
         { path: 'profile', name: 'profile', component: ProfileView },
         { path: 'profile/edit/:id', name: 'profile-edit', component: CustomerDetailView },
+        { path: 'terms', name: 'terms', component: TermsView },
       ],
     },
     {
@@ -91,7 +93,7 @@ router.beforeEach((to) => {
     return { name: 'login' }
   }
 
-  if (to.name === 'home' && authStore.isAuthenticated) {
+  if (to.name === 'login' && authStore.isAuthenticated) {
     return { name: 'booking' }
   }
 

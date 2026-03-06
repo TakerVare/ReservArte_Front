@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import CNavAreaPrimaryButton from '../components/Buttons/c_navAreaPrimaryButton.vue'
 
 const router = useRouter()
 const { t } = useI18n()
@@ -15,15 +16,23 @@ export default {
 <template>
   <div class="payment-view">
     <div class="payment-view__container">
-      <button class="payment-view__back" @click="router.back()">
-        ← {{ t('common.back') }}
-      </button>
+      <div class="payment-view__back-wrap">
+        <CNavAreaPrimaryButton
+          :text="t('common.back')"
+          size="SM"
+          icon-position="before"
+          @click="router.back()"
+        >
+          <template #icon>
+            <img src="../assets/arrowLeft.svg" alt="" />
+          </template>
+        </CNavAreaPrimaryButton>
+      </div>
 
       <h1 class="payment-view__title">{{ t('payment.title') }}</h1>
       <p class="payment-view__subtitle">{{ t('payment.subtitle') }}</p>
 
       <div class="payment-view__cards">
-
         <div class="payment-view__card">
           <div class="payment-view__card-icon">💳</div>
           <div class="payment-view__card-content">
@@ -47,7 +56,6 @@ export default {
             <p>{{ t('payment.bizum.description') }} <strong>649 227 139</strong> {{ t('payment.bizum.timing') }}</p>
           </div>
         </div>
-
       </div>
 
       <section class="payment-view__section">
@@ -88,20 +96,9 @@ export default {
   gap: 8px;
 }
 
-.payment-view__back {
+.payment-view__back-wrap {
   align-self: flex-start;
-  background: none;
-  border: none;
-  color: #FFB6C1;
-  font-family: Georgia, serif;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
   padding: 8px 0;
-}
-
-.payment-view__back:hover {
-  text-decoration: underline;
 }
 
 .payment-view__title {

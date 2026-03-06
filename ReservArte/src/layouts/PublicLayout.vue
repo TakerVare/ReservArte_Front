@@ -37,7 +37,7 @@ function onNavNavigate(index: number) {
       if (authStore.isAuthenticated) {
         router.push({ name: 'user' })
       } else {
-        router.push({ name: 'booking' })
+        router.push({ name: 'login' })
       }
       break
   }
@@ -61,11 +61,7 @@ export default {
     <main class="public-layout__main">
       <router-view />
     </main>
-    <NavBottom
-      :size="size"
-      :active-index="activeNavIndex"
-      @navigate="onNavNavigate"
-    />
+    <NavBottom :size="size" :active-index="activeNavIndex" @navigate="onNavNavigate" />
   </div>
 </template>
 

@@ -51,41 +51,25 @@
             class="c_loginForm__checkbox"
           />
           <label class="c_loginForm__checkbox-label" for="login-terms">
-            {{ $t('auth.acceptTerms') }}
+            <router-link to="/terms" class="c_loginForm__terms-link">
+              Acepto los términos y condiciones
+            </router-link>
           </label>
         </div>
         <span v-if="acceptTermsError" class="c_loginForm__field-error">
           {{ acceptTermsError }}
         </span>
 
-        <div class="c_loginForm__checkbox-wrap">
-          <input
-            id="login-register"
-            v-model="wantsRegister"
-            type="checkbox"
-            class="c_loginForm__checkbox"
-          />
-          <label class="c_loginForm__checkbox-label" for="login-register">
-            {{ $t('auth.wantRegister') }}
-          </label>
-        </div>
-
         <div class="c_loginForm__forgot-row">
-          <a
-            v-if="forgotPasswordUrl"
-            :href="forgotPasswordUrl"
+          <button
+            type="button"
             class="c_loginForm__forgot-link"
+            @click="showForgotModal = true"
           >
             {{ $t('auth.forgotPassword') }}
-          </a>
-          <span v-else class="c_loginForm__forgot-link">{{ $t('auth.forgotPassword') }}</span>
+          </button>
         </div>
       </div>
-
-      <!-- Mensaje de éxito registro -->
-      <p v-if="successMessage" class="c_loginForm__success">
-        {{ successMessage }}
-      </p>
 
       <!-- Error del servidor -->
       <p v-if="serverError" class="c_loginForm__error">
@@ -102,6 +86,20 @@
         />
       </div>
     </form>
+
+    <!-- Modal olvidé contraseña -->
+    <div v-if="showForgotModal" class="c_loginForm__modal-overlay" @click.self="showForgotModal = false">
+      <div class="c_loginForm__modal">
+        <p class="c_loginForm__modal-text">
+          Para recuperar tu contraseña contacta con nosotros en
+          <strong>info@morethanbrows.com</strong> o llámanos al
+          <strong>649 227 139</strong>.
+        </p>
+        <button class="c_loginForm__modal-close" @click="showForgotModal = false">
+          Cerrar
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -133,10 +131,8 @@ const emit = defineEmits<{
   submit: [{ email: string; password: string; acceptTerms: boolean }]
   success: [{ token: string }]
   error: [error: unknown]
-  'register-success': []
 }>()
 
-// ─── Esquema Yup (traducido) ───
 const validationSchema = computed(() =>
   yup.object({
     email: yup
@@ -160,7 +156,6 @@ const validationSchema = computed(() =>
   })
 )
 
-// ─── VeeValidate: useForm + useField ───
 const { handleSubmit } = useForm({
   validationSchema,
   initialValues: {
@@ -174,14 +169,11 @@ const { value: email, errorMessage: emailError, handleBlur: emailBlur } = useFie
 const { value: password, errorMessage: passwordError, handleBlur: passwordBlur } = useField<string>('password')
 const { value: acceptTerms, errorMessage: acceptTermsError } = useField<boolean>('acceptTerms')
 
-// ─── Estado local (no gestionado por VeeValidate) ───
-const wantsRegister = ref(false)
 const isLoading = ref(false)
 const serverError = ref('')
-const successMessage = ref('')
+const showForgotModal = ref(false)
 
 const LOGIN_API_URL = '/api/Auth/Login'
-const REGISTER_API_URL = '/api/Auth/Register'
 
 const submitButtonSize = computed<ButtonSize>(() => {
   switch (props.size) {
@@ -199,27 +191,13 @@ const submitButtonSize = computed<ButtonSize>(() => {
   }
 })
 
-const submitButtonText = computed(() => {
-  if (isLoading.value) {
-    return wantsRegister.value ? t('auth.registering') : t('auth.loggingIn')
-  }
-  return wantsRegister.value ? t('auth.register') : t('auth.login')
-})
+const submitButtonText = computed(() =>
+  isLoading.value ? t('auth.loggingIn') : t('auth.login')
+)
 
-/**
- * onSubmit: VeeValidate valida con Yup.
- * Si pasa la validación, ejecuta handleLogin o handleRegister.
- * Si no pasa, los errores aparecen automáticamente debajo de cada campo.
- */
 const onSubmit = handleSubmit(async (values) => {
   serverError.value = ''
-  successMessage.value = ''
-
-  if (wantsRegister.value) {
-    await handleRegister(values.email, values.password)
-  } else {
-    await handleLogin(values.email, values.password)
-  }
+  await handleLogin(values.email, values.password)
 })
 
 async function handleLogin(emailVal: string, passwordVal: string) {
@@ -258,39 +236,6 @@ async function handleLogin(emailVal: string, passwordVal: string) {
       serverError.value = 'No se recibió token de sesión.'
       emit('error', new Error(serverError.value))
     }
-  } catch (err) {
-    serverError.value = 'No se pudo conectar con el servidor. Comprueba tu conexión.'
-    emit('error', err)
-  } finally {
-    isLoading.value = false
-  }
-}
-
-async function handleRegister(emailVal: string, passwordVal: string) {
-  isLoading.value = true
-  try {
-    const response = await fetch(REGISTER_API_URL, {
-      method: 'POST',
-      headers: {
-        accept: '*/*',
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: emailVal.trim(),
-        password: passwordVal,
-      }),
-    })
-
-    if (!response.ok) {
-      const text = await response.text()
-      serverError.value = text || `Error ${response.status}. Vuelve a intentarlo.`
-      emit('error', new Error(serverError.value))
-      return
-    }
-
-    wantsRegister.value = false
-    successMessage.value = t('auth.registerSuccess')
-    emit('register-success')
   } catch (err) {
     serverError.value = 'No se pudo conectar con el servidor. Comprueba tu conexión.'
     emit('error', err)
@@ -414,6 +359,13 @@ export default {
     cursor: pointer;
   }
 
+  &__terms-link {
+    color: #FFB6C1;
+    text-decoration: underline;
+    font-family: inherit;
+    font-size: inherit;
+  }
+
   &__forgot-row {
     display: flex;
     align-items: center;
@@ -421,6 +373,9 @@ export default {
   }
 
   &__forgot-link {
+    background: none;
+    border: none;
+    padding: 0;
     color: #757575;
     font-size: 16px;
     font-style: normal;
@@ -429,6 +384,7 @@ export default {
     line-height: 22px;
     letter-spacing: 0;
     text-decoration: none;
+    cursor: pointer;
 
     &:hover {
       text-decoration: underline;
@@ -444,15 +400,6 @@ export default {
     font-family: Roboto, system-ui, sans-serif;
   }
 
-  &__success {
-    width: 100%;
-    margin: 0;
-    padding: 8px 0;
-    color: #2e7d32;
-    font-size: 14px;
-    font-family: Roboto, system-ui, sans-serif;
-  }
-
   &__submit-wrap {
     width: 100%;
     max-width: 584px;
@@ -460,7 +407,51 @@ export default {
     box-sizing: border-box;
   }
 
-  /* Variantes de tamaño */
+  &__modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+  }
+
+  &__modal {
+    background: #fff;
+    padding: 32px 24px;
+    max-width: 360px;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    border-radius: 4px;
+  }
+
+  &__modal-text {
+    font-family: Georgia, serif;
+    font-size: 16px;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  &__modal-close {
+    align-self: flex-end;
+    background: #FFB6C1;
+    border: none;
+    color: #fff;
+    font-family: Georgia, serif;
+    font-size: 14px;
+    font-weight: 700;
+    padding: 10px 20px;
+    cursor: pointer;
+
+    &:hover {
+      background: #f0a0b0;
+    }
+  }
+
   &--xxl {
     gap: 64px;
     padding: 64px;
@@ -476,12 +467,8 @@ export default {
     margin: 0 auto;
     min-height: 374px;
   }
-  &--xl &__form {
-    gap: 24px;
-  }
-  &--xl &__submit-wrap {
-    max-width: 584px;
-  }
+  &--xl &__form { gap: 24px; }
+  &--xl &__submit-wrap { max-width: 584px; }
 
   &--lg {
     gap: 32px;
@@ -497,9 +484,7 @@ export default {
     margin: 0 auto;
     min-height: 374px;
   }
-  &--md &__form {
-    gap: 24px;
-  }
+  &--md &__form { gap: 24px; }
 
   &--sm {
     padding: 16px;
@@ -511,9 +496,7 @@ export default {
     gap: 16px;
     max-width: 544px;
   }
-  &--sm &__submit-wrap {
-    max-width: 544px;
-  }
+  &--sm &__submit-wrap { max-width: 544px; }
 
   &--xs {
     padding: 16px;
@@ -525,8 +508,6 @@ export default {
     gap: 16px;
     max-width: 343px;
   }
-  &--xs &__submit-wrap {
-    max-width: 343px;
-  }
+  &--xs &__submit-wrap { max-width: 343px; }
 }
 </style>

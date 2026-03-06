@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
 import { useI18n } from 'vue-i18n'
+import CNavAreaPrimaryButton from '../components/Buttons/c_navAreaPrimaryButton.vue'
 
 const router = useRouter()
 const { t } = useI18n()
@@ -15,9 +16,18 @@ export default {
 <template>
   <div class="privacy-view">
     <div class="privacy-view__container">
-      <button class="privacy-view__back" @click="router.back()">
-        ← {{ t('common.back') }}
-      </button>
+      <div class="privacy-view__back-wrap">
+        <CNavAreaPrimaryButton
+          :text="t('common.back')"
+          size="SM"
+          icon-position="before"
+          @click="router.back()"
+        >
+          <template #icon>
+            <img src="../assets/arrowLeft.svg" alt="" />
+          </template>
+        </CNavAreaPrimaryButton>
+      </div>
 
       <h1 class="privacy-view__title">Política de Privacidad</h1>
       <p class="privacy-view__date">Última actualización: enero 2025</p>
@@ -96,20 +106,9 @@ export default {
   gap: 8px;
 }
 
-.privacy-view__back {
+.privacy-view__back-wrap {
   align-self: flex-start;
-  background: none;
-  border: none;
-  color: #FFB6C1;
-  font-family: Georgia, serif;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
   padding: 8px 0;
-}
-
-.privacy-view__back:hover {
-  text-decoration: underline;
 }
 
 .privacy-view__title {
