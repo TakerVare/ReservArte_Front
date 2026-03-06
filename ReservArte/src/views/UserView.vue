@@ -38,10 +38,13 @@ function onMenuItemClick(itemId: string) {
       router.push({ name: 'payment-methods' });
       break
     case 'datos-usuario':
-      router.push({ name: 'admin-edit-customer', params: { id: authStore.user?.id } })
+      router.push({ name: 'profile-edit', params: { id: authStore.user?.id } })
       break
     case 'acerca':
       router.push({ name: 'about' })
+      break
+    case 'notificaciones':
+      router.push({ name: 'notifications' })
       break
     default:
       console.log(`Navegando a: ${itemId}`)
