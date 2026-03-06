@@ -17,6 +17,8 @@ import UserView from '../views/UserView.vue'
 import PrivacyView from '../views/PrivacyView.vue'
 import PaymentMethodsView from '../views/PaymentMethodsView.vue'
 import AboutView from '../views/AboutView.vue'
+import NotificationsView from '../views/NotificationsView.vue'
+import ProfileView from '../views/ProfileView.vue'
 
 // Vistas auth
 import LoginView from '../views/LoginView.vue'
@@ -50,6 +52,9 @@ const router = createRouter({
         { path: 'privacy', name: 'privacy', component: PrivacyView },
         { path: 'payment-methods', name: 'payment-methods', component: PaymentMethodsView },
         { path: 'about', name: 'about', component: AboutView },
+        { path: 'notifications', name: 'notifications', component: NotificationsView },
+        { path: 'profile', name: 'profile', component: ProfileView },
+        { path: 'profile/edit/:id', name: 'profile-edit', component: CustomerDetailView },
       ],
     },
     {

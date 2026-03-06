@@ -91,6 +91,14 @@ export interface AppointmentItemData {
   name: string
 }
 
+function translateStatus(status: string): string {
+  const camel = status
+    .toLowerCase()
+    .replace(/_([a-z])/g, (_, c: string) => c.toUpperCase())
+  const key = `appointment.status${camel.charAt(0).toUpperCase()}${camel.slice(1)}`
+  return i18n.global.t(key)
+}
+
 export const useAppointmentStore = defineStore('appointment', () => {
   const authStore = useAuthStore()
 
@@ -106,7 +114,7 @@ export const useAppointmentStore = defineStore('appointment', () => {
   const appointmentsAsItems = computed<AppointmentItemData[]>(() =>
     appointments.value.map((a) => ({
       id: String(a.id),
-      name: `${a.appointmentDate} ${a.startTime.slice(0, 5)} — ${a.status}`,
+      name: `${a.appointmentDate} ${a.startTime.slice(0, 5)} — ${translateStatus(a.status)}`,
     }))
   )
 
@@ -286,7 +294,6 @@ export const useAppointmentStore = defineStore('appointment', () => {
     }
   }
 
-  /** PUT /api/Appointment/:id — body es el objeto completo de la cita */
   async function updateAppointment(
     id: string,
     body: AppointmentDetail

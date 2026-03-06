@@ -68,6 +68,7 @@ export default {
       :back-text="$t('common.back')"
       :item-label="$t('appointment.label')"
       :new-text="$t('appointment.new')"
+      :title="$t('admin.customers')"
       :search-query="appointmentStore.searchQuery"
       @update:search-query="appointmentStore.setSearchQuery($event)"
       :items="appointmentStore.items"

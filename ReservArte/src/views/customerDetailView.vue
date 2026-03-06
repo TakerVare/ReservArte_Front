@@ -21,6 +21,9 @@ const authStore = useAuthStore()
 const { t } = useI18n()
 const { size } = useViewportSize()
 
+/** true si el usuario logueado es cliente (no admin/employee) */
+const isCustomer = computed(() => authStore.user?.role === 'user')
+
 /** Id del cliente en edición; undefined en creación */
 const customerId = computed(() => {
   const id = route.params.id
@@ -42,6 +45,7 @@ const formData = ref<UserFormData>({
 const loading = ref(false)
 const error = ref('')
 const avatarUrl = ref<string | null>(null)
+const uploadingAvatar = ref(false)
 
 /** Campos extra solo para cliente (API Customer) */
 const birthDate = ref('')
@@ -156,26 +160,74 @@ onMounted(() => {
 })
 
 watch(customerId, (newId) => {
-  if (newId) {
-    fetchCustomer(newId)
-  } else {
-    resetForm()
-  }
+  if (newId) fetchCustomer(newId)
+  else resetForm()
 })
 
 const pageTitle = computed(() =>
-  isEditMode.value ? t('admin.editCustomer') : t('admin.newCustomer')
+  isCustomer.value
+    ? t('menu.userData')
+    : isEditMode.value ? t('admin.editCustomer') : t('admin.newCustomer')
 )
 
 function onBack() {
-  router.push({ name: 'admin-customers' })
+  if (isCustomer.value) {
+    router.push({ name: 'user' })
+  } else {
+    router.push({ name: 'admin-customers' })
+  }
 }
 
 function onDelete() {
-  // TODO: confirmar y llamar DELETE /api/Customer/:id
   if (!customerId.value) return
   console.log('Eliminar cliente:', customerId.value)
   router.push({ name: 'admin-customers' })
+}
+
+function onAvatarDelete() {
+  avatarUrl.value = null
+}
+
+/** Sube la imagen de perfil al endpoint POST /api/Customer/:id/profile-image */
+async function onAvatarUpload(file: File) {
+  const id = customerId.value
+  if (!id) return
+
+  const token = authStore.token
+  if (!token) {
+    error.value = i18n.global.t('customer.errors.noSession')
+    return
+  }
+
+  uploadingAvatar.value = true
+  error.value = ''
+
+  try {
+    const formDataUpload = new FormData()
+    formDataUpload.append('file', file)
+
+    const response = await fetch(`${CUSTOMER_API_URL}/${id}/profile-image`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formDataUpload,
+    })
+
+    if (!response.ok) {
+      const text = await response.text()
+      error.value = text || i18n.global.t('customer.errors.saveFailedStatus', { status: response.status })
+      return
+    }
+
+    const data = await response.json()
+    // El backend devuelve { message, customer } — actualizamos la URL del avatar
+    avatarUrl.value = data.customer?.profileImageUrl ?? avatarUrl.value
+  } catch {
+    error.value = i18n.global.t('customer.errors.connection')
+  } finally {
+    uploadingAvatar.value = false
+  }
 }
 
 function buildCustomerPayload() {
@@ -232,14 +284,23 @@ async function onSave() {
         return
       }
     }
-    router.push({ name: 'admin-customers' })
+    // Redirigir según rol
+    if (isCustomer.value) {
+      router.push({ name: 'user' })
+    } else {
+      router.push({ name: 'admin-customers' })
+    }
   } catch {
     error.value = i18n.global.t('customer.errors.connection')
   }
 }
 
 function onCancel() {
-  router.push({ name: 'admin-customers' })
+  if (isCustomer.value) {
+    router.push({ name: 'user' })
+  } else {
+    router.push({ name: 'admin-customers' })
+  }
 }
 
 function onUpdateFormData(data: UserFormData) {
@@ -264,15 +325,21 @@ export default {
       :form-data="formData"
       :rol-options="categoryOptions"
       :estado-options="estadoOptions"
-      :show-delete-button="isEditMode"
+      :show-delete-button="isEditMode && !isCustomer"
+      :hide-role-status="isCustomer"
       :avatar-url="avatarUrl ?? ''"
       @back="onBack"
       @delete="onDelete"
       @update:form-data="onUpdateFormData"
       @save="onSave"
       @cancel="onCancel"
+      @avatar-upload="onAvatarUpload"
+      @avatar-delete="onAvatarDelete"
     >
       <template #extra-fields>
+        <p v-if="uploadingAvatar" class="customer-detail-view__uploading">
+          {{ t('actions.uploadImage') }}...
+        </p>
         <CInputField
           v-model="birthDate"
           :label="t('form.birthDate')"
@@ -312,6 +379,13 @@ export default {
 .customer-detail-view__error {
   color: #b71c1c;
   padding: 1rem;
+  margin: 0;
+}
+
+.customer-detail-view__uploading {
+  color: #888;
+  font-size: 14px;
+  font-family: Roboto, system-ui, sans-serif;
   margin: 0;
 }
 

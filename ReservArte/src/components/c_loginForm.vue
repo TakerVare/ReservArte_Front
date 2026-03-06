@@ -203,7 +203,7 @@ const submitButtonText = computed(() => {
   if (isLoading.value) {
     return wantsRegister.value ? t('auth.registering') : t('auth.loggingIn')
   }
-  return wantsRegister.value ? t('auth.register') : t('auth.bookAppointment')
+  return wantsRegister.value ? t('auth.register') : t('auth.login')
 })
 
 /**

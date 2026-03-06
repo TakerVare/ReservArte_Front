@@ -36,6 +36,10 @@ const props = withDefaults(
     estadoOptions?: SelectOption[]
     saveText?: string
     cancelText?: string
+    /** Si true, oculta los selects de Rol y Estado (para clientes editando su propio perfil) */
+    hideRoleStatus?: boolean
+    /** Si true, todos los campos son de solo lectura y se ocultan los botones */
+    readonly?: boolean
   }>(),
   {
     size: 'MD',
@@ -57,6 +61,8 @@ const props = withDefaults(
     estadoOptions: undefined,
     saveText: undefined,
     cancelText: undefined,
+    hideRoleStatus: false,
+    readonly: false,
   }
 )
 
@@ -81,7 +87,7 @@ const emit = defineEmits<{
   back: []
   delete: []
   'avatar-camera': []
-  'avatar-upload': []
+  'avatar-upload': [file: File]
   'avatar-delete': []
   'update:formData': [data: UserFormData]
   save: []
@@ -89,6 +95,7 @@ const emit = defineEmits<{
 }>()
 
 function updateField(field: keyof UserFormData, value: string) {
+  if (props.readonly) return
   emit('update:formData', { ...props.formData, [field]: value })
 }
 
@@ -150,7 +157,7 @@ export default {
       :primary-text="backTextComputed"
       :secondary-text="deleteTextComputed"
       :show-search-bar="false"
-      :show-new-button="showDeleteButton"
+      :show-new-button="showDeleteButton && !readonly"
       secondary-action="delete"
       @back="emit('back')"
       @delete="emit('delete')"
@@ -161,8 +168,9 @@ export default {
         <CAvatarUpload
           :avatar-url="avatarUrl"
           :size="avatarSize"
+          :readonly="readonly"
           @camera="emit('avatar-camera')"
-          @upload="emit('avatar-upload')"
+          @upload="(file) => emit('avatar-upload', file)"
           @delete="emit('avatar-delete')"
         />
       </div>
@@ -178,6 +186,7 @@ export default {
           :model-value="formData.nombre"
           :size="fieldSize"
           :placeholder="t('common.placeholder')"
+          :disabled="readonly"
           @update:model-value="updateField('nombre', $event)"
         />
         <CInputField
@@ -185,6 +194,7 @@ export default {
           :model-value="formData.apellidos"
           :size="fieldSize"
           :placeholder="t('common.placeholder')"
+          :disabled="readonly"
           @update:model-value="updateField('apellidos', $event)"
         />
         <CInputField
@@ -193,6 +203,7 @@ export default {
           :model-value="formData.email"
           :size="fieldSize"
           :placeholder="t('common.placeholder')"
+          :disabled="readonly"
           @update:model-value="updateField('email', $event)"
         />
         <CInputField
@@ -201,30 +212,34 @@ export default {
           :model-value="formData.telefono"
           :size="fieldSize"
           :placeholder="t('common.placeholder')"
+          :disabled="readonly"
           @update:model-value="updateField('telefono', $event)"
         />
 
-        <CSelectField
-          :label="t('form.role')"
-          :model-value="formData.rol"
-          :options="rolOptionsComputed"
-          :size="fieldSize"
-          @update:model-value="updateField('rol', $event)"
-        />
-        <CSelectField
-          :label="t('form.status')"
-          :model-value="formData.estado"
-          :options="estadoOptionsComputed"
-          :size="fieldSize"
-          @update:model-value="updateField('estado', $event)"
-        />
+        <!-- Rol y Estado: ocultos para clientes o en readonly -->
+        <template v-if="!hideRoleStatus && !readonly">
+          <CSelectField
+            :label="t('form.role')"
+            :model-value="formData.rol"
+            :options="rolOptionsComputed"
+            :size="fieldSize"
+            @update:model-value="updateField('rol', $event)"
+          />
+          <CSelectField
+            :label="t('form.status')"
+            :model-value="formData.estado"
+            :options="estadoOptionsComputed"
+            :size="fieldSize"
+            @update:model-value="updateField('estado', $event)"
+          />
+        </template>
 
         <div v-if="$slots['extra-fields']" class="c_userDetailManagement__extra-fields">
           <slot name="extra-fields" />
         </div>
 
-        <!-- Botones guardar / cancelar -->
-        <div class="c_userDetailManagement__form-buttons">
+        <!-- Botones guardar / cancelar: ocultos en modo readonly -->
+        <div v-if="!readonly" class="c_userDetailManagement__form-buttons">
           <CNavAreaPrimaryButton
             :text="saveTextComputed"
             :size="buttonSize"

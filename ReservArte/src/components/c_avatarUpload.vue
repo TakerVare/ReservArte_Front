@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { ref, computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import cameraIcon from '../assets/camera.svg'
 import uploadIcon from '../assets/upload.svg'
@@ -16,11 +16,14 @@ const props = withDefaults(
     alt?: string
     /** Tamaño responsive */
     size?: AvatarUploadSize
+    /** Si true, oculta los botones de acción */
+    readonly?: boolean
   }>(),
   {
     avatarUrl: '',
     alt: undefined,
     size: 'XS',
+    readonly: false,
   }
 )
 
@@ -29,9 +32,25 @@ const altText = computed(() => props.alt ?? t('actions.avatarAlt'))
 
 const emit = defineEmits<{
   camera: []
-  upload: []
+  upload: [file: File]
   delete: []
 }>()
+
+const fileInputRef = ref<HTMLInputElement | null>(null)
+
+function onUploadClick() {
+  fileInputRef.value?.click()
+}
+
+function onFileChange(event: Event) {
+  const input = event.target as HTMLInputElement
+  const file = input.files?.[0]
+  if (file) {
+    emit('upload', file)
+    // Reset input para permitir subir el mismo archivo dos veces
+    input.value = ''
+  }
+}
 
 /**
  * Tamaño del avatar según breakpoint:
@@ -96,18 +115,40 @@ export default {
       />
     </div>
 
-    <!-- Iconos de acción -->
-    <div class="c_avatarUpload__actions">
-      <button class="c_avatarUpload__action c_avatarUpload__action--camera" @click="emit('camera')" :aria-label="t('actions.takePhoto')">
+    <!-- Iconos de acción — ocultos en modo readonly -->
+    <div v-if="!readonly" class="c_avatarUpload__actions">
+      <button
+        class="c_avatarUpload__action c_avatarUpload__action--camera"
+        :aria-label="t('actions.takePhoto')"
+        @click="emit('camera')"
+      >
         <img :src="cameraIcon" :alt="t('actions.takePhoto')" />
       </button>
-      <button class="c_avatarUpload__action c_avatarUpload__action--upload" @click="emit('upload')" :aria-label="t('actions.uploadImage')">
+      <button
+        class="c_avatarUpload__action c_avatarUpload__action--upload"
+        :aria-label="t('actions.uploadImage')"
+        @click="onUploadClick"
+      >
         <img :src="uploadIcon" :alt="t('actions.uploadImage')" />
       </button>
-      <button class="c_avatarUpload__action c_avatarUpload__action--trash" @click="emit('delete')" :aria-label="t('actions.deleteImage')">
+      <button
+        class="c_avatarUpload__action c_avatarUpload__action--trash"
+        :aria-label="t('actions.deleteImage')"
+        @click="emit('delete')"
+      >
         <img :src="trashIcon" :alt="t('actions.deleteImage')" />
       </button>
     </div>
+
+    <!-- Input file oculto -->
+    <input
+      v-if="!readonly"
+      ref="fileInputRef"
+      type="file"
+      accept="image/jpeg,image/png,image/gif,image/webp"
+      class="c_avatarUpload__file-input"
+      @change="onFileChange"
+    />
   </div>
 </template>
 
@@ -125,7 +166,6 @@ export default {
   border-radius: 50%;
   overflow: hidden;
   flex-shrink: 0;
-  /* width, height vienen por :style */
 }
 
 .c_avatarUpload__image {
@@ -180,5 +220,9 @@ export default {
   width: 40px;
   height: 40px;
   display: block;
+}
+
+.c_avatarUpload__file-input {
+  display: none;
 }
 </style>

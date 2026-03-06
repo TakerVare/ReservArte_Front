@@ -38,7 +38,6 @@ const props = withDefaults(
             { id: 'clientes', textKey: 'menu.customers' },
             { id: 'servicios', textKey: 'menu.services' },
             { id: 'empleados', textKey: 'menu.employees' },
-            { id: 'configuracion-admin', textKey: 'menu.settings' },
           ],
         },
         {
@@ -48,7 +47,6 @@ const props = withDefaults(
             { id: 'datos-usuario', textKey: 'menu.userData' },
             { id: 'metodos-pago', textKey: 'menu.paymentMethods' },
             { id: 'notificaciones', textKey: 'menu.notifications' },
-            { id: 'configuracion-user', textKey: 'menu.settings' },
             { id: 'privacidad', textKey: 'menu.privacy' },
             { id: 'acerca', textKey: 'menu.about' },
             { id: 'guia-estilo', textKey: 'menu.styleGuide' },
