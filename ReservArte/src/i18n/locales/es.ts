@@ -170,6 +170,7 @@ export default {
     bookAppointment: 'Reservar Cita',
     loggingIn: 'Iniciando sesión...',
     registering: 'Registrando...',
+    logout: 'Cerrar sesión',
   },
   admin: {
     title: 'Administración',
@@ -353,5 +354,9 @@ export default {
       text: 'Estaremos encantadas de ayudarte. Escríbenos a',
       or: 'o llámanos al',
     },
+  },
+  notifications: {
+    title: 'Notificaciones',
+    empty: 'No tienes notificaciones en este momento.',
   },
 } as const

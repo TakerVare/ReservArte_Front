@@ -170,6 +170,7 @@ export default {
     bookAppointment: 'Book Appointment',
     loggingIn: 'Logging in...',
     registering: 'Registering...',
+    logout: 'Logout',
   },
   admin: {
     title: 'Administration',
@@ -354,4 +355,9 @@ export default {
       or: 'or call us on',
     },
   },
+  notifications: {
+    title: 'Notifications',        
+    empty: 'You have no notifications at the moment.',
+  },
+  
 } as const
