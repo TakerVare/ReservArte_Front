@@ -52,7 +52,7 @@ export default {
       :back-text="$t('common.back')"
       :item-label="$t('customer.label')"
       :new-text="$t('customer.new')"
-      :title="$t('admin.bookings')"
+      :title="$t('admin.customers')"
       :search-query="customerStore.searchQuery"
       @update:search-query="customerStore.setSearchQuery($event)"
       :items="customerStore.items"

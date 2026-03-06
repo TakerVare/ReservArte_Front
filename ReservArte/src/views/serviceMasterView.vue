@@ -56,6 +56,7 @@ export default {
     <CItemMasterManagement
       v-else
       :size="size"
+      :title="$t('admin.services')"
       :back-text="$t('common.back')"
       :item-label="$t('service.label')"
       :new-text="$t('service.new')"
