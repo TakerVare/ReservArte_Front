@@ -3,6 +3,8 @@ import { computed } from 'vue'
 import { useI18n } from 'vue-i18n'
 import c_heroBanner from './c_heroBanner.vue'
 import CInputField from './c_inputField.vue'
+import CNavAreaPrimaryButton from './Buttons/c_navAreaPrimaryButton.vue'
+import CNavAreaSecondaryButton from './Buttons/c_navAreaSecondaryButton.vue'
 import type { InputFieldSize } from './c_inputField.vue'
 
 export type ServiceDetailManagementSize = 'XXL' | 'XL' | 'LG' | 'MD' | 'SM' | 'XS'
@@ -33,7 +35,6 @@ const props = withDefaults(
     showDeleteButton?: boolean
     formTitle?: string
     formData?: ServiceFormData
-    /** Lista de categorías para el select (ordenadas por displayOrder en el padre) */
     categories?: ServiceCategoryOption[]
     saveText?: string
     cancelText?: string
@@ -98,6 +99,13 @@ const innerWidth = computed(() => {
 const fieldSize = computed<InputFieldSize>(() => {
   const map: Record<ServiceDetailManagementSize, InputFieldSize> = {
     'XXL': 'LG', 'XL': 'LG', 'LG': 'MD', 'MD': 'MD', 'SM': 'SM', 'XS': 'XS',
+  }
+  return map[props.size]
+})
+
+const buttonSize = computed(() => {
+  const map: Record<ServiceDetailManagementSize, 'XS' | 'SM' | 'MD'> = {
+    'XXL': 'MD', 'XL': 'MD', 'LG': 'SM', 'MD': 'SM', 'SM': 'XS', 'XS': 'XS',
   }
   return map[props.size]
 })
@@ -214,8 +222,8 @@ export default {
         </div>
 
         <div class="c_serviceDetailManagement__form-buttons">
-          <CNavAreaPrimaryButton :text="saveTextComputed" size="XS" @click="emit('save')" />
-          <CNavAreaSecondaryButton :text="cancelTextComputed" size="XS" @click="emit('cancel')" />
+          <CNavAreaPrimaryButton :text="saveTextComputed" :size="buttonSize" @click="emit('save')" />
+          <CNavAreaSecondaryButton :text="cancelTextComputed" :size="buttonSize" @click="emit('cancel')" />
         </div>
       </div>
     </div>
@@ -228,9 +236,8 @@ export default {
   max-width: 100%;
   box-sizing: border-box;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  overflow: hidden;
   background-color: #fff;
 
   &__container {
@@ -242,29 +249,13 @@ export default {
     background-color: #fff;
   }
 
-  &__title-wrap {
-    width: 100%;
-    background-color: pink;
-  }
-
-  &__nav-area {
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 26px 0;
-    box-sizing: border-box;
-    overflow: hidden;
-    background-color: #fff;
-  }
-
   &__form-area {
     width: 100%;
     display: flex;
     flex-direction: column;
     align-items: stretch;
     gap: 10px;
-    padding: 10px 22px;
+    padding: 10px 22px 100px 22px;
     box-sizing: border-box;
   }
 
@@ -356,7 +347,15 @@ export default {
     display: flex;
     align-items: center;
     gap: 16px;
-    > * { flex: 1; }
+    padding-top: 8px;
+
+    > * {
+      flex: 1;
+      :deep(.c_navAreaPrimaryButton__btn),
+      :deep(.c_navAreaSecondaryButton__btn) {
+        width: 100%;
+      }
+    }
   }
 
   &--xxl { max-width: 1440px; margin: 0 auto; }
