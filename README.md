@@ -1,6 +1,23 @@
 # ReservArte
 Repositorio para la aplicación de reservas de trabajo final de 2º de DAW
 
+## Instalación y ejecución
+
+### Prerrequisitos
+- Docker y Docker Compose instalados en tu sistema.
+
+### Ejecutar con Docker (Entorno completo)
+1. Clona este repositorio:
+   ```
+   git clone <url-del-repositorio>
+   cd ReservArte_Front
+   ```
+2. Ejecuta Docker Compose para iniciar todos los servicios (base de datos, API y frontend):
+   ```
+   docker-compose up --build -d
+   ```
+   - Esto iniciará SQL Server, la API .NET en `http://localhost:5297`, y el frontend en `http://localhost:8080`.
+
 
 ## Credenciales de usuarios de prueba
 
