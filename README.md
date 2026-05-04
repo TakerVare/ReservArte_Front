@@ -16,7 +16,7 @@ Repositorio para la aplicación de reservas de trabajo final de 2º de DAW
    ```
    docker-compose up --build -d
    ```
-   - Esto iniciará SQL Server, la API .NET en `http://localhost:5297`, y el frontend en `http://localhost:8080`.
+   - Esto iniciará SQL Server, la API .NET en `http://localhost:5000`, y el frontend en `http://localhost:8080`.
 
 
 ## Credenciales de usuarios de prueba
@@ -56,6 +56,6 @@ Repositorio para la aplicación de reservas de trabajo final de 2º de DAW
 ### API / Swagger
 | URL | Descripción |
 |-----|-------------|
-| http://localhost:5297/swagger/index.html | Documentación API (Swagger) |
+| http://localhost:5000/swagger/index.html | Documentación API (Swagger) |
 
 
