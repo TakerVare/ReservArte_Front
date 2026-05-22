@@ -604,6 +604,29 @@ INSERT INTO EmployeeServices (EmployeeId, ServiceId, ProficiencyLevel, IsActive)
 (3, 5, 3, 1), -- Laura - Tratamiento Keratina
 (3, 6, 3, 1); -- Laura - Hidratación Profunda
 
+-- Tabla de proveedores con datos de ejemplo
+CREATE TABLE Suppliers (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(200) NOT NULL,
+    Phone NVARCHAR(50) NULL,
+    Address NVARCHAR(500) NULL,
+    Type NVARCHAR(50) NOT NULL DEFAULT 'General',
+    IsActive BIT NOT NULL DEFAULT 1,
+    CreatedAt DATETIME2 NOT NULL DEFAULT GETUTCDATE()
+);
+
+INSERT INTO Suppliers (Name, Phone, Address, Type) VALUES
+('BeautyPro Distribución', '912 345 678', 'Calle Mayor 12, Zaragoza', 'Cosmética'),
+('Wax & Co Supplies', '934 567 890', 'Av. Diagonal 45, Barcelona', 'Cera'),
+('DermaLab España', '916 789 012', 'Gran Vía 88, Madrid', 'Cosmética'),
+('HiloFino S.L.', '976 123 456', 'Paseo Independencia 30, Zaragoza', 'Hilo'),
+('NailArt Pro', '954 321 987', 'Calle Betis 5, Sevilla', 'Uñas'),
+('Tinte Express', '963 456 789', 'Calle Colón 22, Valencia', 'Cosmética'),
+('CeraTop Internacional', '912 111 222', 'Calle Alcalá 100, Madrid', 'Cera'),
+('Threading World', '976 333 444', 'Calle Alfonso I 15, Zaragoza', 'Hilo'),
+('GelNails Distribución', '933 555 666', 'Rambla Catalunya 60, Barcelona', 'Uñas'),
+('SkinCare Global', '911 777 888', 'Paseo de la Castellana 50, Madrid', 'Cosmética');
+
 PRINT 'Verificando tablas creadas:';
 SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' ORDER BY TABLE_NAME;
 
