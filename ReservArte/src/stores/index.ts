@@ -7,6 +7,7 @@ export type { EmployeeListItem, EmployeeItemData } from './employee.store'
 export { useServiceStore } from './service.store'
 export type { ServiceCategory, ServiceListItem, ServiceItemData } from './service.store'
 export { useAppointmentStore } from './appointment.store'
+export { useSupplierStore } from './supplier.store'
 export type {
   AppointmentListItem,
   AppointmentDetail,
