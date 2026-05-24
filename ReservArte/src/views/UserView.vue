@@ -46,6 +46,9 @@ function onMenuItemClick(itemId: string) {
     case 'notificaciones':
       router.push({ name: 'notifications' })
       break
+    case 'proveedores':
+      router.push({ name: 'admin-suppliers' })
+      break
     default:
       console.log(`Navegando a: ${itemId}`)
       break

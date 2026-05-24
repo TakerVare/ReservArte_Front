@@ -38,6 +38,7 @@ const props = withDefaults(
             { id: 'clientes', textKey: 'menu.customers' },
             { id: 'servicios', textKey: 'menu.services' },
             { id: 'empleados', textKey: 'menu.employees' },
+            { id: 'proveedores', textKey: 'menu.suppliers' },
           ],
         },
         {
