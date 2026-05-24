@@ -33,6 +33,7 @@ import ServiceMasterView from '../views/serviceMasterView.vue'
 import ServiceDetailView from '../views/serviceDetailView.vue'
 import AppointmentMasterView from '../views/appointmentMasterView.vue'
 import AppointmentDetailView from '../views/appointmentDetailView.vue'
+import SupplierMasterView from '../views/SupplierMasterView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -80,6 +81,7 @@ const router = createRouter({
         { path: 'bookings', name: 'admin-bookings', component: AppointmentMasterView },
         { path: 'bookings/new', name: 'admin-new-booking', component: AppointmentDetailView },
         { path: 'bookings/:id/edit', name: 'admin-edit-booking', component: AppointmentDetailView },
+        { path: 'suppliers', name: 'admin-suppliers', component: SupplierMasterView },
       ],
     },
   ],
