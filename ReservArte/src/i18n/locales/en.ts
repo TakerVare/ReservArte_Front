@@ -29,6 +29,7 @@ export default {
     about: 'About More Than Brows',
     logout: 'Log out',
     styleGuide: 'Style guide',
+    suppliers: 'Suppliers',
   },
   contact: {
     openingTitle: 'Opening hours',
@@ -359,5 +360,8 @@ export default {
     title: 'Notifications',        
     empty: 'You have no notifications at the moment.',
   },
-  
+  supplier: {
+  title: 'Suppliers',
+  empty: 'No suppliers found for this type.',
+  },
 } as const

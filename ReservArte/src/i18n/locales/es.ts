@@ -29,6 +29,7 @@ export default {
     about: 'Acerca de More Than Brows',
     logout: 'Cerrar sesión',
     styleGuide: 'Guía de estilo',
+    suppliers: 'Proveedores',
   },
   contact: {
     openingTitle: 'Horario de apertura',
@@ -358,5 +359,9 @@ export default {
   notifications: {
     title: 'Notificaciones',
     empty: 'No tienes notificaciones en este momento.',
+  },
+  supplier: {
+  title: 'Proveedores',
+  empty: 'No hay proveedores para este tipo.',
   },
 } as const
