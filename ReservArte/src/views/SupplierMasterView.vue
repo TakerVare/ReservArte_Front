@@ -94,5 +94,70 @@ export default { name: 'SupplierMasterView' }
 </template>
 
 <style scoped>
+.supplier-master-view {
+  width: 100%;
+}
 
+.supplier-master-view__container {
+  max-width: 768px;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+.supplier-master-view__nav {
+  padding: 20px 0;
+}
+
+.supplier-master-view__filters {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 12px 0 20px;
+}
+
+.supplier-master-view__filter-btn {
+  padding: 8px 20px;
+  font-family: Georgia, serif;
+  font-size: 14px;
+  font-weight: 700;
+  border: 1px solid #FFB6C1;
+  border-radius: 24px;
+  background: #fff;
+  color: #FFB6C1;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.supplier-master-view__filter-btn:hover {
+  background: #FFF0F3;
+}
+
+.supplier-master-view__filter-btn--active {
+  background: #FFB6C1;
+  color: #fff;
+}
+
+.supplier-master-view__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.supplier-master-view__error {
+  color: #b71c1c;
+  padding: 1rem 0;
+}
+
+.supplier-master-view__loading {
+  color: #666;
+  padding: 1rem 0;
+  text-align: center;
+}
+
+.supplier-master-view__empty {
+  color: #999;
+  text-align: center;
+  padding: 32px 0;
+  font-family: Georgia, serif;
+  font-size: 16px;
+}
 </style>
